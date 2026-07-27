@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Mencegah zoom otomatis berlebih di layar HP -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Dashboard Rekap Ritase Mingguan</title>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,61 +17,112 @@
       border-radius: 12px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
     }
+    
+    /* === FITUR KHUSUS MOBILE === */
+    .table-responsive {
+      -webkit-overflow-scrolling: touch; /* Scroll usap layar terasa mulus */
+      border-radius: 8px;
+    }
+    
+    .table {
+      font-size: 0.85rem; /* Ukuran font lebih pas di layar HP */
+      white-space: nowrap; /* Mencegah kolom terpotong atau tergulung ke bawah */
+    }
+
+    /* Column Sticky: Kolom pertama (Nama/Unit) tetap diam di posisi kiri saat di-scroll */
+    .table th:nth-child(1),
+    .table td:nth-child(1) {
+      position: sticky;
+      left: 0;
+      background-color: #ffffff;
+      z-index: 2;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    }
+    
+    .table thead th:nth-child(1) {
+      background-color: #f8f9fa;
+      z-index: 3;
+    }
+    
+    .row-total td:nth-child(1) {
+      background-color: #e2e8f0 !important;
+    }
+
     .badge-rit { 
       background-color: #e7f1ff; 
       color: #0d6efd; 
       font-weight: 600; 
-      padding: 6px 10px; 
+      padding: 4px 8px; 
       border-radius: 6px; 
+      font-size: 0.8rem;
     }
+    
     .row-total { 
       background-color: #e2e8f0 !important; 
       font-weight: bold; 
     }
+    
     .row-total .badge-rit { 
       background-color: #0d6efd; 
       color: white; 
     }
+    
     .row-spacer { 
-      height: 35px; 
+      height: 25px; 
       background-color: transparent; 
     }
+    
     .date-sub { 
-      font-size: 0.75rem; 
+      font-size: 0.7rem; 
       color: #6c757d; 
       font-weight: normal; 
       display: block; 
     }
+    
     .section-title {
       border-left: 4px solid #0d6efd;
       padding-left: 10px;
       margin-bottom: 15px;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: bold;
+    }
+
+    /* Penyesuaian Responsif Header di HP */
+    @media (max-width: 576px) {
+      .header-title h2 {
+        font-size: 1.3rem;
+      }
+      .header-title p {
+        font-size: 0.75rem;
+      }
+      .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
     }
   </style>
 </head>
-<body class="py-4">
+<body class="py-3">
 
-  <div class="container">
+  <div class="container-fluid container-md">
     <!-- Header Utama -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <div class="header-title">
         <h2 class="fw-bold text-dark mb-0">📊 Dashboard Rekap Proyek</h2>
-        <p class="text-muted small mb-0">Data Rekap Ritase Mingguan</p>
+        <p class="text-muted mb-0">Data Rekap Ritase Mingguan</p>
       </div>
-      <button onclick="loadAllData()" class="btn btn-outline-primary btn-sm rounded-pill px-3">🔄 Refresh Data</button>
+      <button onclick="loadAllData()" class="btn btn-outline-primary btn-sm rounded-pill px-3 ms-auto">🔄 Refresh</button>
     </div>
 
     <!-- Status Loading -->
     <div id="loading" class="text-center py-5">
       <div class="spinner-border text-primary" role="status"></div>
-      <p class="mt-2 text-muted">Memuat data rekap mingguan...</p>
+      <p class="mt-2 text-muted small">Memuat data rekap mingguan...</p>
     </div>
 
     <!-- Container Utama Tabel -->
     <div id="content" class="d-none">
-      <div class="card p-3 mb-4">
+      <div class="card p-2 p-md-3 mb-4">
         <div class="section-title text-primary">🚚 Rekap Ritase (Mobil Milik & Mobil Sewa)</div>
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
@@ -83,7 +135,7 @@
   </div>
 
   <script>
-    // 🔗 GANTI DENGAN URL WEB APP HASIL DEPLOY TERBARU ANDA
+    // 🔗 URL Web App Google Apps Script Anda
     const API_URL = "https://script.google.com/macros/s/AKfycbyn_wZxGMneEPXqgWlK9kkhMDNVOZe3m6JfkgGSlJ7XF7hZvFs8UVjuLQ6rWDcNkPo/exec";
 
     async function loadAllData() {
