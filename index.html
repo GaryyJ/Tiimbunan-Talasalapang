@@ -13,12 +13,13 @@
 
   <style>
     :root {
-      --bg-main: #f8fafc;
+      --bg-main: #f1f5f9;
       --card-bg: #ffffff;
-      --primary: #2563eb;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
+      --header-bg: #0f172a;       /* Dark Navy Header */
+      --primary-accent: #2563eb;  /* Sapphire Blue */
+      --unit-text: #4f46e5;       /* Indigo Accent untuk nama driver/unit */
       --border-color: #e2e8f0;
+      --text-main: #1e293b;
     }
 
     body { 
@@ -27,82 +28,83 @@
       color: var(--text-main);
     }
 
-    /* Container Card Utama */
+    /* Card Utama Modern */
     .main-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
       overflow: hidden;
     }
 
-    /* Header Section di Dalam Card */
     .card-header-custom {
-      padding: 20px 24px;
+      padding: 22px 28px;
       background: #ffffff;
       border-bottom: 1px solid var(--border-color);
     }
 
-    /* Styling Tabel Modern */
     .table-responsive {
       -webkit-overflow-scrolling: touch;
     }
     
     .table {
-      font-size: 0.82rem;
+      font-size: 0.83rem;
       white-space: nowrap;
       margin-bottom: 0;
     }
 
+    /* Header Tabel Elegan */
     .table th {
-      background-color: #1e293b !important; /* Slate Dark Header */
+      background-color: var(--header-bg) !important;
       color: #f8fafc !important;
       font-weight: 600;
       text-transform: uppercase;
       font-size: 0.72rem;
-      letter-spacing: 0.5px;
-      padding: 14px 12px;
+      letter-spacing: 0.6px;
+      padding: 15px 12px;
       border: none;
     }
 
     .table td {
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-color: #f1f5f9;
       vertical-align: middle;
+      color: #334155;
     }
 
-    /* === FREEZE / STICKY KHUSUS KOLOM KE-2 (IDENTITAS / UNIT) === */
+    /* === FREEZE / STICKY KOLOM KE-2 (IDENTITAS / UNIT) === */
     .table th:nth-child(2),
     .table td:nth-child(2) {
       position: sticky;
       left: 0;
       background-color: #ffffff;
       z-index: 2;
-      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 4px 0 8px rgba(15, 23, 42, 0.05);
     }
     
     .table thead th:nth-child(2) {
-      background-color: #1e293b !important;
+      background-color: var(--header-bg) !important;
       z-index: 3;
     }
     
     .row-total td:nth-child(2) {
-      background-color: #f1f5f9 !important;
+      background-color: #f8fafc !important;
     }
 
-    /* Style Badges & Angka */
+    /* Badge Ritase Elegan */
     .badge-rit { 
       background-color: #eff6ff; 
-      color: #2563eb; 
+      color: #1d4ed8; 
       font-weight: 700; 
       padding: 4px 10px; 
       border-radius: 6px; 
       font-size: 0.8rem;
       border: 1px solid #bfdbfe;
       display: inline-block;
-      min-width: 30px;
+      min-width: 32px;
     }
-    
+
+    /* Styling Baris Total */
     .row-total { 
       background-color: #f8fafc !important; 
       font-weight: 700;
@@ -115,20 +117,27 @@
     }
 
     .row-total .badge-rit { 
-      background-color: #2563eb; 
+      background-color: #1e40af; 
       color: white; 
       border: none;
+      box-shadow: 0 2px 4px rgba(30, 64, 175, 0.2);
     }
 
-    /* Tampilan Angka 0 Lebih Soft */
     .zero-val {
       color: #cbd5e1;
       font-weight: 400;
     }
     
+    /* === BARIS PEMISAH DIBUAT LEBIH LEBAR === */
     .row-spacer { 
-      height: 18px; 
-      background-color: var(--bg-main); 
+      height: 32px; 
+      background-color: #f1f5f9 !important; 
+      border: none !important;
+    }
+
+    .row-spacer td {
+      border: none !important;
+      background-color: #f1f5f9 !important;
     }
     
     .date-sub { 
@@ -139,10 +148,10 @@
       margin-top: 2px;
     }
 
-    /* Tombol Refresh Modern */
+    /* Tombol Refresh */
     .btn-refresh {
       background-color: #ffffff;
-      color: var(--primary);
+      color: #1e40af;
       border: 1px solid #bfdbfe;
       border-radius: 8px;
       font-weight: 600;
@@ -153,6 +162,7 @@
       background-color: #eff6ff;
       color: #1d4ed8;
       border-color: #93c5fd;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
     }
   </style>
 </head>
@@ -260,7 +270,7 @@
         row.forEach((cell, idx) => {
           if (idx < 11) {
             if (idx === 0) tr += `<td class="fw-semibold text-secondary">${cell}</td>`;
-            else if (idx === 1) tr += `<td class="fw-bold text-primary">${cell}</td>`;
+            else if (idx === 1) tr += `<td class="fw-bold" style="color: var(--unit-text);">${cell}</td>`;
             else {
               let num = parseFloat(cell);
               if (num > 0) {
@@ -274,7 +284,8 @@
         tr += "</tr>";
         tbody.innerHTML += tr;
 
-        if (label.includes("total mobil milik")) {
+        // Pemisah antar kelompok yang lebih lebar
+        if (label.includes("total mobil")) {
           tbody.innerHTML += `<tr class="row-spacer"><td colspan="11"></td></tr>`;
         }
       }
