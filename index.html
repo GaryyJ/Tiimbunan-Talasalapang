@@ -13,11 +13,10 @@
 
   <style>
     :root {
-      --bg-main: #f4f6f9;
+      --bg-main: #f8fafc;
       --card-bg: #ffffff;
-      --primary-color: #2563eb;
-      --primary-hover: #1d4ed8;
-      --text-dark: #1e293b;
+      --primary: #2563eb;
+      --text-main: #0f172a;
       --text-muted: #64748b;
       --border-color: #e2e8f0;
     }
@@ -25,49 +24,26 @@
     body { 
       background-color: var(--bg-main); 
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      color: var(--text-dark);
+      color: var(--text-main);
     }
 
-    /* Top Navbar / Header Container */
-    .dashboard-header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 0;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Summary Stat Cards */
-    .stat-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-    }
-    .stat-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }
-
-    /* Main Table Card */
-    .table-card { 
+    /* Container Card Utama */
+    .main-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 14px; 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
       overflow: hidden;
     }
 
+    /* Header Section di Dalam Card */
+    .card-header-custom {
+      padding: 20px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Styling Tabel Modern */
     .table-responsive {
       -webkit-overflow-scrolling: touch;
     }
@@ -79,34 +55,34 @@
     }
 
     .table th {
-      background-color: #0f172a !important; /* Midnight Dark Header */
+      background-color: #1e293b !important; /* Slate Dark Header */
       color: #f8fafc !important;
       font-weight: 600;
       text-transform: uppercase;
       font-size: 0.72rem;
       letter-spacing: 0.5px;
-      padding: 12px 10px;
+      padding: 14px 12px;
       border: none;
     }
 
     .table td {
-      padding: 10px 10px;
+      padding: 10px 12px;
       border-color: #f1f5f9;
       vertical-align: middle;
     }
 
-    /* === STICKY COLUMN KE-2 (IDENTITAS / UNIT) === */
+    /* === FREEZE / STICKY KHUSUS KOLOM KE-2 (IDENTITAS / UNIT) === */
     .table th:nth-child(2),
     .table td:nth-child(2) {
       position: sticky;
       left: 0;
       background-color: #ffffff;
       z-index: 2;
-      box-shadow: 3px 0 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.04);
     }
     
     .table thead th:nth-child(2) {
-      background-color: #0f172a !important;
+      background-color: #1e293b !important;
       z-index: 3;
     }
     
@@ -114,17 +90,17 @@
       background-color: #f1f5f9 !important;
     }
 
-    /* Badges & Text Styles */
+    /* Style Badges & Angka */
     .badge-rit { 
       background-color: #eff6ff; 
       color: #2563eb; 
       font-weight: 700; 
-      padding: 5px 10px; 
+      padding: 4px 10px; 
       border-radius: 6px; 
       font-size: 0.8rem;
       border: 1px solid #bfdbfe;
       display: inline-block;
-      min-width: 32px;
+      min-width: 30px;
     }
     
     .row-total { 
@@ -135,6 +111,7 @@
     .row-total td {
       border-top: 2px solid #cbd5e1 !important;
       border-bottom: 2px solid #cbd5e1 !important;
+      color: #0f172a;
     }
 
     .row-total .badge-rit { 
@@ -143,13 +120,14 @@
       border: none;
     }
 
+    /* Tampilan Angka 0 Lebih Soft */
     .zero-val {
       color: #cbd5e1;
       font-weight: 400;
     }
     
     .row-spacer { 
-      height: 16px; 
+      height: 18px; 
       background-color: var(--bg-main); 
     }
     
@@ -161,78 +139,26 @@
       margin-top: 2px;
     }
 
+    /* Tombol Refresh Modern */
     .btn-refresh {
-      background-color: var(--primary-color);
-      color: white;
+      background-color: #ffffff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
       border-radius: 8px;
-      font-weight: 500;
+      font-weight: 600;
       padding: 8px 16px;
-      border: none;
       transition: all 0.2s ease;
     }
     .btn-refresh:hover {
-      background-color: var(--primary-hover);
-      color: white;
-      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+      background-color: #eff6ff;
+      color: #1d4ed8;
+      border-color: #93c5fd;
     }
   </style>
 </head>
-<body>
+<body class="py-3 py-md-4">
 
-  <!-- Top Navbar / Header -->
-  <header class="dashboard-header">
-    <div class="container-fluid container-xl">
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <div>
-          <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chart-line text-primary me-2"></i>Dashboard Rekap Proyek</h4>
-          <p class="text-muted small mb-0">Laporan & Monitor Ritase Mingguan</p>
-        </div>
-        <button onclick="loadAllData()" class="btn btn-refresh btn-sm d-flex align-items-center gap-2">
-          <i class="fa-solid fa-rotate-right"></i>
-          <span>Refresh Data</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="container-fluid container-xl mb-5">
-
-    <!-- KPI Summary Cards -->
-    <div class="row g-3 mb-4" id="kpiCards">
-      <div class="col-12 col-md-4">
-        <div class="stat-card d-flex align-items-center gap-3">
-          <div class="stat-icon bg-primary-subtle text-primary">
-            <i class="fa-solid fa-truck"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-medium">Mobil Milik</div>
-            <h3 class="fw-bold mb-0 text-dark" id="kpiMilik">-</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4">
-        <div class="stat-card d-flex align-items-center gap-3">
-          <div class="stat-icon bg-info-subtle text-info">
-            <i class="fa-solid fa-truck-ramp-box"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-medium">Mobil Sewa</div>
-            <h3 class="fw-bold mb-0 text-dark" id="kpiSewa">-</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4">
-        <div class="stat-card d-flex align-items-center gap-3">
-          <div class="stat-icon bg-success-subtle text-success">
-            <i class="fa-solid fa-layer-group"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-medium">Total Ritase</div>
-            <h3 class="fw-bold mb-0 text-dark" id="kpiTotal">-</h3>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="container-fluid container-xl">
 
     <!-- Status Loading -->
     <div id="loading" class="text-center py-5">
@@ -240,21 +166,33 @@
       <p class="mt-2 text-muted small fw-medium">Memuat data rekap mingguan...</p>
     </div>
 
-    <!-- Main Table Container -->
+    <!-- Container Utama Dashboard -->
     <div id="content" class="d-none">
-      <div class="table-card">
-        <div class="p-3 bg-white border-bottom d-flex align-items-center justify-content-between">
-          <div class="fw-bold text-dark d-flex align-items-center gap-2">
-            <i class="fa-solid fa-list-check text-primary"></i>
-            <span>Rekap Ritase (Mobil Milik & Mobil Sewa)</span>
+      <div class="main-card">
+        
+        <!-- Header Judul & Tombol Refresh -->
+        <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div>
+            <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+              <i class="fa-solid fa-truck-fast text-primary"></i>
+              <span>Dashboard Rekap Proyek</span>
+            </h4>
+            <p class="text-muted small mb-0 mt-1">Data Rekap Ritase Mingguan (Mobil Milik & Mobil Sewa)</p>
           </div>
+          <button onclick="loadAllData()" class="btn btn-refresh btn-sm d-flex align-items-center gap-2">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>Refresh Data</span>
+          </button>
         </div>
+
+        <!-- Tabel Data -->
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
             <thead id="headMingguan"></thead>
             <tbody id="bodyMingguan"></tbody>
           </table>
         </div>
+
       </div>
     </div>
 
@@ -309,11 +247,8 @@
       headRow += "</tr>";
       thead.innerHTML = headRow;
 
-      // Build Body & Calculate Summary KPIs
+      // Build Body
       tbody.innerHTML = "";
-      let totalMilik = 0;
-      let totalSewa = 0;
-
       for (let i = 2; i < data.length; i++) {
         let row = data[i];
         if (!row || row.every(c => c === "" || c === null)) continue;
@@ -321,13 +256,6 @@
         let label = String(row[0] || "").toLowerCase();
         let isTotal = label.includes("total");
         let tr = `<tr class="${isTotal ? 'row-total' : ''}">`;
-
-        // Extract KPI metrics from total rows
-        if (label.includes("total mobil milik")) {
-          totalMilik = parseFloat(row[8]) || 0;
-        } else if (label.includes("total mobil sewa")) {
-          totalSewa = parseFloat(row[8]) || 0;
-        }
 
         row.forEach((cell, idx) => {
           if (idx < 11) {
@@ -350,11 +278,6 @@
           tbody.innerHTML += `<tr class="row-spacer"><td colspan="11"></td></tr>`;
         }
       }
-
-      // Update Top KPI Cards
-      document.getElementById('kpiMilik').innerText = `${totalMilik} Rit`;
-      document.getElementById('kpiSewa').innerText = `${totalSewa} Rit`;
-      document.getElementById('kpiTotal').innerText = `${totalMilik + totalSewa} Rit`;
     }
 
     // Load data otomatis saat dibuka
