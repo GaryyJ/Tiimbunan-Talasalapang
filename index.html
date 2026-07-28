@@ -99,7 +99,7 @@
 
     .date-sub {
       display: block;
-      color: #38bdf8 !important; /* Biru terang cerah */
+      color: #38bdf8 !important;
       font-size: 0.70rem;
       font-weight: 500;
       margin-top: 3px;
@@ -142,13 +142,13 @@
     }
 
     .row-total { 
-      background-color: #f1f5f9 !important; 
+      background-color: #f8fafc !important; 
       font-weight: 700;
     }
 
     .row-total td {
-      border-top: 2px solid #94a3b8 !important;
-      border-bottom: 3px solid #64748b !important;
+      border-top: 2px solid #64748b !important;
+      border-bottom: 2px solid #64748b !important;
       color: #0f172a !important;
     }
 
@@ -158,14 +158,16 @@
     }
 
     /* ========================================================= */
-    /* STYLE MODEL SPREADSHEET KHUSUS TABEL RINGKASAN HARIAN     */
+    /* JARAK / SPACING KONTANER TABEL MINGGUAN                   */
     /* ========================================================= */
     .summary-box {
       background: #ffffff;
       border-top: 2px dashed #cbd5e1;
-      padding: 30px 20px;
+      margin-top: 2.5rem; /* MEMBERIKAN JARAK BARIS BARU DARI TABEL UTAMA */
+      padding: 30px 20px 20px 20px;
     }
 
+    /* MODEL SPREADSHEET EXCEL UNTUK TABEL RINGKASAN HARIAN */
     .table-excel-style {
       width: 100%;
       border-collapse: collapse !important;
@@ -179,7 +181,7 @@
     .table-excel-style th, 
     .table-excel-style td {
       border: 1px solid #000000 !important;
-      padding: 5px 8px;
+      padding: 6px 10px;
       background-color: #ffffff !important;
       color: #000000 !important;
       vertical-align: middle;
@@ -276,7 +278,7 @@
         <div class="tab-content" id="projectTabsContent">
           
           <!-- TAB 1: REKAP MINGGUAN -->
-          <div class="tab-pane fade show active" id="rekap-pane" role="tabpanel">
+          <div class="tab-pane fade show active p-3" id="rekap-pane" role="tabpanel">
             
             <!-- 1. TABEL UTAMA RITASE -->
             <div class="table-responsive">
@@ -286,7 +288,7 @@
               </table>
             </div>
 
-            <!-- 2. TABEL RINGKASAN HARIAN SPREADSHEET STYLE (PADA BAGIAN BAWAH) -->
+            <!-- 2. TABEL RINGKASAN HARIAN SPREADSHEET STYLE (DIBERI JARAK/MARGIN DI ATASNYA) -->
             <div id="containerRingkasan" class="summary-box d-none">
               <!-- Rendered dynamically by Javascript -->
             </div>
@@ -294,7 +296,7 @@
           </div>
 
           <!-- TAB 2: SOLAR HEXA -->
-          <div class="tab-pane fade" id="solar-pane" role="tabpanel">
+          <div class="tab-pane fade p-3" id="solar-pane" role="tabpanel">
             <div class="table-responsive">
               <table class="table table-main table-hover align-middle mb-0">
                 <thead>
@@ -315,7 +317,7 @@
           </div>
 
           <!-- TAB 3: PENAGIHAN TAMBANG -->
-          <div class="tab-pane fade" id="tambang-pane" role="tabpanel">
+          <div class="tab-pane fade p-3" id="tambang-pane" role="tabpanel">
             <div class="table-responsive">
               <table class="table table-main table-hover align-middle mb-0">
                 <thead>
@@ -391,7 +393,11 @@
 
       for (let idx = 0; idx < data.length; idx++) {
         let firstCell = String(data[idx][0] || "").trim().toUpperCase();
-        if (firstCell.includes("REKAPAN HARIAN") || isSummarySection) {
+        let secondCell = String(data[idx][1] || "").trim().toUpperCase();
+        let thirdCell = String(data[idx][2] || "").trim().toUpperCase();
+
+        // Deteksi dimulainya seksi ringkasan harian
+        if (firstCell.includes("REKAPAN HARIAN") || secondCell.includes("REKAPAN HARIAN") || thirdCell.includes("REKAPAN HARIAN") || isSummarySection) {
           isSummarySection = true;
           ringkasanData.push(data[idx]);
         } else {
@@ -439,11 +445,11 @@
         tbody.innerHTML += tr;
       }
 
-      // --- B. RENDER TABEL RINGKASAN (EXCEL MODEL SAMA PERSIS) ---
+      // --- B. RENDER TABEL RINGKASAN DI KONTANER TERPISAH (DENGAN SPACING BARU) ---
       renderTabelRingkasanExcel(ringkasanData);
     }
 
-    // Fungsi Khusus Merender Tabel Ringkasan dengan Model Spreadsheet Excel
+    // Fungsi Merender Tabel Ringkasan dengan Model Spreadsheet Excel
     function renderTabelRingkasanExcel(ringkasanData) {
       const container = document.getElementById('containerRingkasan');
 
@@ -455,24 +461,22 @@
       container.classList.remove('d-none');
 
       // Ambil Baris Header Hari & Tanggal dari Data Sheet (jika ada)
-      let headHariRow = ringkasanData.find(r => r.some(c => String(c).includes("Ming") || String(c).includes("Sen"))) || [];
+      let headHariRow = ringkasanData.find(r => r.some(c => String(c).toLowerCase().includes("ming") || String(c).toLowerCase().includes("sen"))) || [];
       let headTglRow = ringkasanData.find(r => r.some(c => String(c).includes("/") || String(c).includes("-"))) || [];
 
-      // Default jika data di sheet kosong/parsing gagal
+      // Default jika data di sheet tidak terbaca penuh
       let hariList = ["Ming", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
       let tglList = ["26/07/2026", "27/07/2026", "28/07/2026", "29/07/2026", "30/07/2026", "31/07/2026", "01/08/2026"];
 
-      // Update dari data aktual sheet jika tersedia
       if (headHariRow.length > 0) {
-        let extractedHari = headHariRow.slice(1, 8).filter(c => c !== "");
-        if (extractedHari.length === 7) hariList = extractedHari;
+        let extractedHari = headHariRow.filter(c => c !== "" && !String(c).toLowerCase().includes("jenis"));
+        if (extractedHari.length >= 7) hariList = extractedHari.slice(0, 7);
       }
       if (headTglRow.length > 0) {
-        let extractedTgl = headTglRow.slice(1, 8).filter(c => c !== "");
-        if (extractedTgl.length === 7) tglList = extractedTgl;
+        let extractedTgl = headTglRow.filter(c => String(c).includes("/") || String(c).includes("-"));
+        if (extractedTgl.length >= 7) tglList = extractedTgl.slice(0, 7);
       }
 
-      // Mulai Susun Struktur HTML Sesuai Gambar
       let html = `
         <div class="table-responsive">
           <table class="table-excel-style">
@@ -497,30 +501,34 @@
             <tbody>
       `;
 
-      // Ekstrak Baris Data (Mobil YZ, Mobil Sewa, Pemisah, Total)
-      let rowYZ = ringkasanData.find(r => String(r[0] || "").toLowerCase().includes("mobil yz"));
-      let rowSewa = ringkasanData.find(r => String(r[0] || "").toLowerCase().includes("mobil sewa"));
-      let rowTotal = ringkasanData.find(r => String(r[0] || "").trim().toLowerCase() === "total");
+      // Mencari baris spesifik data
+      let rowYZ = ringkasanData.find(r => r.some(c => String(c).toLowerCase().includes("total mobil yz")));
+      let rowSewa = ringkasanData.find(r => r.some(c => String(c).toLowerCase().includes("total mobil sewa")));
+      let rowTotal = ringkasanData.find(r => r.some(c => String(c).trim().toLowerCase() === "total"));
+
+      // Fungsi bantu mengambil sel nilai
+      const extractValues = (rowArr) => {
+        if (!rowArr) return Array(8).fill(0);
+        let vals = rowArr.filter(c => c !== "" && c !== null && !String(c).toLowerCase().includes("total") && !String(c).toLowerCase().includes("mobil"));
+        while(vals.length < 8) vals.push(0);
+        return vals.slice(0, 8);
+      };
+
+      let valYZ = extractValues(rowYZ);
+      let valSewa = extractValues(rowSewa);
+      let valTotal = extractValues(rowTotal);
 
       // Render Baris 1: Total Mobil YZ
-      if (rowYZ) {
-        html += `<tr><td>${rowYZ[0]}</td>`;
-        for (let c = 1; c <= 8; c++) {
-          html += `<td class="text-center">${rowYZ[c] !== undefined ? rowYZ[c] : 0}</td>`;
-        }
-        html += `</tr>`;
-      }
+      html += `<tr><td>Total Mobil YZ</td>`;
+      valYZ.forEach(v => html += `<td class="text-center">${v}</td>`);
+      html += `</tr>`;
 
       // Render Baris 2: Total Mobil Sewa
-      if (rowSewa) {
-        html += `<tr><td>${rowSewa[0]}</td>`;
-        for (let c = 1; c <= 8; c++) {
-          html += `<td class="text-center">${rowSewa[c] !== undefined ? rowSewa[c] : 0}</td>`;
-        }
-        html += `</tr>`;
-      }
+      html += `<tr><td>Total Mobil Sewa</td>`;
+      valSewa.forEach(v => html += `<td class="text-center">${v}</td>`);
+      html += `</tr>`;
 
-      // Render Baris 3: Pemisah Kosong (Sama seperti gambar Excel)
+      // Render Baris 3: Pemisah Kosong (Sama seperti Excel)
       html += `
         <tr class="empty-row">
           <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
@@ -528,13 +536,9 @@
       `;
 
       // Render Baris 4: Total
-      if (rowTotal) {
-        html += `<tr><td>${rowTotal[0]}</td>`;
-        for (let c = 1; c <= 8; c++) {
-          html += `<td class="text-center">${rowTotal[c] !== undefined ? rowTotal[c] : 0}</td>`;
-        }
-        html += `</tr>`;
-      }
+      html += `<tr class="fw-bold"><td>Total</td>`;
+      valTotal.forEach(v => html += `<td class="text-center">${v}</td>`);
+      html += `</tr>`;
 
       html += `
             </tbody>
