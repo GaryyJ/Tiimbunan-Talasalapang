@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.85, minimum-scale=0.5, maximum-scale=2.0">
   <title>Dashboard Rekap & Operational Proyek</title>
+  
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome Icons -->
@@ -74,16 +75,17 @@
       -webkit-overflow-scrolling: touch;
     }
     
-    .table {
+    /* STYLE TABEL UTAMA RITASE */
+    .table-main {
       font-size: 0.82rem;
       white-space: nowrap;
       margin-bottom: 0;
       border-collapse: separate;
       border-spacing: 0;
+      width: 100%;
     }
 
-    /* Header Tabel Utama */
-    .table th {
+    .table-main th {
       background-color: var(--header-bg) !important;
       color: #f8fafc !important;
       font-weight: 600;
@@ -95,7 +97,6 @@
       text-align: center;
     }
 
-    /* WARNA TANGGAL HEADER */
     .date-sub {
       display: block;
       color: #38bdf8 !important; /* Biru terang cerah */
@@ -104,14 +105,14 @@
       margin-top: 3px;
     }
 
-    .table td {
+    .table-main td {
       padding: 11px 12px;
       border-bottom: 1px solid #e2e8f0;
       vertical-align: middle;
       color: #334155;
     }
 
-    /* Sticky Kolom Ke-2 (khusus rekap mingguan) */
+    /* Sticky Kolom Ke-2 */
     .table-rekap th:nth-child(2),
     .table-rekap td:nth-child(2) {
       position: sticky;
@@ -129,7 +130,6 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    /* Badges & Styling */
     .badge-rit { 
       background-color: #eff6ff; 
       color: #1d4ed8; 
@@ -141,7 +141,6 @@
       display: inline-block;
     }
 
-    /* STYLE BARIS TOTAL & PEMISAH ANTARE-KELOMPOK */
     .row-total { 
       background-color: #f1f5f9 !important; 
       font-weight: 700;
@@ -158,36 +157,56 @@
       font-weight: 400;
     }
 
-    /* STYLE KHUSUS TABEL RINGKASAN DI BAWAH */
+    /* ========================================================= */
+    /* STYLE MODEL SPREADSHEET KHUSUS TABEL RINGKASAN HARIAN     */
+    /* ========================================================= */
     .summary-box {
-      background: #f8fafc;
+      background: #ffffff;
       border-top: 2px dashed #cbd5e1;
-      padding: 24px;
+      padding: 30px 20px;
     }
 
-    .table-summary {
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      overflow: hidden;
+    .table-excel-style {
+      width: 100%;
+      border-collapse: collapse !important;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.88rem;
+      color: #000000;
+      border: 1.5px solid #000000 !important;
       background-color: #ffffff;
     }
 
-    .table-summary th {
-      background-color: #1e293b !important;
-      color: #ffffff !important;
-      font-size: 0.72rem;
+    .table-excel-style th, 
+    .table-excel-style td {
+      border: 1px solid #000000 !important;
+      padding: 5px 8px;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      vertical-align: middle;
+      white-space: nowrap;
     }
 
-    .table-summary tr.row-grand-total {
-      background-color: #2563eb !important;
-      color: #ffffff !important;
+    .table-excel-style .title-header {
       font-weight: 700;
+      font-size: 1.05rem;
+      text-align: center;
+      padding: 8px;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid #000000 !important;
     }
 
-    .table-summary tr.row-grand-total td {
-      color: #ffffff !important;
-      border-top: 2px solid #1d4ed8;
-      font-size: 0.88rem;
+    .table-excel-style thead th {
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .table-excel-style .col-jenis {
+      text-align: left !important;
+      min-width: 140px;
+    }
+
+    .table-excel-style .empty-row td {
+      height: 24px;
     }
 
     .btn-refresh {
@@ -261,24 +280,15 @@
             
             <!-- 1. TABEL UTAMA RITASE -->
             <div class="table-responsive">
-              <table class="table table-rekap table-hover align-middle mb-0">
+              <table class="table table-main table-rekap table-hover align-middle mb-0">
                 <thead id="headMingguan"></thead>
                 <tbody id="bodyMingguan"></tbody>
               </table>
             </div>
 
-            <!-- 2. TABEL RINGKASAN HARIAN (BAGIAN BAWAH) -->
+            <!-- 2. TABEL RINGKASAN HARIAN SPREADSHEET STYLE (PADA BAGIAN BAWAH) -->
             <div id="containerRingkasan" class="summary-box d-none">
-              <div class="d-flex align-items-center gap-2 mb-3">
-                <i class="fa-solid fa-calculator text-primary fs-5"></i>
-                <h6 class="fw-bold mb-0 text-dark">REKAPAN HARIAN MOBIL YZ DAN MOBIL SEWA</h6>
-              </div>
-              <div class="table-responsive">
-                <table class="table table-summary table-hover align-middle">
-                  <thead id="headRingkasan"></thead>
-                  <tbody id="bodyRingkasan"></tbody>
-                </table>
-              </div>
+              <!-- Rendered dynamically by Javascript -->
             </div>
 
           </div>
@@ -286,7 +296,7 @@
           <!-- TAB 2: SOLAR HEXA -->
           <div class="tab-pane fade" id="solar-pane" role="tabpanel">
             <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+              <table class="table table-main table-hover align-middle mb-0">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -307,7 +317,7 @@
           <!-- TAB 3: PENAGIHAN TAMBANG -->
           <div class="tab-pane fade" id="tambang-pane" role="tabpanel">
             <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+              <table class="table table-main table-hover align-middle mb-0">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -374,7 +384,7 @@
         return;
       }
 
-      // Pisahkan data Rincian Armada dan Data Ringkasan Harian (di bawah baris ke-35 pada sheet)
+      // Pisahkan Data Utama dengan Data Rekapan Harian
       let rincianData = [];
       let ringkasanData = [];
       let isSummarySection = false;
@@ -383,15 +393,13 @@
         let firstCell = String(data[idx][0] || "").trim().toUpperCase();
         if (firstCell.includes("REKAPAN HARIAN") || isSummarySection) {
           isSummarySection = true;
-          if (data[idx].some(c => c !== "")) {
-            ringkasanData.push(data[idx]);
-          }
+          ringkasanData.push(data[idx]);
         } else {
           rincianData.push(data[idx]);
         }
       }
 
-      // --- A. RENDER TABEL UTAMA ---
+      // --- A. RENDER TABEL UTAMA RITASE ---
       const maxCols = Math.max(...rincianData.map(row => row ? row.length : 0));
       let headRow = "<tr>";
       if (rincianData[0]) {
@@ -431,62 +439,110 @@
         tbody.innerHTML += tr;
       }
 
-      // --- B. RENDER TABEL RINGKASAN HARIAN (JIKA ADA) ---
-      const summaryBox = document.getElementById('containerRingkasan');
-      const headSummary = document.getElementById('headRingkasan');
-      const bodySummary = document.getElementById('bodyRingkasan');
+      // --- B. RENDER TABEL RINGKASAN (EXCEL MODEL SAMA PERSIS) ---
+      renderTabelRingkasanExcel(ringkasanData);
+    }
 
-      if (ringkasanData.length > 0) {
-        summaryBox.classList.remove('d-none');
-        headSummary.innerHTML = "";
-        bodySummary.innerHTML = "";
+    // Fungsi Khusus Merender Tabel Ringkasan dengan Model Spreadsheet Excel
+    function renderTabelRingkasanExcel(ringkasanData) {
+      const container = document.getElementById('containerRingkasan');
 
-        // Baris Header Ringkasan
-        let headIdx = ringkasanData.findIndex(r => String(r[0] || "").toLowerCase().includes("jenis") || r.some(c => String(c).includes("Ming") || String(c).includes("Sen")));
-        
-        if (headIdx !== -1) {
-          let hRow = "<tr>";
-          let hData = ringkasanData[headIdx];
-          let subDates = ringkasanData[headIdx + 1] || [];
-          
-          for (let c = 0; c < hData.length; c++) {
-            if (hData[c] === "" && subDates[c] === "" && c > 0) continue;
-            let title = hData[c] || "";
-            let subDate = subDates[c] ? `<span class="date-sub">${subDates[c]}</span>` : '';
-            hRow += `<th class="${c === 0 ? 'text-start' : 'text-center'}">${title}${subDate}</th>`;
-          }
-          hRow += "</tr>";
-          headSummary.innerHTML = hRow;
-
-          // Baris Data Ringkasan
-          for (let r = headIdx + 2; r < ringkasanData.length; r++) {
-            let row = ringkasanData[r];
-            if (!row || row.every(c => c === "")) continue;
-
-            let rowLabel = String(row[0] || "").toLowerCase();
-            let isGrandTotal = rowLabel === "total" || rowLabel.includes("grand");
-            
-            let tr = `<tr class="${isGrandTotal ? 'row-grand-total' : ''}">`;
-            for (let c = 0; c < row.length; c++) {
-              let val = row[c] !== undefined ? row[c] : "";
-              if (c === 0) {
-                tr += `<td class="fw-bold text-start">${val}</td>`;
-              } else {
-                let num = parseFloat(String(val).replace(/[^0-9.-]+/g, ""));
-                if (!isNaN(num) && num > 0) {
-                  tr += `<td class="text-center ${isGrandTotal ? 'fw-bold' : ''}">${val}</td>`;
-                } else {
-                  tr += `<td class="text-center ${isGrandTotal ? '' : 'zero-val'}">${val || '0'}</td>`;
-                }
-              }
-            }
-            tr += "</tr>";
-            bodySummary.innerHTML += tr;
-          }
-        }
-      } else {
-        summaryBox.classList.add('d-none');
+      if (!ringkasanData || ringkasanData.length === 0) {
+        container.classList.add('d-none');
+        return;
       }
+
+      container.classList.remove('d-none');
+
+      // Ambil Baris Header Hari & Tanggal dari Data Sheet (jika ada)
+      let headHariRow = ringkasanData.find(r => r.some(c => String(c).includes("Ming") || String(c).includes("Sen"))) || [];
+      let headTglRow = ringkasanData.find(r => r.some(c => String(c).includes("/") || String(c).includes("-"))) || [];
+
+      // Default jika data di sheet kosong/parsing gagal
+      let hariList = ["Ming", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+      let tglList = ["26/07/2026", "27/07/2026", "28/07/2026", "29/07/2026", "30/07/2026", "31/07/2026", "01/08/2026"];
+
+      // Update dari data aktual sheet jika tersedia
+      if (headHariRow.length > 0) {
+        let extractedHari = headHariRow.slice(1, 8).filter(c => c !== "");
+        if (extractedHari.length === 7) hariList = extractedHari;
+      }
+      if (headTglRow.length > 0) {
+        let extractedTgl = headTglRow.slice(1, 8).filter(c => c !== "");
+        if (extractedTgl.length === 7) tglList = extractedTgl;
+      }
+
+      // Mulai Susun Struktur HTML Sesuai Gambar
+      let html = `
+        <div class="table-responsive">
+          <table class="table-excel-style">
+            <thead>
+              <!-- Baris Judul Utama -->
+              <tr>
+                <th colspan="9" class="title-header">
+                  REKAPAN HARIAN MOBIL YZ DAN MOBIL SEWA
+                </th>
+              </tr>
+              <!-- Baris Header Hari -->
+              <tr>
+                <th rowspan="2" class="col-jenis" style="vertical-align: bottom;">Jenis / Armada</th>
+                ${hariList.map(h => `<th>${h}</th>`).join('')}
+                <th rowspan="2" style="vertical-align: middle; text-align: center; width: 90px;">Total Rit</th>
+              </tr>
+              <!-- Baris Header Tanggal -->
+              <tr>
+                ${tglList.map(t => `<th>${t}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      // Ekstrak Baris Data (Mobil YZ, Mobil Sewa, Pemisah, Total)
+      let rowYZ = ringkasanData.find(r => String(r[0] || "").toLowerCase().includes("mobil yz"));
+      let rowSewa = ringkasanData.find(r => String(r[0] || "").toLowerCase().includes("mobil sewa"));
+      let rowTotal = ringkasanData.find(r => String(r[0] || "").trim().toLowerCase() === "total");
+
+      // Render Baris 1: Total Mobil YZ
+      if (rowYZ) {
+        html += `<tr><td>${rowYZ[0]}</td>`;
+        for (let c = 1; c <= 8; c++) {
+          html += `<td class="text-center">${rowYZ[c] !== undefined ? rowYZ[c] : 0}</td>`;
+        }
+        html += `</tr>`;
+      }
+
+      // Render Baris 2: Total Mobil Sewa
+      if (rowSewa) {
+        html += `<tr><td>${rowSewa[0]}</td>`;
+        for (let c = 1; c <= 8; c++) {
+          html += `<td class="text-center">${rowSewa[c] !== undefined ? rowSewa[c] : 0}</td>`;
+        }
+        html += `</tr>`;
+      }
+
+      // Render Baris 3: Pemisah Kosong (Sama seperti gambar Excel)
+      html += `
+        <tr class="empty-row">
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+      `;
+
+      // Render Baris 4: Total
+      if (rowTotal) {
+        html += `<tr><td>${rowTotal[0]}</td>`;
+        for (let c = 1; c <= 8; c++) {
+          html += `<td class="text-center">${rowTotal[c] !== undefined ? rowTotal[c] : 0}</td>`;
+        }
+        html += `</tr>`;
+      }
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      container.innerHTML = html;
     }
 
     // 2. Render Table Solar Hexa
@@ -540,6 +596,7 @@
       }
     }
 
+    // Jalankan pertama kali
     loadAllData();
   </script>
 </body>
