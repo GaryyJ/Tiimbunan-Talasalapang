@@ -82,7 +82,7 @@
       border-spacing: 0;
     }
 
-    /* Header Tabel */
+    /* Header Tabel Utama */
     .table th {
       background-color: var(--header-bg) !important;
       color: #f8fafc !important;
@@ -95,14 +95,13 @@
       text-align: center;
     }
 
-    /* KUSTOMISASI WARNA TANGGAL HEADER */
+    /* WARNA TANGGAL HEADER */
     .date-sub {
       display: block;
-      color: #38bdf8 !important; /* Biru terang cerah agar mudah dibaca */
+      color: #38bdf8 !important; /* Biru terang cerah */
       font-size: 0.70rem;
       font-weight: 500;
       margin-top: 3px;
-      letter-spacing: 0;
     }
 
     .table td {
@@ -152,13 +151,43 @@
       border-top: 2px solid #94a3b8 !important;
       border-bottom: 3px solid #64748b !important;
       color: #0f172a !important;
-      padding-top: 12px;
-      padding-bottom: 12px;
     }
 
     .zero-val {
       color: #cbd5e1;
       font-weight: 400;
+    }
+
+    /* STYLE KHUSUS TABEL RINGKASAN DI BAWAH */
+    .summary-box {
+      background: #f8fafc;
+      border-top: 2px dashed #cbd5e1;
+      padding: 24px;
+    }
+
+    .table-summary {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+
+    .table-summary th {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+      font-size: 0.72rem;
+    }
+
+    .table-summary tr.row-grand-total {
+      background-color: #2563eb !important;
+      color: #ffffff !important;
+      font-weight: 700;
+    }
+
+    .table-summary tr.row-grand-total td {
+      color: #ffffff !important;
+      border-top: 2px solid #1d4ed8;
+      font-size: 0.88rem;
     }
 
     .btn-refresh {
@@ -229,12 +258,29 @@
           
           <!-- TAB 1: REKAP MINGGUAN -->
           <div class="tab-pane fade show active" id="rekap-pane" role="tabpanel">
+            
+            <!-- 1. TABEL UTAMA RITASE -->
             <div class="table-responsive">
               <table class="table table-rekap table-hover align-middle mb-0">
                 <thead id="headMingguan"></thead>
                 <tbody id="bodyMingguan"></tbody>
               </table>
             </div>
+
+            <!-- 2. TABEL RINGKASAN HARIAN (BAGIAN BAWAH) -->
+            <div id="containerRingkasan" class="summary-box d-none">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="fa-solid fa-calculator text-primary fs-5"></i>
+                <h6 class="fw-bold mb-0 text-dark">REKAPAN HARIAN MOBIL YZ DAN MOBIL SEWA</h6>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-summary table-hover align-middle">
+                  <thead id="headRingkasan"></thead>
+                  <tbody id="bodyRingkasan"></tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
 
           <!-- TAB 2: SOLAR HEXA -->
@@ -318,21 +364,40 @@
       }
     }
 
-    // 1. Render Table Rekap Mingguan
+    // 1. Render Table Rekap Mingguan & Ringkasan Bawah
     function renderMingguan(data) {
       const thead = document.getElementById('headMingguan');
       const tbody = document.getElementById('bodyMingguan');
+      
       if (!data || !Array.isArray(data) || data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="100%" class="text-center text-muted py-4">Data Rekap tidak ditemukan</td></tr>`;
         return;
       }
 
-      const maxCols = Math.max(...data.map(row => row ? row.length : 0));
+      // Pisahkan data Rincian Armada dan Data Ringkasan Harian (di bawah baris ke-35 pada sheet)
+      let rincianData = [];
+      let ringkasanData = [];
+      let isSummarySection = false;
+
+      for (let idx = 0; idx < data.length; idx++) {
+        let firstCell = String(data[idx][0] || "").trim().toUpperCase();
+        if (firstCell.includes("REKAPAN HARIAN") || isSummarySection) {
+          isSummarySection = true;
+          if (data[idx].some(c => c !== "")) {
+            ringkasanData.push(data[idx]);
+          }
+        } else {
+          rincianData.push(data[idx]);
+        }
+      }
+
+      // --- A. RENDER TABEL UTAMA ---
+      const maxCols = Math.max(...rincianData.map(row => row ? row.length : 0));
       let headRow = "<tr>";
-      if (data[0]) {
+      if (rincianData[0]) {
         for (let idx = 0; idx < maxCols; idx++) {
-          let col = data[0][idx] !== undefined ? data[0][idx] : "";
-          let subDate = (data[1] && data[1][idx]) ? `<span class="date-sub">${data[1][idx]}</span>` : '';
+          let col = rincianData[0][idx] !== undefined ? rincianData[0][idx] : "";
+          let subDate = (rincianData[1] && rincianData[1][idx]) ? `<span class="date-sub">${rincianData[1][idx]}</span>` : '';
           headRow += `<th class="${idx <= 2 ? 'text-start' : 'text-center'}">${col}${subDate}</th>`;
         }
       }
@@ -340,8 +405,8 @@
       thead.innerHTML = headRow;
 
       tbody.innerHTML = "";
-      for (let i = 2; i < data.length; i++) {
-        let row = data[i];
+      for (let i = 2; i < rincianData.length; i++) {
+        let row = rincianData[i];
         if (!row || row.every(c => c === "" || c === null)) continue;
 
         let label = String(row[0] || "").toLowerCase();
@@ -364,6 +429,63 @@
         }
         tr += "</tr>";
         tbody.innerHTML += tr;
+      }
+
+      // --- B. RENDER TABEL RINGKASAN HARIAN (JIKA ADA) ---
+      const summaryBox = document.getElementById('containerRingkasan');
+      const headSummary = document.getElementById('headRingkasan');
+      const bodySummary = document.getElementById('bodyRingkasan');
+
+      if (ringkasanData.length > 0) {
+        summaryBox.classList.remove('d-none');
+        headSummary.innerHTML = "";
+        bodySummary.innerHTML = "";
+
+        // Baris Header Ringkasan
+        let headIdx = ringkasanData.findIndex(r => String(r[0] || "").toLowerCase().includes("jenis") || r.some(c => String(c).includes("Ming") || String(c).includes("Sen")));
+        
+        if (headIdx !== -1) {
+          let hRow = "<tr>";
+          let hData = ringkasanData[headIdx];
+          let subDates = ringkasanData[headIdx + 1] || [];
+          
+          for (let c = 0; c < hData.length; c++) {
+            if (hData[c] === "" && subDates[c] === "" && c > 0) continue;
+            let title = hData[c] || "";
+            let subDate = subDates[c] ? `<span class="date-sub">${subDates[c]}</span>` : '';
+            hRow += `<th class="${c === 0 ? 'text-start' : 'text-center'}">${title}${subDate}</th>`;
+          }
+          hRow += "</tr>";
+          headSummary.innerHTML = hRow;
+
+          // Baris Data Ringkasan
+          for (let r = headIdx + 2; r < ringkasanData.length; r++) {
+            let row = ringkasanData[r];
+            if (!row || row.every(c => c === "")) continue;
+
+            let rowLabel = String(row[0] || "").toLowerCase();
+            let isGrandTotal = rowLabel === "total" || rowLabel.includes("grand");
+            
+            let tr = `<tr class="${isGrandTotal ? 'row-grand-total' : ''}">`;
+            for (let c = 0; c < row.length; c++) {
+              let val = row[c] !== undefined ? row[c] : "";
+              if (c === 0) {
+                tr += `<td class="fw-bold text-start">${val}</td>`;
+              } else {
+                let num = parseFloat(String(val).replace(/[^0-9.-]+/g, ""));
+                if (!isNaN(num) && num > 0) {
+                  tr += `<td class="text-center ${isGrandTotal ? 'fw-bold' : ''}">${val}</td>`;
+                } else {
+                  tr += `<td class="text-center ${isGrandTotal ? '' : 'zero-val'}">${val || '0'}</td>`;
+                }
+              }
+            }
+            tr += "</tr>";
+            bodySummary.innerHTML += tr;
+          }
+        }
+      } else {
+        summaryBox.classList.add('d-none');
       }
     }
 
