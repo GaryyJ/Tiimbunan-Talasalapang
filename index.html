@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.85, minimum-scale=0.5, maximum-scale=2.0">
-  <title>Dashboard Rekap Ritase Mingguan</title>
+  <title>Dashboard Rekap & Operational Proyek</title>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome Icons -->
@@ -16,9 +16,8 @@
       --bg-main: #f1f5f9;
       --card-bg: #ffffff;
       --header-bg: #0f172a;       /* Dark Navy Header */
-      --primary-accent: #2563eb;  /* Sapphire Blue */
-      --unit-text: #4f46e5;       /* Indigo Accent untuk nama driver/unit */
-      --border-color: #e2e8f0;
+      --primary-blue: #2563eb;
+      --border-color: #cbd5e1;
       --text-main: #1e293b;
     }
 
@@ -28,19 +27,47 @@
       color: var(--text-main);
     }
 
-    /* Card Utama Modern */
     .main-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
+      border-radius: 14px;
       box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
       overflow: hidden;
     }
 
     .card-header-custom {
-      padding: 22px 28px;
+      padding: 20px 24px;
       background: #ffffff;
       border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Tab Custom Styling */
+    .nav-tabs-custom {
+      border-bottom: 2px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 6px 12px 0 12px;
+    }
+
+    .nav-tabs-custom .nav-link {
+      color: #64748b;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tabs-custom .nav-link.active {
+      color: var(--primary-blue);
+      background: #ffffff;
+      border-bottom: 3px solid var(--primary-blue);
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.03);
+    }
+
+    .nav-tabs-custom .nav-link:hover:not(.active) {
+      color: #1e293b;
+      background: #edf2f7;
     }
 
     .table-responsive {
@@ -48,50 +75,52 @@
     }
     
     .table {
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       white-space: nowrap;
       margin-bottom: 0;
+      border-collapse: separate;
+      border-spacing: 0;
     }
 
-    /* Header Tabel Elegan */
+    /* Header Tabel */
     .table th {
       background-color: var(--header-bg) !important;
       color: #f8fafc !important;
       font-weight: 600;
       text-transform: uppercase;
       font-size: 0.72rem;
-      letter-spacing: 0.6px;
-      padding: 15px 12px;
-      border: none;
+      letter-spacing: 0.5px;
+      padding: 14px 12px;
+      border-bottom: 2px solid #334155;
+      text-align: center;
     }
 
     .table td {
-      padding: 11px 12px;
-      border-color: #f1f5f9;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e2e8f0;
       vertical-align: middle;
       color: #334155;
     }
 
-    /* === FREEZE / STICKY KOLOM KE-2 (IDENTITAS / UNIT) === */
-    .table th:nth-child(2),
-    .table td:nth-child(2) {
+    /* Sticky Kolom Ke-2 (khusus rekap mingguan) */
+    .table-rekap th:nth-child(2),
+    .table-rekap td:nth-child(2) {
       position: sticky;
       left: 0;
       background-color: #ffffff;
       z-index: 2;
-      box-shadow: 4px 0 8px rgba(15, 23, 42, 0.05);
+      box-shadow: 3px 0 6px rgba(15, 23, 42, 0.05);
+      font-family: monospace;
+      font-weight: 700;
     }
     
-    .table thead th:nth-child(2) {
+    .table-rekap thead th:nth-child(2) {
       background-color: var(--header-bg) !important;
       z-index: 3;
-    }
-    
-    .row-total td:nth-child(2) {
-      background-color: #f8fafc !important;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    /* Badge Ritase Elegan */
+    /* Badges & Styling */
     .badge-rit { 
       background-color: #eff6ff; 
       color: #1d4ed8; 
@@ -101,10 +130,8 @@
       font-size: 0.8rem;
       border: 1px solid #bfdbfe;
       display: inline-block;
-      min-width: 32px;
     }
 
-    /* Styling Baris Total */
     .row-total { 
       background-color: #f8fafc !important; 
       font-weight: 700;
@@ -116,39 +143,11 @@
       color: #0f172a;
     }
 
-    .row-total .badge-rit { 
-      background-color: #1e40af; 
-      color: white; 
-      border: none;
-      box-shadow: 0 2px 4px rgba(30, 64, 175, 0.2);
-    }
-
     .zero-val {
       color: #cbd5e1;
       font-weight: 400;
     }
-    
-    /* === BARIS PEMISAH DIBUAT LEBIH LEBAR === */
-    .row-spacer { 
-      height: 32px; 
-      background-color: #f1f5f9 !important; 
-      border: none !important;
-    }
 
-    .row-spacer td {
-      border: none !important;
-      background-color: #f1f5f9 !important;
-    }
-    
-    .date-sub { 
-      font-size: 0.65rem; 
-      color: #94a3b8; 
-      font-weight: 400; 
-      display: block; 
-      margin-top: 2px;
-    }
-
-    /* Tombol Refresh */
     .btn-refresh {
       background-color: #ffffff;
       color: #1e40af;
@@ -161,8 +160,6 @@
     .btn-refresh:hover {
       background-color: #eff6ff;
       color: #1d4ed8;
-      border-color: #93c5fd;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
     }
   </style>
 </head>
@@ -170,24 +167,24 @@
 
   <div class="container-fluid container-xl">
 
-    <!-- Status Loading -->
+    <!-- Loading Screen -->
     <div id="loading" class="text-center py-5">
       <div class="spinner-border text-primary" role="status"></div>
-      <p class="mt-2 text-muted small fw-medium">Memuat data rekap mingguan...</p>
+      <p class="mt-2 text-muted small fw-medium">Memuat data operational proyek...</p>
     </div>
 
-    <!-- Container Utama Dashboard -->
+    <!-- Main Content Card -->
     <div id="content" class="d-none">
       <div class="main-card">
         
-        <!-- Header Judul & Tombol Refresh -->
+        <!-- Dashboard Header -->
         <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
             <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
-              <i class="fa-solid fa-truck-fast text-primary"></i>
+              <i class="fa-solid fa-chart-grid text-primary"></i>
               <span>Dashboard Rekap Proyek</span>
             </h4>
-            <p class="text-muted small mb-0 mt-1">Data Rekap Ritase Mingguan (Mobil Milik & Mobil Sewa)</p>
+            <p class="text-muted small mb-0 mt-1">Sistem Integrasi Rekap Ritase, Solar Hexa & Penagihan Tambang</p>
           </div>
           <button onclick="loadAllData()" class="btn btn-refresh btn-sm d-flex align-items-center gap-2">
             <i class="fa-solid fa-rotate-right"></i>
@@ -195,12 +192,79 @@
           </button>
         </div>
 
-        <!-- Tabel Data -->
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead id="headMingguan"></thead>
-            <tbody id="bodyMingguan"></tbody>
-          </table>
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs nav-tabs-custom" id="projectTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="rekap-tab" data-bs-toggle="tab" data-bs-target="#rekap-pane" type="button" role="tab">
+              <i class="fa-solid fa-list-check me-2"></i>Rekap Mingguan
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="solar-tab" data-bs-toggle="tab" data-bs-target="#solar-pane" type="button" role="tab">
+              <i class="fa-solid fa-gas-pump me-2"></i>Solar Hexa
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tambang-tab" data-bs-toggle="tab" data-bs-target="#tambang-pane" type="button" role="tab">
+              <i class="fa-solid fa-file-invoice-dollar me-2"></i>Penagihan Tambang
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab Contents -->
+        <div class="tab-content" id="projectTabsContent">
+          
+          <!-- TAB 1: REKAP MINGGUAN -->
+          <div class="tab-pane fade show active" id="rekap-pane" role="tabpanel">
+            <div class="table-responsive">
+              <table class="table table-rekap table-hover align-middle mb-0">
+                <thead id="headMingguan"></thead>
+                <tbody id="bodyMingguan"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 2: SOLAR HEXA -->
+          <div class="tab-pane fade" id="solar-pane" role="tabpanel">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Waktu</th>
+                    <th>Unit Hexa</th>
+                    <th>Jumlah (Liter)</th>
+                    <th>Harga / Liter (Rp)</th>
+                    <th>Total Biaya (Rp)</th>
+                    <th>Keterangan / Suplier</th>
+                  </tr>
+                </thead>
+                <tbody id="bodySolar"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 3: PENAGIHAN TAMBANG -->
+          <div class="tab-pane fade" id="tambang-pane" role="tabpanel">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Total Ritase</th>
+                    <th>Harga Keamanan (Rp)</th>
+                    <th>Harga Tanah (Rp)</th>
+                    <th>Total Tagihan (Rp)</th>
+                    <th>Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody id="bodyTambang"></tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -208,9 +272,12 @@
 
   </div>
 
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    // 🔗 URL Google Apps Script Anda
-    const API_URL = "https://script.google.com/macros/s/AKfycbyn_wZxGMneEPXqgWlK9kkhMDNVOZe3m6JfkgGSlJ7XF7hZvFs8UVjuLQ6rWDcNkPo/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycby08PgGmtdpFBIT6gz7JogzZEnkWhu2SMwg6vJdJ8--GSFjGNoNx0RJgc0r4Y7Xmuuj/exec";
 
     async function loadAllData() {
       document.getElementById('loading').classList.remove('d-none');
@@ -220,9 +287,13 @@
         const response = await fetch(API_URL);
         const result = await response.json();
 
-        if (result.status === "success" || result.data) {
-          let mingguanData = result.data || result;
-          renderMingguan(mingguanData);
+        if (result.status === "success" || result.data || result) {
+          let rawData = result.data || result;
+
+          // Render masing-masing bagian
+          renderMingguan(rawData.rekap || rawData);
+          renderSolar(rawData.solar || []);
+          renderTambang(rawData.tambang || []);
 
           document.getElementById('loading').classList.add('d-none');
           document.getElementById('content').classList.remove('d-none');
@@ -235,29 +306,27 @@
       }
     }
 
+    // 1. Render Table Rekap Mingguan
     function renderMingguan(data) {
       const thead = document.getElementById('headMingguan');
       const tbody = document.getElementById('bodyMingguan');
-      
       if (!data || !Array.isArray(data) || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11" class="text-center text-muted py-4">Data Ritase tidak ditemukan</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="100%" class="text-center text-muted py-4">Data Rekap tidak ditemukan</td></tr>`;
         return;
       }
 
-      // Build Header
+      const maxCols = Math.max(...data.map(row => row ? row.length : 0));
       let headRow = "<tr>";
       if (data[0]) {
-        data[0].forEach((col, idx) => {
-          if (idx < 11) {
-            if (idx === 0 || idx === 1) headRow += `<th class="text-start">${col}</th>`;
-            else headRow += `<th class="text-center">${col}${data[1] && data[1][idx] ? `<span class="date-sub">${data[1][idx]}</span>` : ''}</th>`;
-          }
-        });
+        for (let idx = 0; idx < maxCols; idx++) {
+          let col = data[0][idx] !== undefined ? data[0][idx] : "";
+          let subDate = (data[1] && data[1][idx]) ? `<span class="date-sub d-block text-muted small">${data[1][idx]}</span>` : '';
+          headRow += `<th class="${idx <= 2 ? 'text-start' : 'text-center'}">${col}${subDate}</th>`;
+        }
       }
       headRow += "</tr>";
       thead.innerHTML = headRow;
 
-      // Build Body
       tbody.innerHTML = "";
       for (let i = 2; i < data.length; i++) {
         let row = data[i];
@@ -267,31 +336,82 @@
         let isTotal = label.includes("total");
         let tr = `<tr class="${isTotal ? 'row-total' : ''}">`;
 
-        row.forEach((cell, idx) => {
-          if (idx < 11) {
-            if (idx === 0) tr += `<td class="fw-semibold text-secondary">${cell}</td>`;
-            else if (idx === 1) tr += `<td class="fw-bold" style="color: var(--unit-text);">${cell}</td>`;
-            else {
-              let num = parseFloat(cell);
-              if (num > 0) {
-                tr += `<td class="text-center"><span class="badge-rit">${cell}</span></td>`;
-              } else {
-                tr += `<td class="text-center zero-val">${cell || '0'}</td>`;
-              }
+        for (let idx = 0; idx < maxCols; idx++) {
+          let cell = row[idx] !== undefined ? row[idx] : "";
+          if (idx === 0) tr += `<td class="fw-semibold text-secondary text-start">${cell}</td>`;
+          else if (idx === 1) tr += `<td class="text-start text-dark">${cell}</td>`;
+          else if (idx === 2) tr += `<td class="fw-bold text-start text-primary">${cell}</td>`;
+          else {
+            let num = parseFloat(cell);
+            if (!isNaN(num) && num > 0) {
+              tr += `<td class="text-center"><span class="badge-rit">${cell}</span></td>`;
+            } else {
+              tr += `<td class="text-center zero-val">${cell || '0'}</td>`;
             }
           }
-        });
+        }
         tr += "</tr>";
         tbody.innerHTML += tr;
-
-        // Pemisah antar kelompok yang lebih lebar
-        if (label.includes("total mobil")) {
-          tbody.innerHTML += `<tr class="row-spacer"><td colspan="11"></td></tr>`;
-        }
       }
     }
 
-    // Load data otomatis saat dibuka
+    // 2. Render Table Solar Hexa
+    function renderSolar(data) {
+      const tbody = document.getElementById('bodySolar');
+      tbody.innerHTML = "";
+      if (!data || data.length <= 1) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">Belum ada transaksi Solar Hexa</td></tr>`;
+        return;
+      }
+      for (let i = 1; i < data.length; i++) {
+        let r = data[i];
+        if (!r || r.length === 0) continue;
+        tbody.innerHTML += `
+          <tr>
+            <td class="text-center fw-medium">${r[0] || ''}</td>
+            <td class="text-center">${formatDate(r[1])}</td>
+            <td class="text-center text-muted">${r[2] || ''}</td>
+            <td class="text-start fw-bold text-primary">${r[3] || ''}</td>
+            <td class="text-center fw-bold">${r[4] || 0} L</td>
+            <td class="text-end">Rp ${(r[5] || 0).toLocaleString('id-ID')}</td>
+            <td class="text-end fw-bold text-success">Rp ${(r[6] || 0).toLocaleString('id-ID')}</td>
+            <td class="text-start">${r[7] || ''}</td>
+          </tr>
+        `;
+      }
+    }
+
+    // 3. Render Table Penagihan Tambang
+    function renderTambang(data) {
+      const tbody = document.getElementById('bodyTambang');
+      tbody.innerHTML = "";
+      if (!data || data.length <= 1) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">Belum ada data Penagihan Tambang</td></tr>`;
+        return;
+      }
+      for (let i = 1; i < data.length; i++) {
+        let r = data[i];
+        if (!r || r.length === 0) continue;
+        tbody.innerHTML += `
+          <tr>
+            <td class="text-center fw-medium">${r[0] || ''}</td>
+            <td class="text-center">${formatDate(r[1])}</td>
+            <td class="text-center fw-bold"><span class="badge-rit">${r[2] || 0} Rit</span></td>
+            <td class="text-end">Rp ${(r[3] || 0).toLocaleString('id-ID')}</td>
+            <td class="text-end">Rp ${(r[4] || 0).toLocaleString('id-ID')}</td>
+            <td class="text-end fw-bold text-success">Rp ${(r[5] || 0).toLocaleString('id-ID')}</td>
+            <td class="text-start text-secondary">${r[6] || ''}</td>
+          </tr>
+        `;
+      }
+    }
+
+    function formatDate(val) {
+      if (!val) return '';
+      let d = new Date(val);
+      return !isNaN(d.getTime()) ? d.toLocaleDateString('id-ID') : val;
+    }
+
     loadAllData();
   </script>
 </body>
