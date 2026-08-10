@@ -11,31 +11,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Google Fonts: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- html2canvas untuk Capture Gambar -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     :root {
       --bg-gradient: #f8fafc;
       --card-bg: #ffffff;
-      
-      /* Warna Kuning Ramah di Mata (Soft Amber) */
       --header-bg: #fef3c7; 
       --header-text: #78350f;
       --header-border: #fde68a;
       --sub-date-color: #92400e;   
-      
-      /* Sel Data Netral & Ramah Dibaca */
       --table-cell-bg: #ffffff;
       --table-cell-text: #1e293b;
       --border-color: #e2e8f0;
-      
-      /* Accent Badges */
       --badge-bg: #2563eb;
       --badge-text: #ffffff;
-      
       --badge-total-bg: #f59e0b;
       --badge-total-text: #ffffff;
-
-      /* Baris Total Sub */
       --total-sub-bg: #f8fafc;     
       --total-sub-text: #0f172a;
     }
@@ -102,7 +95,6 @@
       border: 1px solid var(--border-color);
     }
 
-    /* DESAIN TABEL CLEAN & SOFT */
     .table-main {
       font-size: 0.72rem;
       white-space: nowrap;
@@ -141,7 +133,6 @@
       border: 1px solid var(--border-color);
     }
 
-    /* Baris Total Sub */
     .row-total td { 
       background-color: var(--total-sub-bg) !important; 
       color: var(--total-sub-text) !important;
@@ -149,7 +140,6 @@
       border-top: 2px solid #cbd5e1;
     }
 
-    /* BADGES RITASE */
     .badge-rit { 
       background-color: var(--badge-bg); 
       color: var(--badge-text); 
@@ -193,7 +183,6 @@
       gap: 6px;
     }
 
-    /* SUMMARY TABLE */
     .summary-card-v1 {
       background: #ffffff;
       border-radius: 8px;
@@ -250,6 +239,21 @@
       border-top: 2px solid #cbd5e1;
     }
 
+    .btn-screenshot {
+      background-color: #10b981;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      padding: 6px 12px;
+      font-size: 0.72rem;
+      transition: all 0.2s;
+    }
+
+    .btn-screenshot:hover {
+      background-color: #059669;
+    }
+
     .btn-refresh {
       background-color: var(--header-bg);
       color: var(--header-text);
@@ -264,6 +268,33 @@
     .btn-refresh:hover {
       background-color: #fde68a;
     }
+
+    /* Container Temp Render */
+    #export-container {
+      position: absolute;
+      left: -9999px;
+      top: -9999px;
+      width: 1200px;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 8px;
+    }
+
+    /* Tampilan Gambar Screenshot */
+    .screenshot-viewer-container {
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .screenshot-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 <body class="py-3">
@@ -272,7 +303,7 @@
 
     <!-- Loading Screen -->
     <div id="loading" class="text-center py-5">
-      <div class="spinner-border text-amber spinner-border-sm" style="color: #f59e0b;" role="status"></div>
+      <div class="spinner-border spinner-border-sm" style="color: #f59e0b;" role="status"></div>
       <p class="mt-2 text-dark fw-bold" style="font-size: 0.75rem;">Memuat Data Dashboard...</p>
     </div>
 
@@ -280,7 +311,7 @@
     <div id="content" class="d-none">
       <div class="main-card">
         
-        <!-- Dashboard Header -->
+        <!-- Header & Action Buttons -->
         <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
             <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2" style="font-size: 1.1rem;">
@@ -289,10 +320,19 @@
             </h4>
             <p class="text-muted mb-0" style="font-size: 0.68rem;">Sistem Integrasi Operational Tambang</p>
           </div>
-          <button onclick="loadAllData()" class="btn btn-refresh d-flex align-items-center gap-1">
-            <i class="fa-solid fa-rotate-right"></i>
-            <span>Refresh</span>
-          </button>
+
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <!-- BUTTON SIMPAN SCREENSHOT -->
+            <button onclick="captureAndSavePeriode()" class="btn btn-screenshot d-flex align-items-center gap-1">
+              <i class="fa-solid fa-camera"></i>
+              <span>Simpan Periode</span>
+            </button>
+
+            <button onclick="fetchSheetData()" class="btn btn-refresh d-flex align-items-center gap-1">
+              <i class="fa-solid fa-rotate-right"></i>
+              <span>Refresh</span>
+            </button>
+          </div>
         </div>
 
         <!-- Navigation Tabs -->
@@ -312,17 +352,21 @@
               <i class="fa-solid fa-file-invoice-dollar me-1"></i>Penagihan Tambang
             </button>
           </li>
+          <!-- TAB BARU: REKAPAN PERIODE -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="periode-tab" data-bs-toggle="tab" data-bs-target="#periode-pane" type="button" role="tab">
+              <i class="fa-solid fa-images me-1"></i>Rekapan Periode
+            </button>
+          </li>
         </ul>
 
         <!-- Tab Contents -->
         <div class="tab-content" id="projectTabsContent">
           
-          <!-- TAB 1: REKAP MINGGUAN -->
-          <div class="tab-pane fade show active p-3" id="rekap-pane" role="tabpanel">
-            <!-- Content render via JavaScript -->
-          </div>
+          <!-- Tab 1: Rekap Mingguan -->
+          <div class="tab-pane fade show active p-3" id="rekap-pane" role="tabpanel"></div>
 
-          <!-- TAB 2: SOLAR HEXA -->
+          <!-- Tab 2: Solar Hexa -->
           <div class="tab-pane fade p-3" id="solar-pane" role="tabpanel">
             <div class="table-responsive">
               <table class="table table-main align-middle mb-0">
@@ -343,7 +387,7 @@
             </div>
           </div>
 
-          <!-- TAB 3: PENAGIHAN TAMBANG -->
+          <!-- Tab 3: Penagihan Tambang -->
           <div class="tab-pane fade p-3" id="tambang-pane" role="tabpanel">
             <div class="table-responsive">
               <table class="table table-main align-middle mb-0">
@@ -363,6 +407,30 @@
             </div>
           </div>
 
+          <!-- TAB 4: HALAMAN REKAPAN PERIODE (SCREENSHOT VIEWER) -->
+          <div class="tab-pane fade p-3" id="periode-pane" role="tabpanel">
+            <div class="row mb-3 align-items-center">
+              <div class="col-md-6 col-12 mb-2 mb-md-0">
+                <label for="selectPeriode" class="form-label fw-bold" style="font-size: 0.78rem;">Pilih Periode Rekapan:</label>
+                <select id="selectPeriode" class="form-select form-select-sm" onchange="displaySelectedScreenshot()">
+                  <option value="">-- Pilih Periode Tersimpan --</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-12 text-md-end">
+                <button onclick="deleteSelectedPeriode()" class="btn btn-outline-danger btn-sm" style="font-size: 0.70rem;">
+                  <i class="fa-solid fa-trash me-1"></i>Hapus Periode Ini
+                </button>
+              </div>
+            </div>
+
+            <!-- Tampilan Gambar Screenshot -->
+            <div class="screenshot-viewer-container">
+              <div id="screenshotDisplay">
+                <p class="text-muted mb-0" style="font-size: 0.75rem;">Pilih periode pada dropdown di atas untuk melihat gambar rekapan.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -370,13 +438,15 @@
 
   </div>
 
-  <!-- Bootstrap JS Bundle -->
+  <!-- Container Rahasia untuk Kompilasi Gambar -->
+  <div id="export-container"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycby08PgGmtdpFBIT6gz7JogzZEnkWhu2SMwg6vJdJ8--GSFjGNoNx0RJgc0r4Y7Xmuuj/exec";
 
-    async function loadAllData() {
+    async function fetchSheetData() {
       document.getElementById('loading').classList.remove('d-none');
       document.getElementById('content').classList.add('d-none');
 
@@ -384,17 +454,18 @@
         const response = await fetch(API_URL);
         const result = await response.json();
 
-        if (result.status === "success" || result.data || result) {
+        if (result.status === "success" || result.data) {
           let rawData = result.data || result;
 
           renderMingguan(rawData.rekap || rawData);
           renderSolar(rawData.solar || []);
           renderTambang(rawData.tambang || []);
+          loadPeriodeDropdown();
 
           document.getElementById('loading').classList.add('d-none');
           document.getElementById('content').classList.remove('d-none');
         } else {
-          alert("Gagal mengambil data dari Google Sheets!");
+          alert("Gagal mengambil data sheet!");
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -404,7 +475,6 @@
 
     function renderMingguan(data) {
       const containerTab = document.getElementById('rekap-pane');
-      
       if (!data || !Array.isArray(data) || data.length === 0) {
         containerTab.innerHTML = `<div class="text-center text-muted py-3">Data Rekap tidak ditemukan</div>`;
         return;
@@ -503,11 +573,9 @@
       }
 
       let mainContentHtml = "";
-      
       if (rowsMobilYZ.length > 0) {
         mainContentHtml += generateTableHTML(rowsMobilYZ, "Rincian Ritase - Mobil YZ", "fa-solid fa-truck-front");
       }
-      
       if (rowsMobilSewa.length > 0) {
         mainContentHtml += generateTableHTML(rowsMobilSewa, "Rincian Ritase - Mobil Sewa", "fa-solid fa-truck-ramp-box");
       }
@@ -520,7 +588,6 @@
 
     function renderTabelRekapanHarian(ringkasanData) {
       const container = document.getElementById('containerRingkasan');
-
       if (!ringkasanData || ringkasanData.length === 0) {
         container.classList.add('d-none');
         return;
@@ -673,7 +740,131 @@
       }
     }
 
-    loadAllData();
+    // --- MANAJEMEN SCREENSHOT & DROPDOWN PERIODE ---
+
+    async function captureAndSavePeriode() {
+      const namaPeriode = prompt("Masukkan Nama Periode Rekap:", "Minggu 1 - Agustus 2026");
+      if (!namaPeriode) return;
+
+      const exportContainer = document.getElementById('export-container');
+      
+      const rekapHtml = document.getElementById('rekap-pane').innerHTML;
+      const solarHtml = document.getElementById('solar-pane').innerHTML;
+      const tambangHtml = document.getElementById('tambang-pane').innerHTML;
+
+      exportContainer.innerHTML = `
+        <div style="font-family: 'Inter', sans-serif; color: #1e293b;">
+          <div style="border-bottom: 3px solid #fde68a; padding-bottom: 12px; margin-bottom: 20px; text-align: center;">
+            <h2 style="font-weight: 800; color: #78350f; margin: 0; font-size: 1.5rem;">LAPORAN REKAP OPERASIONAL TAMBANG</h2>
+            <h4 style="font-weight: 700; color: #2563eb; margin-top: 6px; font-size: 1.1rem;">PERIODE: ${namaPeriode.toUpperCase()}</h4>
+          </div>
+
+          <div style="margin-bottom: 25px;">
+            <h5 style="font-weight: 800; color: #1e293b; border-left: 4px solid #2563eb; padding-left: 8px; margin-bottom: 12px;">1. Rekap Ritase Mingguan</h5>
+            ${rekapHtml}
+          </div>
+
+          <div style="margin-bottom: 25px;">
+            <h5 style="font-weight: 800; color: #1e293b; border-left: 4px solid #f59e0b; padding-left: 8px; margin-bottom: 12px;">2. Pengeluaran Solar Hexa</h5>
+            ${solarHtml}
+          </div>
+
+          <div style="margin-bottom: 25px;">
+            <h5 style="font-weight: 800; color: #1e293b; border-left: 4px solid #10b981; padding-left: 8px; margin-bottom: 12px;">3. Penagihan Tambang</h5>
+            ${tambangHtml}
+          </div>
+
+          <div style="text-align: right; font-size: 0.65rem; color: #94a3b8; margin-top: 20px;">
+            Dicetak otomatis pada: ${new Date().toLocaleString('id-ID')}
+          </div>
+        </div>
+      `;
+
+      try {
+        const canvas = await html2canvas(exportContainer, {
+          scale: 1.5,
+          useCORS: true,
+          backgroundColor: "#ffffff"
+        });
+
+        // Konversi Gambar ke Base64 (DataURL)
+        const imageDataUrl = canvas.toDataURL("image/png");
+
+        // Simpan ke LocalStorage
+        let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
+        savedData[namaPeriode] = imageDataUrl;
+        localStorage.setItem('rekapan_periode_db', JSON.stringify(savedData));
+
+        exportContainer.innerHTML = "";
+
+        // Reload Dropdown
+        loadPeriodeDropdown();
+
+        // Pindah otomatis ke Tab "Rekapan Periode"
+        const tabBtn = new bootstrap.Tab(document.getElementById('periode-tab'));
+        tabBtn.show();
+
+        // Otomatis pilih periode yang baru saja dibuat
+        document.getElementById('selectPeriode').value = namaPeriode;
+        displaySelectedScreenshot();
+
+        alert(`Berhasil menyimpan rekapan periode "${namaPeriode}"!`);
+
+      } catch (err) {
+        console.error("Gagal mengambil screenshot:", err);
+        alert("Terjadi kesalahan saat menyimpan gambar.");
+      }
+    }
+
+    function loadPeriodeDropdown() {
+      const select = document.getElementById('selectPeriode');
+      let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
+
+      select.innerHTML = `<option value="">-- Pilih Periode Tersimpan --</option>`;
+
+      Object.keys(savedData).forEach(nama => {
+        let opt = document.createElement('option');
+        opt.value = nama;
+        opt.textContent = nama;
+        select.appendChild(opt);
+      });
+    }
+
+    function displaySelectedScreenshot() {
+      const selectedNama = document.getElementById('selectPeriode').value;
+      const displayArea = document.getElementById('screenshotDisplay');
+
+      if (!selectedNama) {
+        displayArea.innerHTML = `<p class="text-muted mb-0" style="font-size: 0.75rem;">Pilih periode pada dropdown di atas untuk melihat gambar rekapan.</p>`;
+        return;
+      }
+
+      let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
+      let imgData = savedData[selectedNama];
+
+      if (imgData) {
+        displayArea.innerHTML = `<img src="${imgData}" class="screenshot-img" alt="Rekapan ${selectedNama}">`;
+      }
+    }
+
+    function deleteSelectedPeriode() {
+      const selectedNama = document.getElementById('selectPeriode').value;
+      if (!selectedNama) {
+        alert("Pilih periode yang ingin dihapus terlebih dahulu.");
+        return;
+      }
+
+      if (confirm(`Apakah Anda yakin ingin menghapus rekapan periode "${selectedNama}"?`)) {
+        let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
+        delete savedData[selectedNama];
+        localStorage.setItem('rekapan_periode_db', JSON.stringify(savedData));
+
+        loadPeriodeDropdown();
+        displaySelectedScreenshot();
+      }
+    }
+
+    fetchSheetData();
   </script>
 </body>
 </html>
