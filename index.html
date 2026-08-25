@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Rekap Proyek - Warm Amber Theme</title>
+    <title>Dashboard Rekap Proyek - Ultra Compact</title>
     <!-- Bootstrap CSS 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts Inter -->
@@ -30,40 +30,42 @@
         background: var(--page);
         font-family: 'Inter', sans-serif;
         color: var(--ink);
-        font-size: 13.5px;
-        line-height: 1.5;
+        font-size: 13px;
+        line-height: 1.4;
+        overflow-x: hidden;
     }
 
     .main-header {
         background: var(--surface);
         border-bottom: 1px solid #e2e8f0;
-        padding: 16px 0;
-        margin-bottom: 16px;
+        padding: 12px 0;
+        margin-bottom: 12px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .main-header h4 {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         letter-spacing: -.01em;
     }
 
     .main-header .header-icon {
         background: #fef3c7;
         color: #d97706;
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     #current-time {
         background: #fffbf0 !important;
         color: #b45309 !important;
         border: 1px solid #fde68a !important;
-        border-radius: 8px !important;
-        font-size: .78rem !important;
+        border-radius: 6px !important;
+        font-size: .75rem !important;
     }
 
     .btn-amber-refresh {
@@ -71,9 +73,9 @@
         color: #78350f;
         border: 1px solid #fde68a;
         font-weight: 600;
-        font-size: .78rem;
-        border-radius: 8px;
-        padding: 6px 14px;
+        font-size: .75rem;
+        border-radius: 6px;
+        padding: 5px 10px;
         transition: all 0.2s ease;
     }
 
@@ -85,128 +87,114 @@
     .solar-kpi-card {
         background: var(--surface);
         border: 1px solid #fde68a;
-        border-radius: 12px;
-        padding: 14px 18px;
-        box-shadow: 0 2px 8px rgba(217, 119, 6, 0.05);
+        border-radius: 10px;
+        padding: 10px 12px;
+        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.04);
         position: relative;
         overflow: hidden;
         height: 100%;
-        transition: transform .2s ease;
-    }
-
-    .solar-kpi-card:hover {
-        transform: translateY(-2px);
     }
 
     .solar-kpi-card .card-label {
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: .04em;
         color: #92400e;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .solar-kpi-card .card-value {
-        font-size: 1.35rem;
+        font-size: 1.15rem;
         font-weight: 800;
         color: #78350f;
-        line-height: 1.2;
+        line-height: 1.1;
     }
 
     .solar-kpi-card .card-subtext {
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         color: #64748b;
-        margin-top: 4px;
+        margin-top: 2px;
     }
 
     .solar-kpi-card .card-icon-bg {
         position: absolute;
-        right: 14px;
-        bottom: 10px;
-        font-size: 2.2rem;
-        opacity: 0.12;
+        right: 8px;
+        bottom: 4px;
+        font-size: 1.6rem;
+        opacity: 0.1;
         color: #d97706;
     }
 
+    /* Nav Tabs Responsif Scroll */
     .nav-pills {
         background: #fffbf0;
-        padding: 6px;
-        border-radius: 12px;
+        padding: 4px;
+        border-radius: 10px;
         border: 1px solid #fde68a;
-        gap: 6px;
-        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.05);
+        gap: 4px;
+        box-shadow: 0 2px 4px rgba(217, 119, 6, 0.04);
+        -webkit-overflow-scrolling: touch;
     }
+
+    .nav-pills::-webkit-scrollbar { display: none; }
 
     .nav-pills .nav-link {
         color: #92400e;
         font-weight: 600;
-        border-radius: 8px;
-        padding: 9px 16px;
-        font-size: .82rem;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: .78rem;
         background: transparent;
         border: 1px solid transparent;
         white-space: nowrap;
-        transition: all .2s ease;
-    }
-
-    .nav-pills .nav-link:hover {
-        background: #fef3c7;
-        color: #78350f;
     }
 
     .nav-pills .nav-link.active {
         background: #fde68a !important;
         color: #78350f !important;
         border-color: #fcd34d;
-        box-shadow: 0 2px 4px rgba(180, 83, 9, 0.12);
         font-weight: 700;
     }
 
     .card-custom {
         border: 1px solid #fde68a;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(217, 119, 6, 0.04);
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.03);
         background: var(--surface);
-        margin-bottom: 22px;
+        margin-bottom: 28px;
         overflow: hidden;
     }
 
     .card-custom .card-header-amber {
         background: #fef3c7;
-        padding: 12px 16px;
+        padding: 8px 12px;
         border-bottom: 1px solid #fde68a;
-        font-size: .92rem;
+        font-size: .85rem;
         font-weight: 700;
         color: #78350f;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
 
-    .card-custom .card-header-amber i {
-        color: #d97706;
-    }
-
-    .card-body-container {
-        padding: 12px;
-    }
+    .card-body-container { padding: 8px; }
 
     .table-responsive {
-        max-height: 560px;
-        overflow: auto;
+        max-height: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
         border: 1px solid #e2e8f0;
-        border-radius: 8px;
+        border-radius: 6px;
         background-color: #ffffff;
+        -webkit-overflow-scrolling: touch;
     }
 
     .table {
-        font-size: .81rem;
+        font-size: .78rem;
         white-space: nowrap;
         border-color: #e2e8f0;
         margin-bottom: 0;
         background-color: #ffffff;
-        table-layout: auto;
     }
 
     .table thead th {
@@ -220,107 +208,170 @@
         vertical-align: middle;
         border-bottom: 1px solid #fde68a !important;
         border-right: 1px solid #fde68a !important;
-        padding: 10px 12px;
-        font-size: .78rem;
-        letter-spacing: .02em;
+        padding: 6px 8px;
+        font-size: .75rem;
     }
 
     .table tbody td {
         background-color: #ffffff !important;
         color: #1e293b !important;
         vertical-align: middle;
-        padding: 8px 12px;
+        padding: 6px 8px;
         border-color: #f1f5f9 !important;
         font-weight: 500;
-        font-size: .81rem;
+        height: 32px;
     }
 
     tr.date-separator td {
-        height: 18px;
+        height: 12px;
         background-color: #f8fafc !important;
-        border-left: none !important;
-        border-right: none !important;
-        border-top: 1px solid #e2e8f0 !important;
-        border-bottom: 1px solid #e2e8f0 !important;
+        border: none !important;
     }
+
+    /* STRUKTUR PRESISI UNTUK SEMUA TABEL REKAP */
+    .table-rekap {
+        table-layout: fixed;
+        width: 100%;
+        min-width: 680px;
+    }
+
+    .table-rekap th, .table-rekap td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .table-rekap th:nth-child(1), .table-rekap td:nth-child(1) { width: 11%; }
+    .table-rekap th:nth-child(2), .table-rekap td:nth-child(2) { width: 12%; }
+    .table-rekap th:nth-child(3), .table-rekap td:nth-child(3) { width: 14%; }
+    .table-rekap th:nth-child(4), .table-rekap td:nth-child(4),
+    .table-rekap th:nth-child(5), .table-rekap td:nth-child(5),
+    .table-rekap th:nth-child(6), .table-rekap td:nth-child(6),
+    .table-rekap th:nth-child(7), .table-rekap td:nth-child(7),
+    .table-rekap th:nth-child(8), .table-rekap td:nth-child(8),
+    .table-rekap th:nth-child(9), .table-rekap td:nth-child(9),
+    .table-rekap th:nth-child(10), .table-rekap td:nth-child(10) { width: 8%; }
+    .table-rekap th:nth-child(11), .table-rekap td:nth-child(11) { width: 7%; }
 
     .table-log th:first-child,
     .table-log td:first-child {
-        width: 55px !important;
-        max-width: 55px !important;
-        min-width: 45px !important;
+        width: 35px !important;
+        min-width: 35px !important;
         text-align: center;
-    }
-
-    .table-rekap th:first-child,
-    .table-rekap td:first-child {
-        min-width: 120px !important;
-        text-align: left;
-        padding-left: 14px;
     }
 
     .table tbody tr.is-total-row td {
         background-color: #f8fafc !important;
         color: #0f172a !important;
         font-weight: 700;
-        border-top: 1px solid #cbd5e1 !important;
-        border-bottom: 1px solid #cbd5e1 !important;
     }
 
     .badge-ritase {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 28px;
-        height: 24px;
+        min-width: 22px;
+        height: 19px;
         background-color: #2563eb !important;
         color: #ffffff !important;
         font-weight: 700;
-        font-size: .8rem;
-        border-radius: 6px;
-        padding: 0 8px;
+        font-size: .72rem;
+        border-radius: 4px;
+        padding: 0 4px;
     }
 
     .badge-total {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 32px;
-        height: 25px;
+        min-width: 24px;
+        height: 20px;
         background-color: #f59e0b !important;
         color: #ffffff !important;
         font-weight: 800;
-        font-size: .82rem;
-        border-radius: 6px;
-        padding: 0 9px;
+        font-size: .75rem;
+        border-radius: 4px;
+        padding: 0 5px;
     }
 
+    /* ========================================================= */
+    /* ANIMASI KREATIF EXCAVATOR (HEXAVATOR) LOADING */
+    /* ========================================================= */
     #loading {
         background: #fffbf0;
         border: 1px solid #fde68a;
         border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.05);
     }
 
-    .table-responsive::-webkit-scrollbar {
-        width: 7px;
-        height: 7px;
+    .excavator-loader {
+        width: 140px;
+        height: 100px;
+        margin: 0 auto 12px auto;
+        position: relative;
     }
 
-    .table-responsive::-webkit-scrollbar-track {
-        background: #fffbf0;
+    .excavator-loader svg {
+        width: 100%;
+        height: 100%;
     }
 
-    .table-responsive::-webkit-scrollbar-thumb {
-        background: #fde68a;
-        border-radius: 10px;
+    .excavator-arm {
+        transform-origin: 35px 65px;
+        animation: digArm 2s infinite ease-in-out;
     }
 
-    @media (max-width: 768px) {
-        body { font-size: 12.5px; }
-        .main-header { padding: 12px 0; margin-bottom: 12px; }
-        .nav-pills .nav-link { padding: 7px 12px; font-size: .75rem; }
-        .table-responsive { max-height: 400px; }
-        .solar-kpi-card .card-value { font-size: 1.15rem; }
+    .excavator-bucket {
+        transform-origin: 85px 60px;
+        animation: digBucket 2s infinite ease-in-out;
+    }
+
+    .dirt-particle {
+        animation: dirtFly 2s infinite ease-in-out;
+    }
+
+    @keyframes digArm {
+        0%, 100% { transform: rotate(0deg); }
+        40% { transform: rotate(-15deg); }
+        70% { transform: rotate(8deg); }
+    }
+
+    @keyframes digBucket {
+        0%, 100% { transform: rotate(0deg); }
+        40% { transform: rotate(-25deg); }
+        65% { transform: rotate(20deg); }
+    }
+
+    @keyframes dirtFly {
+        0%, 40% { opacity: 0; transform: translate(0, 0) scale(0); }
+        60% { opacity: 1; transform: translate(-12px, -15px) scale(1); }
+        80%, 100% { opacity: 0; transform: translate(-25px, 5px) scale(0.5); }
+    }
+
+    /* MODE ULTRA-COMPACT SMARTPHONE */
+    @media (max-width: 576px) {
+        body { font-size: 11.5px; line-height: 1.3; }
+        .container-fluid { padding-left: 6px !important; padding-right: 6px !important; }
+        .main-header { padding: 6px 0; margin-bottom: 8px; }
+        .main-header h4 { font-size: 0.88rem; }
+        .main-header p { display: none !important; }
+        .main-header .header-icon { width: 26px; height: 26px; font-size: 0.75rem; border-radius: 6px; }
+        .btn-amber-refresh, #current-time { font-size: 0.65rem !important; padding: 3px 6px !important; }
+        .solar-kpi-card { padding: 6px 8px; border-radius: 8px; }
+        .solar-kpi-card .card-label { font-size: 0.6rem; margin-bottom: 1px; }
+        .solar-kpi-card .card-value { font-size: 0.92rem; }
+        .solar-kpi-card .card-subtext { font-size: 0.6rem; margin-top: 1px; line-height: 1; }
+        .solar-kpi-card .card-icon-bg { font-size: 1.1rem; right: 4px; bottom: 2px; opacity: 0.08; }
+        .nav-pills { padding: 3px; gap: 3px; border-radius: 8px; margin-bottom: 8px !important; }
+        .nav-pills .nav-link { padding: 4px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .card-custom { margin-bottom: 18px; border-radius: 8px; }
+        .card-custom .card-header-amber { padding: 6px 10px; font-size: 0.78rem; }
+        .card-body-container { padding: 4px; }
+        .table-responsive { max-height: 340px; border-radius: 4px; }
+        .table thead th { padding: 4px 5px; font-size: 0.68rem; }
+        .table tbody td { padding: 4px 5px; font-size: 0.7rem; height: 28px; }
+        .badge-ritase, .badge-total { min-width: 18px; height: 16px; font-size: 0.65rem; padding: 0 3px; border-radius: 3px; }
     }
     </style>
 </head>
@@ -328,100 +379,120 @@
 
     <!-- Header Navbar -->
     <div class="main-header">
-        <div class="container-fluid px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="container-fluid px-2 d-flex justify-content-between align-items-center flex-wrap gap-1">
             <div>
-                <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
-                    <span class="header-icon"><i class="fa-solid fa-truck-monster"></i></span> Dashboard Rekap Proyek
+                <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-1">
+                    <span class="header-icon"><i class="fa-solid fa-truck-monster"></i></span> Dashboard Rekap
                 </h4>
-                <p class="text-muted small mb-0 mt-1">Sistem Integrasi Operasional Tambang & Timbunan Talasalapang</p>
+                <p class="text-muted small mb-0 mt-1">Sistem Integrasi Operasional Tambang</p>
             </div>
-            <div class="text-end d-flex align-items-center gap-2">
+            <div class="text-end d-flex align-items-center gap-1">
                 <button class="btn btn-amber-refresh d-flex align-items-center gap-1 shadow-sm" id="btn-refresh" onclick="fetchData()">
-                    <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Refresh Data
+                    <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Refresh
                 </button>
-                <span class="badge border px-3 py-2" id="current-time">
-                    <i class="fa-regular fa-clock me-1"></i> Memuat waktu...
+                <span class="badge border px-2 py-1" id="current-time">
+                    <i class="fa-regular fa-clock me-1"></i> Memuat...
                 </span>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid px-4">
-        <!-- Loading State -->
-        <div id="loading" class="text-center py-5 px-3 mb-4">
-            <div class="spinner-border text-warning" role="status"></div>
-            <p class="mt-2 text-warning fw-semibold small">Menghubungkan ke database Google Spreadsheet...</p>
+    <div class="container-fluid px-2">
+        <!-- Loading State Kreatif (Hexavator) -->
+        <div id="loading" class="text-center my-3">
+            <div class="excavator-loader">
+                <svg viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 5 80 L 115 80" stroke="#d97706" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 4"/>
+                    <rect x="15" y="68" width="50" height="12" rx="6" fill="#334155"/>
+                    <circle cx="21" cy="74" r="4" fill="#94a3b8"/>
+                    <circle cx="40" cy="74" r="4" fill="#94a3b8"/>
+                    <circle cx="59" cy="74" r="4" fill="#94a3b8"/>
+                    <path d="M 20 68 L 25 48 L 50 48 L 58 68 Z" fill="#d97706"/>
+                    <path d="M 38 52 L 48 52 L 46 62 L 38 62 Z" fill="#fef3c7"/>
+                    <g class="excavator-arm">
+                        <path d="M 35 60 L 60 35 L 85 60" stroke="#b45309" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <g class="excavator-bucket">
+                            <path d="M 85 60 L 98 62 L 94 74 L 82 70 Z" fill="#78350f"/>
+                            <path d="M 98 62 L 102 61 M 97 66 L 101 65 M 95 70 L 99 69" stroke="#334155" stroke-width="1.5"/>
+                        </g>
+                    </g>
+                    <circle class="dirt-particle" cx="80" cy="68" r="3" fill="#b45309"/>
+                    <circle class="dirt-particle" cx="76" cy="64" r="2" fill="#d97706"/>
+                </svg>
+            </div>
+            <div class="fw-bold text-dark" style="font-size: 0.9rem;">Hexavator Sedang Mengeruk Data...</div>
+            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Menghubungkan & Memperbarui Spreadsheet</p>
         </div>
 
         <!-- Content Area -->
         <div id="content" style="display: none;">
             
             <!-- SECTION CARDS (PEMANTAUAN SOLAR HEXA GLOBAL) -->
-            <div class="row g-3 mb-4">
+            <div class="row g-1 g-sm-2 mb-2">
                 <div class="col-6 col-md-3">
                     <div class="solar-kpi-card">
-                        <div class="card-label"><i class="fa-solid fa-gas-pump me-1"></i> Total Belanja Solar</div>
+                        <div class="card-label"><i class="fa-solid fa-gas-pump me-1"></i> Total Belanja</div>
                         <div class="card-value" id="kpi-total-belanja">0 L</div>
-                        <div class="card-subtext">Akumulasi Pembelian Solar</div>
+                        <div class="card-subtext">Akumulasi Belanja</div>
                         <i class="fa-solid fa-cart-shopping card-icon-bg"></i>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="solar-kpi-card">
-                        <div class="card-label"><i class="fa-solid fa-truck-fast me-1"></i> Ritase Pemakaian</div>
+                        <div class="card-label"><i class="fa-solid fa-truck-fast me-1"></i> Total Ritase</div>
                         <div class="card-value" id="kpi-total-ritase">0 Rit</div>
-                        <div class="card-subtext" id="kpi-pemakaian-liter">Pemakaian: 0 L (1,5L/Rit)</div>
+                        <div class="card-subtext" id="kpi-pemakaian-liter">Pemakaian: 0 L</div>
                         <i class="fa-solid fa-route card-icon-bg"></i>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="solar-kpi-card">
-                        <div class="card-label"><i class="fa-solid fa-fill-drip me-1"></i> Sisa Stok Solar</div>
+                        <div class="card-label"><i class="fa-solid fa-fill-drip me-1"></i> Sisa Stok</div>
                         <div class="card-value text-amber" id="kpi-sisa-stok">0 L</div>
-                        <div class="card-subtext">Formula: Belanja - (Rit x 1,5L)</div>
+                        <div class="card-subtext">Belanja - Pakai</div>
                         <i class="fa-solid fa-oil-can card-icon-bg"></i>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="solar-kpi-card">
-                        <div class="card-label"><i class="fa-solid fa-calculator me-1"></i> Sisa Kuota Ritase</div>
+                        <div class="card-label"><i class="fa-solid fa-calculator me-1"></i> Sisa Kuota</div>
                         <div class="card-value text-primary" id="kpi-sisa-ritase">0 Rit</div>
-                        <div class="card-subtext">Formula: Sisa Stok ÷ 1,5L</div>
+                        <div class="card-subtext">Stok ÷ 1,5L</div>
                         <i class="fa-solid fa-chart-line card-icon-bg"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Menu Navigasi Tab Sheet -->
-            <ul class="nav nav-pills mb-4 flex-nowrap overflow-auto pb-1" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills mb-2 flex-nowrap overflow-auto" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-rekap" type="button" role="tab">
-                        <i class="fa-solid fa-chart-pie me-2"></i> Rekap Mingguan
+                        <i class="fa-solid fa-chart-pie me-1"></i> Rekap Mingguan
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-yz" type="button" role="tab">
-                        <i class="fa-solid fa-truck me-2"></i> Log Mobil YZ
+                        <i class="fa-solid fa-truck me-1"></i> Mobil YZ
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-cash" type="button" role="tab">
-                        <i class="fa-solid fa-money-bill-wave me-2"></i> Log Mobil Cash
+                        <i class="fa-solid fa-money-bill-wave me-1"></i> Mobil Cash
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-sewa" type="button" role="tab">
-                        <i class="fa-solid fa-truck-ramp-box me-2"></i> Log Mobil Sewa
+                        <i class="fa-solid fa-truck-ramp-box me-1"></i> Mobil Sewa
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-solar" type="button" role="tab">
-                        <i class="fa-solid fa-gas-pump me-2"></i> Solar Hexa
+                        <i class="fa-solid fa-gas-pump me-1"></i> Solar Hexa
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-tagihan" type="button" role="tab">
-                        <i class="fa-solid fa-file-invoice-dollar me-2"></i> Penagihan Tambang
+                        <i class="fa-solid fa-file-invoice-dollar me-1"></i> Penagihan
                     </button>
                 </li>
             </ul>
@@ -431,19 +502,19 @@
                 <!-- 1. Rekap Mingguan Tab -->
                 <div class="tab-pane fade show active" id="tab-rekap" role="tabpanel">
                     <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Rincian Ritase - Mobil YZ</div>
+                        <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Ritase - Mobil YZ</div>
                         <div class="card-body-container">
                             <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Rincian Ritase - Mobil Cash</div>
+                        <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Ritase - Mobil Cash</div>
                         <div class="card-body-container">
                             <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-truck-ramp-box"></i> Rincian Ritase - Mobil Sewa</div>
+                        <div class="card-header-amber"><i class="fa-solid fa-truck-ramp-box"></i> Ritase - Mobil Sewa</div>
                         <div class="card-body-container">
                             <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-sewa"></table></div>
                         </div>
@@ -491,7 +562,7 @@
     <script>
         function updateClock() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const options = { weekday: 'short', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             document.getElementById('current-time').innerHTML = `<i class="fa-regular fa-clock me-1"></i> ${now.toLocaleDateString('id-ID', options)}`;
         }
         setInterval(updateClock, 1000);
@@ -506,9 +577,19 @@
             if (refreshBtn) refreshBtn.disabled = true;
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
 
-            fetch(WEB_APP_URL, { method: 'GET', mode: 'cors', redirect: 'follow' })
-            .then(res => res.json())
+            // Buka animasi loading Hexavator & sembunyikan konten saat refresh dipanggil
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('content').style.display = 'none';
+
+            fetch(WEB_APP_URL)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP Error! Status: ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
+                // Sembunyikan loading dan tampilkan konten dashboard
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
 
@@ -521,7 +602,13 @@
                 populateTable('table-tagihan', data.tagihan);
             })
             .catch(err => {
-                document.getElementById('loading').innerHTML = `<div class="alert alert-danger text-center p-3 small">Gagal Memuat Data: ${err.message}</div>`;
+                console.error("Fetch Error:", err);
+                document.getElementById('loading').innerHTML = `
+                    <div class="alert alert-danger text-center p-3 small mb-0">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> 
+                        Gagal Memuat Data: ${err.message}<br>
+                        <small class="text-muted">Pastikan akses deployment Apps Script disetel ke "Anyone" (Siapa Saja).</small>
+                    </div>`;
                 document.getElementById('loading').style.display = 'block';
             })
             .finally(() => {
@@ -586,7 +673,7 @@
 
             document.getElementById('kpi-total-belanja').innerText = `${totalBelanjaSolar.toLocaleString('id-ID')} L`;
             document.getElementById('kpi-total-ritase').innerText = `${totalRitase.toLocaleString('id-ID')} Rit`;
-            document.getElementById('kpi-pemakaian-liter').innerText = `Pemakaian: ${totalPemakaianLiter.toLocaleString('id-ID')} L (${KONSUMSI_PER_RIT}L/Rit)`;
+            document.getElementById('kpi-pemakaian-liter').innerText = `Pakai: ${totalPemakaianLiter.toLocaleString('id-ID')} L`;
             document.getElementById('kpi-sisa-stok').innerText = `${(sisaStokSolar || 0).toLocaleString('id-ID', {maximumFractionDigits: 1})} L`;
             document.getElementById('kpi-sisa-ritase').innerText = `${(sisaRitase || 0).toLocaleString('id-ID', {maximumFractionDigits: 1})} Rit`;
         }
@@ -612,8 +699,7 @@
                 if (!isNaN(d.getTime())) {
                     const hours = String(d.getHours()).padStart(2, '0');
                     const minutes = String(d.getMinutes()).padStart(2, '0');
-                    const seconds = String(d.getSeconds()).padStart(2, '0');
-                    return `${hours}:${minutes}:${seconds}`;
+                    return `${hours}:${minutes}`;
                 }
             }
             return val;
@@ -665,7 +751,7 @@
             }
 
             if (!rows || rows.length === 0) {
-                table.innerHTML = "<tbody><tr><td class='text-center text-muted py-3 small'>Tidak ada data tersedia</td></tr></tbody>";
+                table.innerHTML = "<tbody><tr><td class='text-center text-muted py-2 small'>Tidak ada data</td></tr></tbody>";
                 return;
             }
 
@@ -684,7 +770,7 @@
 
             if (isSingleTitleHeader) {
                 const titleText = nonFormattedTitle[0] || "";
-                thead += `<tr><th colspan="${maxCols}" class="text-center fw-bold py-2">${titleText}</th></tr>`;
+                thead += `<tr><th colspan="${maxCols}" class="text-center fw-bold py-1">${titleText}</th></tr>`;
                 thead += `<tr>`;
                 if (rows[1]) {
                     rows[1].forEach(th => {
@@ -718,27 +804,34 @@
 
             let tbody = "<tbody>";
             let lastDate = null;
-            let inSummarySection = false; // Penanda khusus agar baris nilai rekap bawah ikut aman dari format "Rp"
+            let inSummarySection = false;
+            let hasInsertedSolarSpacing = false;
+            let isSummaryTable = (tableId === 'table-rekap-summary');
 
             for (let i = startIndex; i < rows.length; i++) {
                 if (!rows[i] || rows[i].every(cell => cell === "" || cell === null)) continue;
                 
                 let rowText = rows[i].join(' ').toLowerCase();
                 
-                // Deteksi mulainya area rekapitulasi di baris paling bawah
                 if (rowText.includes('total balanja') || rowText.includes('total belanja') || rowText.includes('total ritase')) {
                     inSummarySection = true;
                 }
 
-                // Anggap sebagai baris Total (grey background) jika ada kata kunci, ATAU ia berada di area rekapitulasi (termasuk baris nilainya)
+                // PERBAIKAN: Menambahkan 10 baris kosong (spacer) khusus pada sheet Solar Hexa
+                if (isSolarTable && inSummarySection && !hasInsertedSolarSpacing) {
+                    const NUMBER_OF_SPACER_ROWS = 10;
+                    for (let s = 0; s < NUMBER_OF_SPACER_ROWS; s++) {
+                        tbody += `<tr style="height: 24px; background-color: #f8fafc;"><td colspan="${maxCols}" style="border: none !important; background: transparent !important;"></td></tr>`;
+                    }
+                    hasInsertedSolarSpacing = true;
+                }
+
                 let isTotalRow = rowText.includes('total') || rowText.includes('grand') || rowText.includes('sisa') || inSummarySection;
 
-                // Pengaman ekstra: Jika sel pertama (No) ada angkanya, ini pasti baris data biasa (jangan ditandai isTotalRow)
                 if (rows[i][0] !== "" && rows[i][0] !== null && parseNum(rows[i][0]) > 0 && !inSummarySection) {
                     isTotalRow = false;
                 }
 
-                // Otomatis set Harga / Liter menjadi 10.000 (hanya untuk data biasa, bukan untuk rekap/summary bawah)
                 if (isSolarTable && !isTotalRow) {
                     let hargaIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('harga')) : -1;
                     let jumlahIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('jumlah')) : -1;
@@ -788,7 +881,6 @@
                     } else if (headerName.includes('waktu') || headerName.includes('jam')) {
                         formattedCell = formatTimeCell(formattedCell);
                     } 
-                    // Baris rekap bawah (!isTotalRow yang sudah false berkat inSummarySection) bebas dari paksaan Rp
                     else if (!isTotalRow && (headerName.includes('biaya') || headerName.includes('harga') || headerName.includes('tagihan') || headerName.includes('nominal'))) {
                         formattedCell = formatCurrencyOrNumber(formattedCell);
                     }
@@ -797,15 +889,27 @@
                     const isNumeric = numVal > 0 && cell !== "";
                     const isTotalCol = colIndex === (rows[i].length - 1) || headerName.includes('total');
 
-                    if (!isSolarTable) {
-                        if (!isTotalRow && isNumeric && colIndex >= 3 && !headerName.includes('no')) {
-                            if (isTotalCol) {
+                    if (!isSolarTable && isNumeric) {
+                        if (isSummaryTable) {
+                            if (rowText.includes('total keseluruhan')) {
                                 formattedCell = `<span class="badge-total">${cell}</span>`;
                             } else {
-                                formattedCell = `<span class="badge-ritase">${cell}</span>`;
+                                if (isTotalCol) {
+                                    formattedCell = `<span class="badge-total">${cell}</span>`;
+                                } else {
+                                    formattedCell = `<span class="badge-ritase">${cell}</span>`;
+                                }
                             }
-                        } else if (isTotalRow && isNumeric) {
-                            formattedCell = `<span class="badge-total">${cell}</span>`;
+                        } else {
+                            if (isTotalRow) {
+                                formattedCell = `<span class="badge-total">${cell}</span>`;
+                            } else if (colIndex >= 3 && !headerName.includes('no')) {
+                                if (isTotalCol) {
+                                    formattedCell = `<span class="badge-total">${cell}</span>`;
+                                } else {
+                                    formattedCell = `<span class="badge-ritase">${cell}</span>`;
+                                }
+                            }
                         }
                     }
 
