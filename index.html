@@ -1,870 +1,824 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Dashboard Rekap Proyek</title>
-  
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- html2canvas untuk Capture Gambar -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Rekap Proyek - Warm Amber Theme</title>
+    <!-- Bootstrap CSS 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
     :root {
-      --bg-gradient: #f8fafc;
-      --card-bg: #ffffff;
-      --header-bg: #fef3c7; 
-      --header-text: #78350f;
-      --header-border: #fde68a;
-      --sub-date-color: #92400e;   
-      --table-cell-bg: #ffffff;
-      --table-cell-text: #1e293b;
-      --border-color: #e2e8f0;
-      --badge-bg: #2563eb;
-      --badge-text: #ffffff;
-      --badge-total-bg: #f59e0b;
-      --badge-total-text: #ffffff;
-      --total-sub-bg: #f8fafc;     
-      --total-sub-text: #0f172a;
+        --amber-bg: #fffbf0;
+        --amber-header-bg: #fef3c7;
+        --amber-header-border: #fde68a;
+        --amber-border: #fde68a;
+        --amber-text: #78350f;
+        --amber-primary: #d97706;
+        --ink: #1e293b;
+        --surface: #ffffff;
+        --page: #f8fafc;
     }
 
-    * {
-      -webkit-tap-highlight-color: transparent !important;
-      outline: none !important;
+    * { box-sizing: border-box; }
+
+    body {
+        background: var(--page);
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+        font-size: 13.5px;
+        line-height: 1.5;
     }
 
-    body { 
-      background: var(--bg-gradient); 
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      color: var(--table-cell-text);
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      user-select: none;
+    .main-header {
+        background: var(--surface);
+        border-bottom: 1px solid #e2e8f0;
+        padding: 16px 0;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    .main-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      overflow: hidden;
-      border: 1px solid var(--border-color);
+    .main-header h4 {
+        font-size: 1.15rem;
+        letter-spacing: -.01em;
     }
 
-    .card-header-custom {
-      padding: 12px 18px;
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
+    .main-header .header-icon {
+        background: #fef3c7;
+        color: #d97706;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .nav-tabs-custom {
-      border-bottom: 2px solid var(--header-border);
-      background: #f8fafc;
-      padding: 6px 8px 0 8px;
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      white-space: nowrap;
+    #current-time {
+        background: #fffbf0 !important;
+        color: #b45309 !important;
+        border: 1px solid #fde68a !important;
+        border-radius: 8px !important;
+        font-size: .78rem !important;
     }
 
-    .nav-tabs-custom::-webkit-scrollbar { display: none; }
-
-    .nav-tabs-custom .nav-link {
-      color: #64748b;
-      font-weight: 700;
-      font-size: 0.75rem;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px 6px 0 0;
-      transition: all 0.2s ease;
+    .btn-amber-refresh {
+        background-color: #fef3c7;
+        color: #78350f;
+        border: 1px solid #fde68a;
+        font-weight: 600;
+        font-size: .78rem;
+        border-radius: 8px;
+        padding: 6px 14px;
+        transition: all 0.2s ease;
     }
 
-    .nav-tabs-custom .nav-link.active {
-      color: var(--header-text);
-      background: var(--header-bg);
+    .btn-amber-refresh:hover {
+        background-color: #fde68a;
+        color: #78350f;
+    }
+
+    .solar-kpi-card {
+        background: var(--surface);
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        padding: 14px 18px;
+        box-shadow: 0 2px 8px rgba(217, 119, 6, 0.05);
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        transition: transform .2s ease;
+    }
+
+    .solar-kpi-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .solar-kpi-card .card-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: #92400e;
+        margin-bottom: 4px;
+    }
+
+    .solar-kpi-card .card-value {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #78350f;
+        line-height: 1.2;
+    }
+
+    .solar-kpi-card .card-subtext {
+        font-size: 0.72rem;
+        color: #64748b;
+        margin-top: 4px;
+    }
+
+    .solar-kpi-card .card-icon-bg {
+        position: absolute;
+        right: 14px;
+        bottom: 10px;
+        font-size: 2.2rem;
+        opacity: 0.12;
+        color: #d97706;
+    }
+
+    .nav-pills {
+        background: #fffbf0;
+        padding: 6px;
+        border-radius: 12px;
+        border: 1px solid #fde68a;
+        gap: 6px;
+        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.05);
+    }
+
+    .nav-pills .nav-link {
+        color: #92400e;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-size: .82rem;
+        background: transparent;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        transition: all .2s ease;
+    }
+
+    .nav-pills .nav-link:hover {
+        background: #fef3c7;
+        color: #78350f;
+    }
+
+    .nav-pills .nav-link.active {
+        background: #fde68a !important;
+        color: #78350f !important;
+        border-color: #fcd34d;
+        box-shadow: 0 2px 4px rgba(180, 83, 9, 0.12);
+        font-weight: 700;
+    }
+
+    .card-custom {
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(217, 119, 6, 0.04);
+        background: var(--surface);
+        margin-bottom: 22px;
+        overflow: hidden;
+    }
+
+    .card-custom .card-header-amber {
+        background: #fef3c7;
+        padding: 12px 16px;
+        border-bottom: 1px solid #fde68a;
+        font-size: .92rem;
+        font-weight: 700;
+        color: #78350f;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .card-custom .card-header-amber i {
+        color: #d97706;
+    }
+
+    .card-body-container {
+        padding: 12px;
     }
 
     .table-responsive {
-      overflow-x: auto;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
+        max-height: 560px;
+        overflow: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background-color: #ffffff;
     }
 
-    .table-main {
-      font-size: 0.72rem;
-      white-space: nowrap;
-      margin-bottom: 0;
-      width: 100%;
-      border-collapse: collapse;
+    .table {
+        font-size: .81rem;
+        white-space: nowrap;
+        border-color: #e2e8f0;
+        margin-bottom: 0;
+        background-color: #ffffff;
+        table-layout: auto;
     }
 
-    .table-main th {
-      background: var(--header-bg) !important;
-      color: var(--header-text) !important;
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 0.3px;
-      padding: 8px 6px;
-      border: 1px solid var(--header-border);
-      text-align: center;
-      line-height: 1.2;
+    .table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #fef3c7 !important;
+        color: #78350f !important;
+        z-index: 2;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+        border-bottom: 1px solid #fde68a !important;
+        border-right: 1px solid #fde68a !important;
+        padding: 10px 12px;
+        font-size: .78rem;
+        letter-spacing: .02em;
     }
 
-    .date-sub {
-      display: block;
-      color: var(--sub-date-color) !important;
-      font-size: 0.60rem;
-      font-weight: 600;
-      margin-top: 1px;
+    .table tbody td {
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        vertical-align: middle;
+        padding: 8px 12px;
+        border-color: #f1f5f9 !important;
+        font-weight: 500;
+        font-size: .81rem;
     }
 
-    .table-main td {
-      padding: 6px 8px;
-      background-color: var(--table-cell-bg);
-      color: var(--table-cell-text);
-      vertical-align: middle;
-      line-height: 1.2;
-      border: 1px solid var(--border-color);
+    tr.date-separator td {
+        height: 18px;
+        background-color: #f8fafc !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: 1px solid #e2e8f0 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
     }
 
-    .row-total td { 
-      background-color: var(--total-sub-bg) !important; 
-      color: var(--total-sub-text) !important;
-      font-weight: 800;
-      border-top: 2px solid #cbd5e1;
+    .table-log th:first-child,
+    .table-log td:first-child {
+        width: 55px !important;
+        max-width: 55px !important;
+        min-width: 45px !important;
+        text-align: center;
     }
 
-    .badge-rit { 
-      background-color: var(--badge-bg); 
-      color: var(--badge-text); 
-      font-weight: 800; 
-      border-radius: 4px; 
-      font-size: 0.70rem;
-      padding: 2px 8px;
-      display: inline-block;
-      min-width: 26px;
-      text-align: center;
+    .table-rekap th:first-child,
+    .table-rekap td:first-child {
+        min-width: 120px !important;
+        text-align: left;
+        padding-left: 14px;
     }
 
-    .badge-rit-total {
-      background: var(--badge-total-bg);
-      color: var(--badge-total-text);
-      font-weight: 800;
-      border-radius: 4px;
-      font-size: 0.70rem;
-      padding: 2px 8px;
-      display: inline-block;
-      min-width: 26px;
-      text-align: center;
+    .table tbody tr.is-total-row td {
+        background-color: #f8fafc !important;
+        color: #0f172a !important;
+        font-weight: 700;
+        border-top: 1px solid #cbd5e1 !important;
+        border-bottom: 1px solid #cbd5e1 !important;
     }
 
-    .zero-val {
-      color: #cbd5e1;
-      font-weight: 400;
+    .badge-ritase {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 28px;
+        height: 24px;
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: .8rem;
+        border-radius: 6px;
+        padding: 0 8px;
     }
 
-    .table-wrapper {
-      margin-bottom: 1.2rem;
+    .badge-total {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 25px;
+        background-color: #f59e0b !important;
+        color: #ffffff !important;
+        font-weight: 800;
+        font-size: .82rem;
+        border-radius: 6px;
+        padding: 0 9px;
     }
 
-    .table-category-title {
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: #1e293b;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    #loading {
+        background: #fffbf0;
+        border: 1px solid #fde68a;
+        border-radius: 12px;
     }
 
-    .summary-card-v1 {
-      background: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 1.2rem;
-    }
-    
-    .table-v1 {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.72rem;
-      white-space: nowrap;
+    .table-responsive::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
     }
 
-    .table-v1 .title-bg {
-      background: var(--header-bg);
-      color: var(--header-text);
-      font-weight: 800;
-      font-size: 0.75rem;
-      padding: 8px;
-      text-align: center;
-      border: 1px solid var(--header-border);
+    .table-responsive::-webkit-scrollbar-track {
+        background: #fffbf0;
     }
 
-    .table-v1 th {
-      background-color: #fef9c3;
-      color: #713f12;
-      font-weight: 800;
-      font-size: 0.65rem;
-      padding: 6px 4px;
-      text-align: center;
-      border: 1px solid #fde047;
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #fde68a;
+        border-radius: 10px;
     }
 
-    .table-v1 td {
-      padding: 6px 8px;
-      background: #ffffff;
-      color: #1e293b;
-      text-align: center;
-      border: 1px solid var(--border-color);
+    @media (max-width: 768px) {
+        body { font-size: 12.5px; }
+        .main-header { padding: 12px 0; margin-bottom: 12px; }
+        .nav-pills .nav-link { padding: 7px 12px; font-size: .75rem; }
+        .table-responsive { max-height: 400px; }
+        .solar-kpi-card .card-value { font-size: 1.15rem; }
     }
-
-    .table-v1 .col-label {
-      font-weight: 700;
-      color: #0f172a;
-      background-color: #f8fafc;
-      text-align: left;
-    }
-
-    .table-v1 .row-grand-total td {
-      background-color: #f8fafc;
-      font-weight: 800;
-      color: #0f172a;
-      border-top: 2px solid #cbd5e1;
-    }
-
-    .btn-screenshot {
-      background-color: #10b981;
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      font-weight: 700;
-      padding: 6px 12px;
-      font-size: 0.72rem;
-      transition: all 0.2s;
-    }
-
-    .btn-screenshot:hover {
-      background-color: #059669;
-    }
-
-    .btn-refresh {
-      background-color: var(--header-bg);
-      color: var(--header-text);
-      border: 1px solid var(--header-border);
-      border-radius: 6px;
-      font-weight: 700;
-      padding: 6px 12px;
-      font-size: 0.72rem;
-      transition: all 0.2s;
-    }
-
-    .btn-refresh:hover {
-      background-color: #fde68a;
-    }
-
-    /* Container Temp Render */
-    #export-container {
-      position: absolute;
-      left: -9999px;
-      top: -9999px;
-      width: 1200px;
-      background: #ffffff;
-      padding: 24px;
-      border-radius: 8px;
-    }
-
-    /* Tampilan Gambar Screenshot */
-    .screenshot-viewer-container {
-      background: #f1f5f9;
-      border: 2px dashed #cbd5e1;
-      border-radius: 8px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .screenshot-img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+    </style>
 </head>
-<body class="py-3">
+<body>
 
-  <div class="container-fluid container-xl">
-
-    <!-- Loading Screen -->
-    <div id="loading" class="text-center py-5">
-      <div class="spinner-border spinner-border-sm" style="color: #f59e0b;" role="status"></div>
-      <p class="mt-2 text-dark fw-bold" style="font-size: 0.75rem;">Memuat Data Dashboard...</p>
-    </div>
-
-    <!-- Main Content Card -->
-    <div id="content" class="d-none">
-      <div class="main-card">
-        
-        <!-- Header & Action Buttons -->
-        <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <div>
-            <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2" style="font-size: 1.1rem;">
-              <i class="fa-solid fa-chart-pie" style="color: #2563eb;"></i>
-              <span>Dashboard Rekap Proyek</span>
-            </h4>
-            <p class="text-muted mb-0" style="font-size: 0.68rem;">Sistem Integrasi Operational Tambang</p>
-          </div>
-
-          <div class="d-flex align-items-center gap-2 flex-wrap">
-            <!-- BUTTON SIMPAN SCREENSHOT -->
-            <button onclick="captureAndSavePeriode()" class="btn btn-screenshot d-flex align-items-center gap-1">
-              <i class="fa-solid fa-camera"></i>
-              <span>Simpan Periode</span>
-            </button>
-
-            <button onclick="fetchSheetData()" class="btn btn-refresh d-flex align-items-center gap-1">
-              <i class="fa-solid fa-rotate-right"></i>
-              <span>Refresh</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Navigation Tabs -->
-        <ul class="nav nav-tabs nav-tabs-custom" id="projectTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="rekap-tab" data-bs-toggle="tab" data-bs-target="#rekap-pane" type="button" role="tab">
-              <i class="fa-solid fa-layer-group me-1"></i>Rekap Mingguan
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="solar-tab" data-bs-toggle="tab" data-bs-target="#solar-pane" type="button" role="tab">
-              <i class="fa-solid fa-gas-pump me-1"></i>Solar Hexa
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tambang-tab" data-bs-toggle="tab" data-bs-target="#tambang-pane" type="button" role="tab">
-              <i class="fa-solid fa-file-invoice-dollar me-1"></i>Penagihan Tambang
-            </button>
-          </li>
-          <!-- TAB BARU: REKAPAN PERIODE -->
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="periode-tab" data-bs-toggle="tab" data-bs-target="#periode-pane" type="button" role="tab">
-              <i class="fa-solid fa-images me-1"></i>Rekapan Periode
-            </button>
-          </li>
-        </ul>
-
-        <!-- Tab Contents -->
-        <div class="tab-content" id="projectTabsContent">
-          
-          <!-- Tab 1: Rekap Mingguan -->
-          <div class="tab-pane fade show active p-3" id="rekap-pane" role="tabpanel"></div>
-
-          <!-- Tab 2: Solar Hexa -->
-          <div class="tab-pane fade p-3" id="solar-pane" role="tabpanel">
-            <div class="table-responsive">
-              <table class="table table-main align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Waktu</th>
-                    <th>Unit Hexa</th>
-                    <th>Jumlah (L)</th>
-                    <th>Harga/L (Rp)</th>
-                    <th>Total Biaya (Rp)</th>
-                    <th>Keterangan / Suplier</th>
-                  </tr>
-                </thead>
-                <tbody id="bodySolar"></tbody>
-              </table>
+    <!-- Header Navbar -->
+    <div class="main-header">
+        <div class="container-fluid px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                    <span class="header-icon"><i class="fa-solid fa-truck-monster"></i></span> Dashboard Rekap Proyek
+                </h4>
+                <p class="text-muted small mb-0 mt-1">Sistem Integrasi Operasional Tambang & Timbunan Talasalapang</p>
             </div>
-          </div>
-
-          <!-- Tab 3: Penagihan Tambang -->
-          <div class="tab-pane fade p-3" id="tambang-pane" role="tabpanel">
-            <div class="table-responsive">
-              <table class="table table-main align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Total Ritase</th>
-                    <th>Harga Keamanan (Rp)</th>
-                    <th>Harga Tanah (Rp)</th>
-                    <th>Total Tagihan (Rp)</th>
-                    <th>Keterangan</th>
-                  </tr>
-                </thead>
-                <tbody id="bodyTambang"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- TAB 4: HALAMAN REKAPAN PERIODE (SCREENSHOT VIEWER) -->
-          <div class="tab-pane fade p-3" id="periode-pane" role="tabpanel">
-            <div class="row mb-3 align-items-center">
-              <div class="col-md-6 col-12 mb-2 mb-md-0">
-                <label for="selectPeriode" class="form-label fw-bold" style="font-size: 0.78rem;">Pilih Periode Rekapan:</label>
-                <select id="selectPeriode" class="form-select form-select-sm" onchange="displaySelectedScreenshot()">
-                  <option value="">-- Pilih Periode Tersimpan --</option>
-                </select>
-              </div>
-              <div class="col-md-6 col-12 text-md-end">
-                <button onclick="deleteSelectedPeriode()" class="btn btn-outline-danger btn-sm" style="font-size: 0.70rem;">
-                  <i class="fa-solid fa-trash me-1"></i>Hapus Periode Ini
+            <div class="text-end d-flex align-items-center gap-2">
+                <button class="btn btn-amber-refresh d-flex align-items-center gap-1 shadow-sm" id="btn-refresh" onclick="fetchData()">
+                    <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Refresh Data
                 </button>
-              </div>
+                <span class="badge border px-3 py-2" id="current-time">
+                    <i class="fa-regular fa-clock me-1"></i> Memuat waktu...
+                </span>
             </div>
-
-            <!-- Tampilan Gambar Screenshot -->
-            <div class="screenshot-viewer-container">
-              <div id="screenshotDisplay">
-                <p class="text-muted mb-0" style="font-size: 0.75rem;">Pilih periode pada dropdown di atas untuk melihat gambar rekapan.</p>
-              </div>
-            </div>
-          </div>
-
         </div>
-
-      </div>
     </div>
 
-  </div>
+    <div class="container-fluid px-4">
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-5 px-3 mb-4">
+            <div class="spinner-border text-warning" role="status"></div>
+            <p class="mt-2 text-warning fw-semibold small">Menghubungkan ke database Google Spreadsheet...</p>
+        </div>
 
-  <!-- Container Rahasia untuk Kompilasi Gambar -->
-  <div id="export-container"></div>
+        <!-- Content Area -->
+        <div id="content" style="display: none;">
+            
+            <!-- SECTION CARDS (PEMANTAUAN SOLAR HEXA GLOBAL) -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="solar-kpi-card">
+                        <div class="card-label"><i class="fa-solid fa-gas-pump me-1"></i> Total Belanja Solar</div>
+                        <div class="card-value" id="kpi-total-belanja">0 L</div>
+                        <div class="card-subtext">Akumulasi Pembelian Solar</div>
+                        <i class="fa-solid fa-cart-shopping card-icon-bg"></i>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="solar-kpi-card">
+                        <div class="card-label"><i class="fa-solid fa-truck-fast me-1"></i> Ritase Pemakaian</div>
+                        <div class="card-value" id="kpi-total-ritase">0 Rit</div>
+                        <div class="card-subtext" id="kpi-pemakaian-liter">Pemakaian: 0 L (1,5L/Rit)</div>
+                        <i class="fa-solid fa-route card-icon-bg"></i>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="solar-kpi-card">
+                        <div class="card-label"><i class="fa-solid fa-fill-drip me-1"></i> Sisa Stok Solar</div>
+                        <div class="card-value text-amber" id="kpi-sisa-stok">0 L</div>
+                        <div class="card-subtext">Formula: Belanja - (Rit x 1,5L)</div>
+                        <i class="fa-solid fa-oil-can card-icon-bg"></i>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="solar-kpi-card">
+                        <div class="card-label"><i class="fa-solid fa-calculator me-1"></i> Sisa Kuota Ritase</div>
+                        <div class="card-value text-primary" id="kpi-sisa-ritase">0 Rit</div>
+                        <div class="card-subtext">Formula: Sisa Stok ÷ 1,5L</div>
+                        <i class="fa-solid fa-chart-line card-icon-bg"></i>
+                    </div>
+                </div>
+            </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Menu Navigasi Tab Sheet -->
+            <ul class="nav nav-pills mb-4 flex-nowrap overflow-auto pb-1" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-rekap" type="button" role="tab">
+                        <i class="fa-solid fa-chart-pie me-2"></i> Rekap Mingguan
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-yz" type="button" role="tab">
+                        <i class="fa-solid fa-truck me-2"></i> Log Mobil YZ
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-cash" type="button" role="tab">
+                        <i class="fa-solid fa-money-bill-wave me-2"></i> Log Mobil Cash
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-sewa" type="button" role="tab">
+                        <i class="fa-solid fa-truck-ramp-box me-2"></i> Log Mobil Sewa
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-solar" type="button" role="tab">
+                        <i class="fa-solid fa-gas-pump me-2"></i> Solar Hexa
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-tagihan" type="button" role="tab">
+                        <i class="fa-solid fa-file-invoice-dollar me-2"></i> Penagihan Tambang
+                    </button>
+                </li>
+            </ul>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycby08PgGmtdpFBIT6gz7JogzZEnkWhu2SMwg6vJdJ8--GSFjGNoNx0RJgc0r4Y7Xmuuj/exec";
+            <!-- Tab Content -->
+            <div class="tab-content" id="pills-tabContent">
+                <!-- 1. Rekap Mingguan Tab -->
+                <div class="tab-pane fade show active" id="tab-rekap" role="tabpanel">
+                    <div class="card card-custom">
+                        <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Rincian Ritase - Mobil YZ</div>
+                        <div class="card-body-container">
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
+                        </div>
+                    </div>
+                    <div class="card card-custom">
+                        <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Rincian Ritase - Mobil Cash</div>
+                        <div class="card-body-container">
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
+                        </div>
+                    </div>
+                    <div class="card card-custom">
+                        <div class="card-header-amber"><i class="fa-solid fa-truck-ramp-box"></i> Rincian Ritase - Mobil Sewa</div>
+                        <div class="card-body-container">
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-sewa"></table></div>
+                        </div>
+                    </div>
+                    <div class="card card-custom">
+                        <div class="card-header-amber"><i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & SEWA</div>
+                        <div class="card-body-container">
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-summary"></table></div>
+                        </div>
+                    </div>
+                </div>
 
-    async function fetchSheetData() {
-      document.getElementById('loading').classList.remove('d-none');
-      document.getElementById('content').classList.add('d-none');
+                <!-- 2. Log Mobil YZ -->
+                <div class="tab-pane fade" id="tab-yz" role="tabpanel">
+                    <div class="card card-custom"><div class="card-body-container"><div class="table-responsive"><table class="table table-bordered align-middle" id="table-yz"></table></div></div></div>
+                </div>
+                <!-- 3. Log Mobil Cash -->
+                <div class="tab-pane fade" id="tab-cash" role="tabpanel">
+                    <div class="card card-custom"><div class="card-body-container"><div class="table-responsive"><table class="table table-bordered align-middle" id="table-cash"></table></div></div></div>
+                </div>
+                <!-- 4. Log Mobil Sewa -->
+                <div class="tab-pane fade" id="tab-sewa" role="tabpanel">
+                    <div class="card card-custom"><div class="card-body-container"><div class="table-responsive"><table class="table table-bordered align-middle" id="table-sewa"></table></div></div></div>
+                </div>
+                <!-- 5. Solar Hexa Sheet -->
+                <div class="tab-pane fade" id="tab-solar" role="tabpanel">
+                    <div class="card card-custom">
+                        <div class="card-header-amber"><i class="fa-solid fa-gas-pump"></i> Log Transaksi Solar Hexa</div>
+                        <div class="card-body-container">
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-solar"></table></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 6. Penagihan Tambang -->
+                <div class="tab-pane fade" id="tab-tagihan" role="tabpanel">
+                    <div class="card card-custom"><div class="card-body-container"><div class="table-responsive"><table class="table table-bordered align-middle" id="table-tagihan"></table></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      try {
-        const response = await fetch(API_URL);
-        const result = await response.json();
-
-        if (result.status === "success" || result.data) {
-          let rawData = result.data || result;
-
-          renderMingguan(rawData.rekap || rawData);
-          renderSolar(rawData.solar || []);
-          renderTambang(rawData.tambang || []);
-          loadPeriodeDropdown();
-
-          document.getElementById('loading').classList.add('d-none');
-          document.getElementById('content').classList.remove('d-none');
-        } else {
-          alert("Gagal mengambil data sheet!");
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('current-time').innerHTML = `<i class="fa-regular fa-clock me-1"></i> ${now.toLocaleDateString('id-ID', options)}`;
         }
-      } catch (error) {
-        console.error("Fetch error:", error);
-        alert("Terjadi kesalahan koneksi!");
-      }
-    }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    function renderMingguan(data) {
-      const containerTab = document.getElementById('rekap-pane');
-      if (!data || !Array.isArray(data) || data.length === 0) {
-        containerTab.innerHTML = `<div class="text-center text-muted py-3">Data Rekap tidak ditemukan</div>`;
-        return;
-      }
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyRwzd-ysGE2_VmmZ8lzk1iFr_wLYB3TBPTqe04PUYTolfMGtUrff-22zXIi5zRRpjwmg/exec";
 
-      let rincianData = [];
-      let ringkasanData = [];
-      let isSummarySection = false;
+        function fetchData() {
+            const refreshBtn = document.getElementById('btn-refresh');
+            const refreshIcon = document.getElementById('refresh-icon');
 
-      for (let idx = 0; idx < data.length; idx++) {
-        let cell0 = String(data[idx][0] || "").trim().toUpperCase();
-        let cell1 = String(data[idx][1] || "").trim().toUpperCase();
-        let cell2 = String(data[idx][2] || "").trim().toUpperCase();
+            if (refreshBtn) refreshBtn.disabled = true;
+            if (refreshIcon) refreshIcon.classList.add('fa-spin');
 
-        if (cell0.includes("REKAPAN HARIAN") || cell1.includes("REKAPAN HARIAN") || cell2.includes("REKAPAN HARIAN") || isSummarySection) {
-          isSummarySection = true;
-          ringkasanData.push(data[idx]);
-        } else {
-          rincianData.push(data[idx]);
+            fetch(WEB_APP_URL, { method: 'GET', mode: 'cors', redirect: 'follow' })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+
+                calculateSolarKPICards(data.solarHexa);
+                processRekapMingguan(data.rekapMingguan);
+                populateTable('table-yz', data.mobilYz);
+                populateTable('table-cash', data.mobilCash);
+                populateTable('table-sewa', data.mobilSewa);
+                populateTable('table-solar', data.solarHexa, false, true);
+                populateTable('table-tagihan', data.tagihan);
+            })
+            .catch(err => {
+                document.getElementById('loading').innerHTML = `<div class="alert alert-danger text-center p-3 small">Gagal Memuat Data: ${err.message}</div>`;
+                document.getElementById('loading').style.display = 'block';
+            })
+            .finally(() => {
+                if (refreshBtn) refreshBtn.disabled = false;
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+            });
         }
-      }
 
-      const maxCols = Math.max(...rincianData.map(row => row ? row.length : 0));
-      let headHtml = "<tr>";
-      if (rincianData[0]) {
-        for (let idx = 0; idx < maxCols; idx++) {
-          let col = rincianData[0][idx] !== undefined ? rincianData[0][idx] : "";
-          let subDate = (rincianData[1] && rincianData[1][idx]) ? `<span class="date-sub">${rincianData[1][idx]}</span>` : '';
-          headHtml += `<th class="${idx <= 2 ? 'text-start ps-3' : 'text-center'}">${col}${subDate}</th>`;
+        window.onload = function() {
+            fetchData();
+        };
+
+        function parseNum(val) {
+            if (typeof val === 'number') return val;
+            if (!val) return 0;
+            let cleaned = String(val).replace(/[^0-9.-]+/g, "");
+            let parsed = parseFloat(cleaned);
+            return isNaN(parsed) ? 0 : parsed;
         }
-      }
-      headHtml += "</tr>";
 
-      let rowsMobilYZ = [];
-      let rowsMobilSewa = [];
+        function calculateSolarKPICards(solarRows) {
+            if (!solarRows || solarRows.length === 0) return;
 
-      for (let i = 2; i < rincianData.length; i++) {
-        let row = rincianData[i];
-        if (!row || row.every(c => c === "" || c === null)) continue;
+            let totalBelanjaSolar = 0;
+            let totalRitase = 0;
+            let isSummaryFound = false;
 
-        let jenisArmada = String(row[0] || "").toLowerCase();
+            for (let i = 0; i < solarRows.length; i++) {
+                let row = solarRows[i];
+                if (!row) continue;
 
-        if (jenisArmada.includes("sewa")) {
-          if (row[0]) row[0] = "Mobil Sewa";
-          rowsMobilSewa.push(row);
-        } else {
-          rowsMobilYZ.push(row);
-        }
-      }
-
-      function generateTableHTML(rowArray, title, iconClass) {
-        let bodyRows = "";
-        for (let row of rowArray) {
-          let label = String(row[0] || "").toLowerCase();
-          let isTotal = label.includes("total");
-          let tr = `<tr class="${isTotal ? 'row-total' : ''}">`;
-
-          for (let idx = 0; idx < maxCols; idx++) {
-            let cell = row[idx] !== undefined ? row[idx] : "";
-            let isLastColumn = (idx === maxCols - 1); 
-
-            if (idx === 0) tr += `<td class="text-start ps-3 fw-semibold">${cell}</td>`;
-            else if (idx === 1) tr += `<td class="text-start font-monospace">${cell}</td>`;
-            else if (idx === 2) tr += `<td class="text-start">${cell}</td>`;
-            else {
-              let num = parseFloat(String(cell).replace(/[^0-9.-]+/g, ""));
-              if (!isNaN(num) && num > 0) {
-                if (isTotal || isLastColumn) {
-                  tr += `<td class="text-center"><span class="badge-rit-total">${cell}</span></td>`;
-                } else {
-                  tr += `<td class="text-center"><span class="badge-rit">${cell}</span></td>`;
+                let rowString = row.join(' ').toLowerCase();
+                if (rowString.includes('total belanja solar') || rowString.includes('total balanja')) {
+                    let valueRow = solarRows[i + 1];
+                    if (valueRow) {
+                        let numbers = valueRow.map(v => parseNum(v)).filter(v => v > 0);
+                        if (numbers.length >= 2) {
+                            totalBelanjaSolar = numbers[0];
+                            totalRitase = numbers[1];
+                            isSummaryFound = true;
+                            break;
+                        }
+                    }
                 }
-              } else {
-                tr += `<td class="text-center zero-val">${cell || '0'}</td>`;
-              }
             }
-          }
-          tr += "</tr>";
-          bodyRows += tr;
+
+            if (!isSummaryFound) {
+                for (let i = solarRows.length - 1; i >= 0; i--) {
+                    let nums = solarRows[i].map(v => parseNum(v)).filter(v => v > 0);
+                    if (nums.length >= 2) {
+                        totalBelanjaSolar = nums[0];
+                        totalRitase = nums[1];
+                        break;
+                    }
+                }
+            }
+
+            const KONSUMSI_PER_RIT = 1.5;
+            let totalPemakaianLiter = totalRitase * KONSUMSI_PER_RIT;
+            let sisaStokSolar = totalBelanjaSolar - totalPemakaianLiter;
+            let sisaRitase = sisaStokSolar / KONSUMSI_PER_RIT;
+
+            document.getElementById('kpi-total-belanja').innerText = `${totalBelanjaSolar.toLocaleString('id-ID')} L`;
+            document.getElementById('kpi-total-ritase').innerText = `${totalRitase.toLocaleString('id-ID')} Rit`;
+            document.getElementById('kpi-pemakaian-liter').innerText = `Pemakaian: ${totalPemakaianLiter.toLocaleString('id-ID')} L (${KONSUMSI_PER_RIT}L/Rit)`;
+            document.getElementById('kpi-sisa-stok').innerText = `${(sisaStokSolar || 0).toLocaleString('id-ID', {maximumFractionDigits: 1})} L`;
+            document.getElementById('kpi-sisa-ritase').innerText = `${(sisaRitase || 0).toLocaleString('id-ID', {maximumFractionDigits: 1})} Rit`;
         }
 
-        return `
-          <div class="table-wrapper">
-            <div class="table-category-title">
-              <i class="${iconClass}" style="color: #2563eb;"></i>
-              <span>${title}</span>
-            </div>
-            <div class="table-responsive">
-              <table class="table table-main align-middle mb-0">
-                <thead>${headHtml}</thead>
-                <tbody>${bodyRows}</tbody>
-              </table>
-            </div>
-          </div>
-        `;
-      }
-
-      let mainContentHtml = "";
-      if (rowsMobilYZ.length > 0) {
-        mainContentHtml += generateTableHTML(rowsMobilYZ, "Rincian Ritase - Mobil YZ", "fa-solid fa-truck-front");
-      }
-      if (rowsMobilSewa.length > 0) {
-        mainContentHtml += generateTableHTML(rowsMobilSewa, "Rincian Ritase - Mobil Sewa", "fa-solid fa-truck-ramp-box");
-      }
-
-      mainContentHtml += `<div id="containerRingkasan" class="summary-card-v1 d-none"></div>`;
-      containerTab.innerHTML = mainContentHtml;
-
-      renderTabelRekapanHarian(ringkasanData);
-    }
-
-    function renderTabelRekapanHarian(ringkasanData) {
-      const container = document.getElementById('containerRingkasan');
-      if (!ringkasanData || ringkasanData.length === 0) {
-        container.classList.add('d-none');
-        return;
-      }
-
-      container.classList.remove('d-none');
-
-      let headHariRow = ringkasanData.find(r => r.some(c => String(c).toLowerCase().includes("ming") || String(c).toLowerCase().includes("sen"))) || [];
-      let headTglRow = ringkasanData.find(r => r.some(c => String(c).includes("/") || String(c).includes("-"))) || [];
-
-      let hariList = ["Ming", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
-      let tglList = ["26/07/2026", "27/07/2026", "28/07/2026", "29/07/2026", "30/07/2026", "31/07/2026", "01/08/2026"];
-
-      if (headHariRow.length > 0) {
-        let extractedHari = headHariRow.filter(c => c !== "" && !String(c).toLowerCase().includes("jenis"));
-        if (extractedHari.length >= 7) hariList = extractedHari.slice(0, 7);
-      }
-      if (headTglRow.length > 0) {
-        let extractedTgl = headTglRow.filter(c => String(c).includes("/") || String(c).includes("-"));
-        if (extractedTgl.length >= 7) tglList = extractedTgl.slice(0, 7);
-      }
-
-      let rowYZ = ringkasanData.find(r => r.some(c => String(c).toLowerCase().includes("total mobil yz")));
-      let rowSewa = ringkasanData.find(r => r.some(c => String(c).toLowerCase().includes("total mobil sewa")));
-      let rowTotal = ringkasanData.find(r => r.some(c => String(c).trim().toLowerCase() === "total"));
-
-      const extractValues = (rowArr) => {
-        if (!rowArr) return Array(8).fill(0);
-        let vals = rowArr.filter(c => c !== "" && c !== null && !String(c).toLowerCase().includes("total") && !String(c).toLowerCase().includes("mobil"));
-        while(vals.length < 8) vals.push(0);
-        return vals.slice(0, 8);
-      };
-
-      let valYZ = extractValues(rowYZ);
-      let valSewa = extractValues(rowSewa);
-      let valTotal = extractValues(rowTotal);
-
-      let html = `
-        <div class="table-responsive">
-          <table class="table-v1">
-            <thead>
-              <tr>
-                <th colspan="9" class="title-bg">
-                  <i class="fa-solid fa-calculator me-1"></i>REKAPAN HARIAN MOBIL YZ & SEWA
-                </th>
-              </tr>
-              <tr>
-                <th rowspan="2" style="vertical-align: middle;" class="text-start ps-3">Jenis / Armada</th>
-                ${hariList.map(h => `<th>${h}</th>`).join('')}
-                <th rowspan="2" style="vertical-align: middle;">Total Rit</th>
-              </tr>
-              <tr>
-                ${tglList.map(t => `<th style="font-weight: 600; color: #854d0e;">${t}</th>`).join('')}
-              </tr>
-            </thead>
-            <tbody>
-      `;
-
-      html += `<tr><td class="col-label ps-3">Total Mobil YZ</td>`;
-      valYZ.forEach((v, idx) => {
-        let isTotalCol = idx === 7;
-        let num = parseFloat(v) || 0;
-        if (isTotalCol) {
-          html += `<td class="text-center"><span class="badge-rit-total">${v}</span></td>`;
-        } else {
-          html += `<td class="text-center ${num === 0 ? 'zero-val' : 'fw-bold'}">${v}</td>`;
+        function formatDateCell(val) {
+            if (!val && val !== 0) return "";
+            if (typeof val === 'string' && (val.includes('T') || val.includes('-') || val.includes('/'))) {
+                const d = new Date(val);
+                if (!isNaN(d.getTime())) {
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const year = String(d.getFullYear()).slice(-2);
+                    return `${day}/${month}/${year}`;
+                }
+            }
+            return val;
         }
-      });
-      html += `</tr>`;
 
-      html += `<tr><td class="col-label ps-3">Total Mobil Sewa</td>`;
-      valSewa.forEach((v, idx) => {
-        let isTotalCol = idx === 7;
-        let num = parseFloat(v) || 0;
-        if (isTotalCol) {
-          html += `<td class="text-center"><span class="badge-rit-total">${v}</span></td>`;
-        } else {
-          html += `<td class="text-center ${num === 0 ? 'zero-val' : 'fw-bold'}">${v}</td>`;
+        function formatTimeCell(val) {
+            if (!val && val !== 0) return "";
+            if (typeof val === 'string' && val.includes('T')) {
+                const d = new Date(val);
+                if (!isNaN(d.getTime())) {
+                    const hours = String(d.getHours()).padStart(2, '0');
+                    const minutes = String(d.getMinutes()).padStart(2, '0');
+                    const seconds = String(d.getSeconds()).padStart(2, '0');
+                    return `${hours}:${minutes}:${seconds}`;
+                }
+            }
+            return val;
         }
-      });
-      html += `</tr>`;
 
-      html += `<tr class="row-grand-total"><td class="col-label ps-3 fw-bold">GRAND TOTAL RITASE</td>`;
-      valTotal.forEach((v, idx) => {
-        let isTotalCol = idx === 7;
-        let num = parseFloat(v) || 0;
-        if (isTotalCol) {
-          html += `<td class="text-center"><span class="badge-rit-total">${v}</span></td>`;
-        } else {
-          html += `<td class="text-center fw-bold ${num === 0 ? 'zero-val' : ''}">${v}</td>`;
+        function formatCurrencyOrNumber(val) {
+            let num = parseNum(val);
+            if (num > 0) {
+                return "Rp " + num.toLocaleString('id-ID');
+            }
+            return val;
         }
-      });
-      html += `</tr>`;
 
-      html += `
-            </tbody>
-          </table>
-        </div>
-      `;
+        function processRekapMingguan(rows) {
+            if (!rows || rows.length === 0) return;
 
-      container.innerHTML = html;
-    }
+            const globalHeader = rows[0] || [];
+            const subHeader = rows[1] || [];
 
-    function renderSolar(data) {
-      const tbody = document.getElementById('bodySolar');
-      tbody.innerHTML = "";
-      if (!data || data.length <= 1) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-2">Belum ada transaksi Solar Hexa</td></tr>`;
-        return;
-      }
-      for (let i = 1; i < data.length; i++) {
-        let r = data[i];
-        if (!r || r.length === 0 || r.every(c => c === "")) continue;
-        tbody.innerHTML += `
-          <tr>
-            <td class="text-center">${r[0] || ''}</td>
-            <td class="text-center">${r[1] || ''}</td>
-            <td class="text-center">${r[2] || ''}</td>
-            <td class="text-start">${r[3] || ''}</td>
-            <td class="text-center fw-bold">${r[4] || '0'}</td>
-            <td class="text-end">${r[5] || 'Rp0'}</td>
-            <td class="text-end fw-bold">${r[6] || 'Rp0'}</td>
-            <td class="text-start">${r[7] || ''}</td>
-          </tr>
-        `;
-      }
-    }
+            let yzRows = [globalHeader, subHeader];
+            for (let i = 2; i <= 8; i++) { if (rows[i]) yzRows.push(rows[i]); }
 
-    function renderTambang(data) {
-      const tbody = document.getElementById('bodyTambang');
-      tbody.innerHTML = "";
-      if (!data || data.length <= 1) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-2">Belum ada data Penagihan Tambang</td></tr>`;
-        return;
-      }
-      for (let i = 1; i < data.length; i++) {
-        let r = data[i];
-        if (!r || r.length === 0 || r.every(c => c === "")) continue;
-        tbody.innerHTML += `
-          <tr>
-            <td class="text-center">${r[0] || ''}</td>
-            <td class="text-center">${r[1] || ''}</td>
-            <td class="text-center fw-bold"><span class="badge-rit">${r[2] || '0'} Rit</span></td>
-            <td class="text-end">${r[3] || 'Rp0'}</td>
-            <td class="text-end">${r[4] || 'Rp0'}</td>
-            <td class="text-end fw-bold">${r[5] || 'Rp0'}</td>
-            <td class="text-start">${r[6] || ''}</td>
-          </tr>
-        `;
-      }
-    }
+            let cashRows = [globalHeader, subHeader];
+            for (let i = 13; i <= 14; i++) { if (rows[i]) cashRows.push(rows[i]); }
 
-    // --- MANAJEMEN SCREENSHOT & DROPDOWN PERIODE ---
+            let sewaRows = [globalHeader, subHeader];
+            for (let i = 19; i <= 24; i++) { if (rows[i]) sewaRows.push(rows[i]); }
 
-    async function captureAndSavePeriode() {
-      const namaPeriode = prompt("Masukkan Nama Periode Rekap:", "Minggu 1 - Agustus 2026");
-      if (!namaPeriode) return;
+            let summaryRows = [globalHeader, subHeader];
+            for (let i = 31; i <= 35; i++) { if (rows[i]) summaryRows.push(rows[i]); }
 
-      const exportContainer = document.getElementById('export-container');
-      
-      const rekapHtml = document.getElementById('rekap-pane').innerHTML;
-      const solarHtml = document.getElementById('solar-pane').innerHTML;
-      const tambangHtml = document.getElementById('tambang-pane').innerHTML;
+            populateTable('table-rekap-yz', yzRows, true);
+            populateTable('table-rekap-cash', cashRows, true);
+            populateTable('table-rekap-sewa', sewaRows, true);
+            populateTable('table-rekap-summary', summaryRows, true);
+        }
 
-      exportContainer.innerHTML = `
-        <div style="font-family: 'Inter', sans-serif; color: #1e293b;">
-          <div style="border-bottom: 3px solid #fde68a; padding-bottom: 12px; margin-bottom: 20px; text-align: center;">
-            <h2 style="font-weight: 800; color: #78350f; margin: 0; font-size: 1.5rem;">LAPORAN REKAP OPERASIONAL TAMBANG</h2>
-            <h4 style="font-weight: 700; color: #2563eb; margin-top: 6px; font-size: 1.1rem;">PERIODE: ${namaPeriode.toUpperCase()}</h4>
-          </div>
+        function populateTable(tableId, rows, isMultiHeader = false, isSolarTable = false) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            table.innerHTML = "";
 
-          <div style="margin-bottom: 25px;">
-            <h5 style="font-weight: 800; color: #1e293b; border-left: 4px solid #2563eb; padding-left: 8px; margin-bottom: 12px;">1. Rekap Ritase Mingguan</h5>
-            ${rekapHtml}
-          </div>
+            if (isMultiHeader) {
+                table.classList.add('table-rekap');
+                table.classList.remove('table-log');
+            } else {
+                table.classList.add('table-log');
+                table.classList.remove('table-rekap');
+            }
 
-          <div style="margin-bottom: 25px;">
-            <h5 style="font-weight: 800; color: #1e293b; border-left: 4px solid #f59e0b; padding-left: 8px; margin-bottom: 12px;">2. Pengeluaran Solar Hexa</h5>
-            ${solarHtml}
-          </div>
+            if (!rows || rows.length === 0) {
+                table.innerHTML = "<tbody><tr><td class='text-center text-muted py-3 small'>Tidak ada data tersedia</td></tr></tbody>";
+                return;
+            }
 
-          <div style="margin-bottom: 25px;">
-            <h5 style="font-weight: 800; color: #1e293b; border-left: 4px solid #10b981; padding-left: 8px; margin-bottom: 12px;">3. Penagihan Tambang</h5>
-            ${tambangHtml}
-          </div>
+            const maxCols = Math.max(...rows.map(r => r ? r.length : 0));
+            let startIndex = 0;
+            let thead = "<thead>";
 
-          <div style="text-align: right; font-size: 0.65rem; color: #94a3b8; margin-top: 20px;">
-            Dicetak otomatis pada: ${new Date().toLocaleString('id-ID')}
-          </div>
-        </div>
-      `;
+            const nonFormattedTitle = rows[0] ? rows[0].filter(c => c !== "" && c !== null) : [];
+            const isSingleTitleHeader = !isMultiHeader && rows.length > 1 && nonFormattedTitle.length === 1;
 
-      try {
-        const canvas = await html2canvas(exportContainer, {
-          scale: 1.5,
-          useCORS: true,
-          backgroundColor: "#ffffff"
-        });
+            let dateColIndex = -1;
+            let headerRow = isSingleTitleHeader ? rows[1] : rows[0];
+            if (headerRow) {
+                dateColIndex = headerRow.findIndex(h => String(h).toLowerCase().includes('tanggal'));
+            }
 
-        // Konversi Gambar ke Base64 (DataURL)
-        const imageDataUrl = canvas.toDataURL("image/png");
+            if (isSingleTitleHeader) {
+                const titleText = nonFormattedTitle[0] || "";
+                thead += `<tr><th colspan="${maxCols}" class="text-center fw-bold py-2">${titleText}</th></tr>`;
+                thead += `<tr>`;
+                if (rows[1]) {
+                    rows[1].forEach(th => {
+                        thead += `<th class="align-middle text-center">${th || ''}</th>`;
+                    });
+                }
+                thead += `</tr>`;
+                startIndex = 2;
+            } else if (isMultiHeader && rows.length >= 2) {
+                thead += `<tr>`;
+                rows[0].forEach((th) => {
+                    thead += `<th class="align-middle text-center">${th || ''}</th>`;
+                });
+                thead += `</tr><tr>`;
+                rows[1].forEach((th) => {
+                    thead += `<th class="align-middle text-center">${formatDateCell(th) || ''}</th>`;
+                });
+                thead += `</tr>`;
+                startIndex = 2;
+            } else {
+                thead += `<tr>`;
+                if (rows[0]) {
+                    rows[0].forEach(th => {
+                        thead += `<th class="align-middle text-center">${th || ''}</th>`;
+                    });
+                }
+                thead += `</tr>`;
+                startIndex = 1;
+            }
+            thead += "</thead>";
 
-        // Simpan ke LocalStorage
-        let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
-        savedData[namaPeriode] = imageDataUrl;
-        localStorage.setItem('rekapan_periode_db', JSON.stringify(savedData));
+            let tbody = "<tbody>";
+            let lastDate = null;
+            let inSummarySection = false; // Penanda khusus agar baris nilai rekap bawah ikut aman dari format "Rp"
 
-        exportContainer.innerHTML = "";
+            for (let i = startIndex; i < rows.length; i++) {
+                if (!rows[i] || rows[i].every(cell => cell === "" || cell === null)) continue;
+                
+                let rowText = rows[i].join(' ').toLowerCase();
+                
+                // Deteksi mulainya area rekapitulasi di baris paling bawah
+                if (rowText.includes('total balanja') || rowText.includes('total belanja') || rowText.includes('total ritase')) {
+                    inSummarySection = true;
+                }
 
-        // Reload Dropdown
-        loadPeriodeDropdown();
+                // Anggap sebagai baris Total (grey background) jika ada kata kunci, ATAU ia berada di area rekapitulasi (termasuk baris nilainya)
+                let isTotalRow = rowText.includes('total') || rowText.includes('grand') || rowText.includes('sisa') || inSummarySection;
 
-        // Pindah otomatis ke Tab "Rekapan Periode"
-        const tabBtn = new bootstrap.Tab(document.getElementById('periode-tab'));
-        tabBtn.show();
+                // Pengaman ekstra: Jika sel pertama (No) ada angkanya, ini pasti baris data biasa (jangan ditandai isTotalRow)
+                if (rows[i][0] !== "" && rows[i][0] !== null && parseNum(rows[i][0]) > 0 && !inSummarySection) {
+                    isTotalRow = false;
+                }
 
-        // Otomatis pilih periode yang baru saja dibuat
-        document.getElementById('selectPeriode').value = namaPeriode;
-        displaySelectedScreenshot();
+                // Otomatis set Harga / Liter menjadi 10.000 (hanya untuk data biasa, bukan untuk rekap/summary bawah)
+                if (isSolarTable && !isTotalRow) {
+                    let hargaIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('harga')) : -1;
+                    let jumlahIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('jumlah')) : -1;
+                    let totalIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('total')) : -1;
 
-        alert(`Berhasil menyimpan rekapan periode "${namaPeriode}"!`);
+                    if (hargaIndex !== -1) {
+                        let currentHarga = parseNum(rows[i][hargaIndex]);
+                        if (currentHarga <= 10) {
+                            rows[i][hargaIndex] = 10000;
+                            currentHarga = 10000;
+                        }
+                        if (jumlahIndex !== -1 && totalIndex !== -1) {
+                            let jml = parseNum(rows[i][jumlahIndex]);
+                            if (jml > 0) {
+                                rows[i][totalIndex] = jml * currentHarga;
+                            }
+                        }
+                    }
+                }
 
-      } catch (err) {
-        console.error("Gagal mengambil screenshot:", err);
-        alert("Terjadi kesalahan saat menyimpan gambar.");
-      }
-    }
+                if (!isSolarTable && !isMultiHeader && dateColIndex !== -1 && !isTotalRow) {
+                    let currentDateRaw = rows[i][dateColIndex];
+                    let currentDate = formatDateCell(currentDateRaw);
 
-    function loadPeriodeDropdown() {
-      const select = document.getElementById('selectPeriode');
-      let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
+                    if (lastDate !== null && currentDate !== lastDate && currentDate !== "") {
+                        tbody += `<tr class="date-separator"><td colspan="${maxCols}"></td></tr>`;
+                    }
+                    if (currentDate !== "") {
+                        lastDate = currentDate;
+                    }
+                }
 
-      select.innerHTML = `<option value="">-- Pilih Periode Tersimpan --</option>`;
+                tbody += `<tr class="${isTotalRow ? 'is-total-row' : ''}">`;
+                
+                rows[i].forEach((cell, colIndex) => {
+                    let formattedCell = (cell !== undefined && cell !== null) ? cell : '';
+                    let headerName = (rows[1] && isSingleTitleHeader) 
+                        ? String(rows[1][colIndex] || '').toLowerCase() 
+                        : String(rows[0] ? rows[0][colIndex] || '' : '').toLowerCase();
 
-      Object.keys(savedData).forEach(nama => {
-        let opt = document.createElement('option');
-        opt.value = nama;
-        opt.textContent = nama;
-        select.appendChild(opt);
-      });
-    }
+                    if (typeof formattedCell === 'number') {
+                        formattedCell = Number.isInteger(formattedCell) ? formattedCell : formattedCell.toFixed(1);
+                    }
 
-    function displaySelectedScreenshot() {
-      const selectedNama = document.getElementById('selectPeriode').value;
-      const displayArea = document.getElementById('screenshotDisplay');
+                    if (headerName.includes('tanggal')) {
+                        formattedCell = formatDateCell(formattedCell);
+                    } else if (headerName.includes('waktu') || headerName.includes('jam')) {
+                        formattedCell = formatTimeCell(formattedCell);
+                    } 
+                    // Baris rekap bawah (!isTotalRow yang sudah false berkat inSummarySection) bebas dari paksaan Rp
+                    else if (!isTotalRow && (headerName.includes('biaya') || headerName.includes('harga') || headerName.includes('tagihan') || headerName.includes('nominal'))) {
+                        formattedCell = formatCurrencyOrNumber(formattedCell);
+                    }
 
-      if (!selectedNama) {
-        displayArea.innerHTML = `<p class="text-muted mb-0" style="font-size: 0.75rem;">Pilih periode pada dropdown di atas untuk melihat gambar rekapan.</p>`;
-        return;
-      }
+                    const numVal = parseNum(cell);
+                    const isNumeric = numVal > 0 && cell !== "";
+                    const isTotalCol = colIndex === (rows[i].length - 1) || headerName.includes('total');
 
-      let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
-      let imgData = savedData[selectedNama];
+                    if (!isSolarTable) {
+                        if (!isTotalRow && isNumeric && colIndex >= 3 && !headerName.includes('no')) {
+                            if (isTotalCol) {
+                                formattedCell = `<span class="badge-total">${cell}</span>`;
+                            } else {
+                                formattedCell = `<span class="badge-ritase">${cell}</span>`;
+                            }
+                        } else if (isTotalRow && isNumeric) {
+                            formattedCell = `<span class="badge-total">${cell}</span>`;
+                        }
+                    }
 
-      if (imgData) {
-        displayArea.innerHTML = `<img src="${imgData}" class="screenshot-img" alt="Rekapan ${selectedNama}">`;
-      }
-    }
+                    let alignmentClass = (isMultiHeader && colIndex === 0) ? 'text-start fw-semibold' : 'text-center';
 
-    function deleteSelectedPeriode() {
-      const selectedNama = document.getElementById('selectPeriode').value;
-      if (!selectedNama) {
-        alert("Pilih periode yang ingin dihapus terlebih dahulu.");
-        return;
-      }
+                    tbody += `<td class="${alignmentClass}">${formattedCell}</td>`;
+                });
+                tbody += "</tr>";
+            }
+            tbody += "</tbody>";
 
-      if (confirm(`Apakah Anda yakin ingin menghapus rekapan periode "${selectedNama}"?`)) {
-        let savedData = JSON.parse(localStorage.getItem('rekapan_periode_db')) || {};
-        delete savedData[selectedNama];
-        localStorage.setItem('rekapan_periode_db', JSON.stringify(savedData));
-
-        loadPeriodeDropdown();
-        displaySelectedScreenshot();
-      }
-    }
-
-    fetchSheetData();
-  </script>
+            table.innerHTML = thead + tbody;
+        }
+    </script>
 </body>
 </html>
