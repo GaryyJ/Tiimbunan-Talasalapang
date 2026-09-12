@@ -455,7 +455,7 @@
                     <div class="solar-kpi-card">
                         <div class="card-label"><i class="fa-solid fa-calculator me-1"></i> Sisa Kuota</div>
                         <div class="card-value text-primary" id="kpi-sisa-ritase">0 Rit</div>
-                        <div class="card-subtext">Stok ÷ 1,5L</div>
+                        <div class="card-subtext">Stok ÷ 0,9L</div>
                         <i class="fa-solid fa-chart-line card-icon-bg"></i>
                     </div>
                 </div>
@@ -656,7 +656,7 @@
                 }
             }
 
-            const KONSUMSI_PER_RIT = 1.5;
+            const KONSUMSI_PER_RIT = 0.9;
             let totalPemakaianLiter = totalRitase * KONSUMSI_PER_RIT;
             let sisaStokSolar = totalBelanjaSolar - totalPemakaianLiter;
             let sisaRitase = sisaStokSolar / KONSUMSI_PER_RIT;
