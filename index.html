@@ -85,27 +85,27 @@
         background: rgba(255, 255, 255, 0.88);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-        padding: 10px 0;
-        margin-bottom: 14px;
+        padding: 8px 0;
+        margin-bottom: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .main-header h4 {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         letter-spacing: -.01em;
     }
 
     .main-header .header-icon {
         background: #fef3c7;
         color: #d97706;
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     #current-time {
@@ -113,8 +113,8 @@
         color: #b45309 !important;
         border: 1px solid #fde68a !important;
         border-radius: 5px !important;
-        font-size: .78rem !important;
-        padding: 5px 10px !important;
+        font-size: .75rem !important;
+        padding: 4px 8px !important;
     }
 
     .btn-amber-refresh {
@@ -122,9 +122,9 @@
         color: #78350f;
         border: 1px solid #fde68a;
         font-weight: 600;
-        font-size: .78rem;
+        font-size: .75rem;
         border-radius: 5px;
-        padding: 5px 12px;
+        padding: 4px 10px;
         transition: all 0.2s ease;
     }
 
@@ -139,38 +139,39 @@
         backdrop-filter: blur(8px);
         border: 1px solid #fde68a;
         border-radius: 8px;
-        padding: 10px 14px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        padding: 8px 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
         position: relative;
         overflow: hidden;
+        height: 100%;
     }
 
     .solar-kpi-card .card-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 700;
         text-transform: uppercase;
         color: #92400e;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .solar-kpi-card .card-value {
-        font-size: 1.25rem;
+        font-size: 1.15rem;
         font-weight: 800;
         color: #78350f;
         line-height: 1.1;
     }
 
     .solar-kpi-card .card-subtext {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         color: #64748b;
-        margin-top: 4px;
+        margin-top: 2px;
     }
 
     .solar-kpi-card .card-icon-bg {
         position: absolute;
-        right: 8px;
-        bottom: 4px;
-        font-size: 1.6rem;
+        right: 6px;
+        bottom: 2px;
+        font-size: 1.4rem;
         opacity: 0.12;
         color: #d97706;
     }
@@ -184,17 +185,27 @@
         border: 1px solid #fde68a;
         gap: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .nav-pills::-webkit-scrollbar {
+        display: none;
     }
 
     .nav-pills .nav-link {
         color: #92400e;
         font-weight: 600;
         border-radius: 6px;
-        padding: 6px 14px;
-        font-size: .82rem;
+        padding: 5px 10px;
+        font-size: .78rem;
         background: transparent;
         border: 1px solid transparent;
         white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .nav-pills .nav-link.active {
@@ -208,44 +219,45 @@
     .card-custom {
         border: 1px solid #fde68a;
         border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
         background: rgba(255, 255, 255, 0.95);
-        margin-bottom: 14px;
+        margin-bottom: 10px;
         overflow: hidden;
     }
 
     .card-custom .card-header-amber {
         background: #fef3c7;
-        padding: 8px 14px;
+        padding: 6px 10px;
         border-bottom: 1px solid #fde68a;
-        font-size: .85rem;
+        font-size: .78rem;
         font-weight: 700;
         color: #78350f;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
     .card-body-container { 
         padding: 0;
     }
 
+    /* RESPONSIVE TABLE WRAPPER */
     .table-responsive {
-        height: auto !important;
-        max-height: none !important;
+        width: 100%;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border: none;
         background-color: #ffffff;
     }
 
-    /* STANDARISASI TABEL */
+    /* KUNCI UTAMA PENYELARASAN TABEL */
     .table {
-        font-size: .8rem;
+        font-size: .78rem;
         white-space: nowrap;
         border-color: #fde68a;
         margin-bottom: 0;
-        width: 100%;
-        table-layout: fixed;
+        width: 100% !important;
+        table-layout: fixed; /* Kunci ukuran lebar kolom presisi */
     }
 
     .table thead th {
@@ -256,33 +268,30 @@
         vertical-align: middle;
         border-bottom: 1px solid #fde68a !important;
         border-right: 1px solid #fde68a !important;
-        padding: 6px 8px;
-        font-size: .8rem;
-        height: 32px;
+        padding: 5px 4px;
+        font-size: .75rem;
+        height: 28px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .table tbody td {
         background-color: #ffffff !important;
         color: #1e293b !important;
         vertical-align: middle;
-        padding: 5px 8px;
+        padding: 4px 4px;
         border-color: #fef3c7 !important;
         font-weight: 500;
-        height: 30px;
+        height: 26px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     tr.date-separator td {
-        height: 6px;
+        height: 5px;
         background-color: #f8fafc !important;
         border: none !important;
     }
-
-    /* LEBAR KOLOM UNIFORM */
-    .table-rekap col.col-armada { width: 14%; }
-    .table-rekap col.col-pelat { width: 14%; }
-    .table-rekap col.col-supir { width: 16%; }
-    .table-rekap col.col-day { width: 7.8%; }
-    .table-rekap col.col-total { width: 9%; }
 
     .table tbody tr.is-total-row td {
         background-color: #fffbf0 !important;
@@ -295,49 +304,49 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 22px;
-        height: 20px;
+        min-width: 20px;
+        height: 18px;
         background-color: #2563eb !important;
         color: #ffffff !important;
         font-weight: 700;
-        font-size: .75rem;
+        font-size: .7rem;
         border-radius: 4px;
-        padding: 0 6px;
+        padding: 0 4px;
     }
 
     .badge-total {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 22px;
-        height: 20px;
+        min-width: 20px;
+        height: 18px;
         background-color: #f59e0b !important;
         color: #ffffff !important;
         font-weight: 800;
-        font-size: .75rem;
+        font-size: .7rem;
         border-radius: 4px;
-        padding: 0 6px;
+        padding: 0 4px;
     }
 
     .badge-grand-total {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 24px;
-        height: 22px;
+        min-width: 22px;
+        height: 20px;
         background-color: #ef4444 !important;
         color: #ffffff !important;
         font-weight: 800;
-        font-size: .78rem;
+        font-size: .75rem;
         border-radius: 4px;
-        padding: 0 6px;
+        padding: 0 5px;
         box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3);
     }
 
-    /* CONTAINER GRAFIK */
+    /* CONTAINER GRAFIK RINGKAS */
     .chart-container-box {
         position: relative;
-        height: 320px;
+        height: 150px;
         width: 100%;
     }
 
@@ -347,14 +356,14 @@
         backdrop-filter: blur(8px);
         border: 1px solid #fde68a;
         border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .excavator-loader {
-        width: 90px;
-        height: 60px;
-        margin: 0 auto 8px auto;
+        width: 80px;
+        height: 50px;
+        margin: 0 auto 6px auto;
         position: relative;
     }
 
@@ -392,11 +401,18 @@
         80%, 100% { opacity: 0; transform: translate(-25px, 5px) scale(0.5); }
     }
 
+    /* RESPONSIVE HP */
     @media (max-width: 576px) {
         body { font-size: 11px; }
         .dashboard-wrapper { padding: 0 6px; }
-        .table tbody td { padding: 4px 6px; height: 26px; }
-        .chart-container-box { height: 250px; }
+        .main-header h4 { font-size: 0.95rem; }
+        .solar-kpi-card { padding: 6px 8px; }
+        .solar-kpi-card .card-value { font-size: 1rem; }
+        .solar-kpi-card .card-label { font-size: 0.65rem; }
+        .table tbody td { padding: 3px 2px; height: 24px; font-size: 0.7rem; }
+        .table thead th { font-size: 0.68rem; padding: 3px 2px; }
+        .chart-container-box { height: 130px; }
+        .card-header-amber { font-size: 0.7rem; padding: 5px 8px; }
     }
     </style>
 </head>
@@ -412,7 +428,7 @@
             </div>
             <div class="text-end d-flex align-items-center gap-2">
                 <button class="btn btn-amber-refresh d-flex align-items-center gap-1 shadow-sm" id="btn-refresh" onclick="fetchData()">
-                    <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Refresh
+                    <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> <span class="d-none d-sm-inline">Refresh</span>
                 </button>
                 <span class="badge border px-2 py-1" id="current-time">
                     <i class="fa-regular fa-clock me-1"></i> Memuat...
@@ -423,7 +439,7 @@
 
     <div class="dashboard-wrapper">
         <!-- Loading State -->
-        <div id="loading" class="text-center my-3">
+        <div id="loading" class="text-center my-2">
             <div class="excavator-loader">
                 <svg viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M 5 80 L 115 80" stroke="#d97706" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 4"/>
@@ -444,21 +460,20 @@
                     <circle class="dirt-particle" cx="76" cy="64" r="2" fill="#d97706"/>
                 </svg>
             </div>
-            <div class="fw-bold text-dark" style="font-size: 0.9rem;">Hexavator Memuat Data...</div>
+            <div class="fw-bold text-dark" style="font-size: 0.85rem;">Memuat Data...</div>
         </div>
 
         <!-- Content Area -->
         <div id="content" style="display: none;">
             
-            <!-- SECTION VISUALISASI GRAFIK (DITARUH PALING ATAS BERDASARKAN PERMINTAAN) -->
-            <div class="row g-2 mb-3">
-                <!-- 1. BAR CHART BERDAMPINGAN (TREN PERIODE) -->
-                <div class="col-12 col-lg-8">
+            <!-- SECTION VISUALISASI GRAFIK BERSAMPINGAN -->
+            <div class="row g-2 mb-2">
+                <div class="col-6">
                     <div class="card card-custom h-100 mb-0">
-                        <div class="card-header-amber">
-                            <i class="fa-solid fa-chart-column"></i> Tren Ritase Per Periode
+                        <div class="card-header-amber text-truncate">
+                            <i class="fa-solid fa-chart-column me-1"></i> Tren Ritase
                         </div>
-                        <div class="card-body p-3">
+                        <div class="card-body p-1">
                             <div class="chart-container-box">
                                 <canvas id="barChartPeriode"></canvas>
                             </div>
@@ -466,13 +481,12 @@
                     </div>
                 </div>
 
-                <!-- 2. DONUT CHART (TOTAL KESELURUHAN & RITASE DI LEGEND) -->
-                <div class="col-12 col-lg-4">
+                <div class="col-6">
                     <div class="card card-custom h-100 mb-0">
-                        <div class="card-header-amber">
-                            <i class="fa-solid fa-chart-pie"></i> Total Ritase Armada
+                        <div class="card-header-amber text-truncate">
+                            <i class="fa-solid fa-chart-pie me-1"></i> Total Ritase
                         </div>
-                        <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                        <div class="card-body p-1 d-flex align-items-center justify-content-center">
                             <div class="chart-container-box">
                                 <canvas id="donutChartArmada"></canvas>
                             </div>
@@ -481,8 +495,8 @@
                 </div>
             </div>
 
-            <!-- SECTION CARDS (CATATAN SOLAR / KPI CARDS DITUKAR KE BAWAH GRAFIK) -->
-            <div class="row g-2 mb-3">
+            <!-- SECTION CARDS / KPI -->
+            <div class="row g-2 mb-2">
                 <div class="col-6 col-md-3">
                     <div class="solar-kpi-card">
                         <div class="card-label"><i class="fa-solid fa-gas-pump me-1"></i> Total Belanja</div>
@@ -518,7 +532,7 @@
             </div>
 
             <!-- Menu Navigasi Tab Sheet -->
-            <ul class="nav nav-pills mb-3 flex-nowrap overflow-auto" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills mb-2" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-rekap" type="button" role="tab">
                         <i class="fa-solid fa-chart-pie me-1"></i> Rekap Mingguan
@@ -552,19 +566,19 @@
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Ritase - Mobil YZ</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle table-rekap" id="table-rekap-yz"></table></div>
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Ritase - Mobil Cash</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle table-rekap" id="table-rekap-cash"></table></div>
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & CASH</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle table-rekap" id="table-rekap-summary"></table></div>
+                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-summary"></table></div>
                         </div>
                     </div>
                 </div>
@@ -594,7 +608,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Register DataLabels Plugin untuk Chart.js
         Chart.register(ChartDataLabels);
 
         let barChartInstance = null;
@@ -638,7 +651,6 @@
                 populateTable('table-solar', data.solarHexa, false, true);
                 populateTable('table-tagihan', data.tagihan);
 
-                // Render Visualisasi Grafik
                 renderDashboardCharts();
             })
             .catch(err => {
@@ -661,13 +673,14 @@
             fetchData();
         };
 
-        // FUNGSI RENDER GRAFIK TREN PERIODE & DONUT CHART KESELURUHAN
         function renderDashboardCharts() {
-            const labels = ['Periode 1', 'Periode 2', 'Periode 3', 'Periode 4', 'Periode 5', 'Periode 6', 'Periode 7', 'Periode 8'];
+            const labels = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'];
             const dataYZ = [68, 99, 102, 107, 77, 134, 80, 97];
             const dataCash = [0, 0, 0, 0, 0, 1, 17, 37];
 
-            // 1. RENDER GROUPED BAR CHART
+            const isMobile = window.innerWidth <= 576;
+
+            // 1. CHART BAR TREN RITASE
             const ctxBar = document.getElementById('barChartPeriode').getContext('2d');
             if (barChartInstance) barChartInstance.destroy();
 
@@ -677,20 +690,20 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Mobil YZ',
+                            label: 'YZ',
                             data: dataYZ,
-                            backgroundColor: '#2563eb', // Biru
-                            borderRadius: 3,
-                            barPercentage: 0.75,
-                            categoryPercentage: 0.6
+                            backgroundColor: '#2563eb',
+                            borderRadius: 2,
+                            barPercentage: 0.85,
+                            categoryPercentage: 0.75
                         },
                         {
-                            label: 'Mobil Cash',
+                            label: 'Cash',
                             data: dataCash,
-                            backgroundColor: '#f97316', // Oranye
-                            borderRadius: 3,
-                            barPercentage: 0.75,
-                            categoryPercentage: 0.6
+                            backgroundColor: '#f97316',
+                            borderRadius: 2,
+                            barPercentage: 0.85,
+                            categoryPercentage: 0.75
                         }
                     ]
                 },
@@ -698,47 +711,43 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 25 }
+                        padding: { top: 12, left: 0, right: 0, bottom: 0 }
                     },
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { usePointStyle: true, font: { family: 'Inter', size: 12, weight: '600' } }
+                            labels: { 
+                                usePointStyle: true, 
+                                boxWidth: 5,
+                                font: { family: 'Inter', size: isMobile ? 7.5 : 9, weight: '600' } 
+                            }
                         },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        // Konfigurasi Angka di Atas Batang
+                        tooltip: { mode: 'index', intersect: false },
                         datalabels: {
                             anchor: 'end',
                             align: 'top',
-                            offset: 2,
-                            font: { family: 'Inter', weight: 'bold', size: 10 },
-                            color: function(context) {
-                                return context.dataset.backgroundColor;
-                            },
-                            formatter: function(value) {
-                                return value > 0 ? value : ''; // Sembunyikan jika angka 0
-                            }
+                            offset: -2,
+                            font: { family: 'Inter', weight: 'bold', size: isMobile ? 6.5 : 8 },
+                            color: function(context) { return context.dataset.backgroundColor; },
+                            formatter: function(value) { return value > 0 ? value : ''; }
                         }
                     },
                     scales: {
                         x: {
                             grid: { display: false },
-                            ticks: { font: { family: 'Inter', size: 11, weight: '500' } }
+                            ticks: { font: { family: 'Inter', size: isMobile ? 7.5 : 9, weight: '500' } }
                         },
                         y: {
                             beginAtZero: true,
                             max: 160,
                             grid: { color: '#f1f5f9' },
-                            title: { display: true, text: 'Jumlah Ritase', font: { family: 'Inter', size: 11, weight: '600' } }
+                            ticks: { font: { family: 'Inter', size: isMobile ? 7 : 8.5 }, stepSize: 40 }
                         }
                     }
                 }
             });
 
-            // 2. RENDER DONUT CHART (TOTAL KESELURUHAN & RITASE DI DALAM BUBBLE & KETERANGAN)
+            // 2. CHART DONUT TOTAL RITASE
             const totalYZ = dataYZ.reduce((a, b) => a + b, 0);
             const totalCash = dataCash.reduce((a, b) => a + b, 0);
             const grandTotal = totalYZ + totalCash;
@@ -749,11 +758,7 @@
             donutChartInstance = new Chart(ctxDonut, {
                 type: 'doughnut',
                 data: {
-                    labels: [
-                        `Mobil YZ (${totalYZ} Rit)`, 
-                        `Mobil Cash (${totalCash} Rit)`,
-                        `Total Keseluruhan (${grandTotal} Rit)`
-                    ],
+                    labels: [`Mobil YZ`, `Mobil Cash`],
                     datasets: [{
                         data: [totalYZ, totalCash],
                         backgroundColor: ['#2563eb', '#f97316'],
@@ -769,49 +774,24 @@
                             position: 'bottom',
                             labels: { 
                                 usePointStyle: true, 
-                                font: { family: 'Inter', size: 11, weight: '600' },
-                                // Trik custom legend item untuk menambahkan "Total Keseluruhan"
+                                boxWidth: 5,
+                                font: { family: 'Inter', size: isMobile ? 7.5 : 9, weight: '600' },
                                 generateLabels: function(chart) {
                                     return [
-                                        {
-                                            text: `Mobil YZ: ${totalYZ} Rit`,
-                                            fillStyle: '#2563eb',
-                                            strokeStyle: '#2563eb',
-                                            pointStyle: 'circle'
-                                        },
-                                        {
-                                            text: `Mobil Cash: ${totalCash} Rit`,
-                                            fillStyle: '#f97316',
-                                            strokeStyle: '#f97316',
-                                            pointStyle: 'circle'
-                                        },
-                                        {
-                                            text: `Total Keseluruhan: ${grandTotal} Rit`,
-                                            fillStyle: '#475569',
-                                            strokeStyle: '#475569',
-                                            pointStyle: 'rectRounded'
-                                        }
+                                        { text: `YZ: ${totalYZ}`, fillStyle: '#2563eb', strokeStyle: '#2563eb', pointStyle: 'circle' },
+                                        { text: `Cash: ${totalCash}`, fillStyle: '#f97316', strokeStyle: '#f97316', pointStyle: 'circle' },
+                                        { text: `Tot: ${grandTotal}`, fillStyle: '#475569', strokeStyle: '#475569', pointStyle: 'rectRounded' }
                                     ];
                                 }
                             }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ` ${context.label.split(' (')[0]}: ${context.raw} Rit`;
-                                }
-                            }
-                        },
-                        // Konfigurasi Data Label: Menggunakan JUMLAH RITASE bukan %
                         datalabels: {
                             color: '#ffffff',
-                            font: { family: 'Inter', weight: 'bold', size: 12 },
-                            formatter: function(value) {
-                                return value > 0 ? `${value} Rit` : '';
-                            }
+                            font: { family: 'Inter', weight: 'bold', size: isMobile ? 8 : 10 },
+                            formatter: function(value) { return value > 0 ? `${value}` : ''; }
                         }
                     },
-                    cutout: '62%'
+                    cutout: '50%'
                 }
             });
         }
@@ -875,7 +855,6 @@
 
         function formatDateCell(val) {
             if (!val && val !== 0) return "";
-            
             if (typeof val === 'string' && (val.includes('T') || val.includes('-') || val.includes('/'))) {
                 if (val.includes('T')) {
                     const d = new Date(val);
@@ -886,7 +865,6 @@
                         return `${day}/${month}/${year}`;
                     }
                 }
-                
                 let parts = val.split('T')[0].split(/[-/]/);
                 if (parts.length === 3) {
                     let day, month, year;
@@ -902,7 +880,6 @@
                     return `${day}/${month}/${year}`;
                 }
             }
-            
             return val;
         }
 
@@ -945,7 +922,6 @@
                     let text = rows[i].join(' ').toLowerCase();
                     if (!text.includes('sewa')) {
                         let originalRow = [...rows[i]];
-                        
                         if (originalRow.length > 0 && originalRow[0] !== "" && (originalRow[1] === "" || originalRow[1] === undefined)) {
                             let label = originalRow[0];
                             let formattedSummaryRow = ["", "", label, ...originalRow.slice(1)];
@@ -974,15 +950,24 @@
 
             const maxCols = Math.max(...rows.map(r => r ? r.length : 0));
             
-            let colGroup = "<colgroup>";
-            if (isMultiHeader) {
-                colGroup += `<col class="col-armada"><col class="col-pelat"><col class="col-supir">`;
-                for (let c = 3; c < maxCols - 1; c++) {
-                    colGroup += `<col class="col-day">`;
-                }
-                colGroup += `<col class="col-total">`;
+            // MENYISIPKAN COLGROUP UNTUK MENGUNCI PERSENTASE LEBAR KOLOM SERAGAM
+            let colgroup = '';
+            if (maxCols === 11) {
+                colgroup = `
+                <colgroup>
+                    <col style="width: 14%;">
+                    <col style="width: 13%;">
+                    <col style="width: 15%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 7.5%;">
+                    <col style="width: 10.5%;">
+                </colgroup>`;
             }
-            colGroup += "</colgroup>";
 
             let startIndex = 0;
             let thead = "<thead>";
@@ -1040,7 +1025,6 @@
                 if (!rows[i] || rows[i].every(cell => cell === "" || cell === null)) continue;
                 
                 let rowText = rows[i].join(' ').toLowerCase();
-
                 if (rowText.includes('sewa')) continue;
                 
                 if (rowText.includes('total balanja') || rowText.includes('total belanja') || rowText.includes('total ritase')) {
@@ -1048,7 +1032,7 @@
                 }
 
                 if (isSolarTable && inSummarySection && !hasInsertedSolarSpacing) {
-                    tbody += `<tr style="height: 18px; background-color: #f8fafc;"><td colspan="${maxCols}" style="border: none !important; background: transparent !important;"></td></tr>`;
+                    tbody += `<tr style="height: 14px; background-color: #f8fafc;"><td colspan="${maxCols}" style="border: none !important; background: transparent !important;"></td></tr>`;
                     hasInsertedSolarSpacing = true;
                 }
 
@@ -1071,11 +1055,7 @@
                     }
                 }
 
-                let trClass = "";
-                if (isTotalRow) {
-                    trClass = "is-total-row";
-                }
-
+                let trClass = isTotalRow ? "is-total-row" : "";
                 tbody += `<tr class="${trClass}">`;
                 
                 rows[i].forEach((cell, colIndex) => {
@@ -1122,7 +1102,7 @@
             }
             tbody += "</tbody>";
 
-            table.innerHTML = colGroup + thead + tbody;
+            table.innerHTML = colgroup + thead + tbody;
         }
     </script>
 </body>
