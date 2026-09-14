@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Rekap Proyek - Ultra Compact</title>
+    <title>Dashboard Rekap Proyek</title>
     <!-- Bootstrap CSS 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts Inter -->
@@ -11,6 +11,10 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Chart.js & Chart.js DataLabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
     <style>
     :root {
         --amber-bg: #fffbf0;
@@ -21,51 +25,96 @@
         --amber-primary: #d97706;
         --ink: #1e293b;
         --surface: #ffffff;
-        --page: #f8fafc;
     }
 
     * { box-sizing: border-box; }
 
     body {
-        background: var(--page);
         font-family: 'Inter', sans-serif;
         color: var(--ink);
         font-size: 13px;
-        line-height: 1.4;
+        line-height: 1.3;
         overflow-x: hidden;
+        min-height: 100vh;
+        padding-bottom: 20px;
+        position: relative;
+        background-color: #f1f5f9;
     }
 
+    /* GRAFIS GELOMBANG DI KIRI */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 2%;
+        left: -5%;
+        width: 650px;
+        height: 650px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%233b82f6' stroke-opacity='0.35' stroke-width='2.5'%3E%3Cpath d='M-100,400 Q150,200 400,400 T900,400' /%3E%3Cpath d='M-100,420 Q150,220 400,420 T900,420' /%3E%3Cpath d='M-100,440 Q150,240 400,440 T900,440' /%3E%3Cpath d='M-100,460 Q150,260 400,460 T900,460' /%3E%3Cpath d='M-100,480 Q150,280 400,480 T900,480' /%3E%3Cpath d='M-100,500 Q150,300 400,500 T900,500' /%3E%3Cpath d='M-100,520 Q150,320 400,520 T900,520' /%3E%3C/g%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* TEKS WATERMARK TRANSPARAN */
+    body::after {
+        content: "REKAP\A REKAP";
+        white-space: pre;
+        position: fixed;
+        bottom: -30px;
+        right: -10px;
+        font-size: 8.5rem;
+        font-weight: 900;
+        line-height: 0.82;
+        color: rgba(37, 99, 235, 0.09);
+        letter-spacing: 2px;
+        z-index: -1;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    /* EMBED CONTAINER */
+    .dashboard-wrapper {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 0 12px;
+    }
+
+    /* HEADER COMPACT */
     .main-header {
-        background: var(--surface);
-        border-bottom: 1px solid #e2e8f0;
-        padding: 12px 0;
-        margin-bottom: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        padding: 10px 0;
+        margin-bottom: 14px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .main-header h4 {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         letter-spacing: -.01em;
     }
 
     .main-header .header-icon {
         background: #fef3c7;
         color: #d97706;
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        font-size: 1rem;
     }
 
     #current-time {
         background: #fffbf0 !important;
         color: #b45309 !important;
         border: 1px solid #fde68a !important;
-        border-radius: 6px !important;
-        font-size: .75rem !important;
+        border-radius: 5px !important;
+        font-size: .78rem !important;
+        padding: 5px 10px !important;
     }
 
     .btn-amber-refresh {
@@ -73,9 +122,9 @@
         color: #78350f;
         border: 1px solid #fde68a;
         font-weight: 600;
-        font-size: .75rem;
-        border-radius: 6px;
-        padding: 5px 10px;
+        font-size: .78rem;
+        border-radius: 5px;
+        padding: 5px 12px;
         transition: all 0.2s ease;
     }
 
@@ -84,36 +133,37 @@
         color: #78350f;
     }
 
+    /* KPI CARDS */
     .solar-kpi-card {
-        background: var(--surface);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
         border: 1px solid #fde68a;
-        border-radius: 10px;
-        padding: 10px 12px;
-        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.04);
+        border-radius: 8px;
+        padding: 10px 14px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
         position: relative;
         overflow: hidden;
-        height: 100%;
     }
 
     .solar-kpi-card .card-label {
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
         color: #92400e;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
     }
 
     .solar-kpi-card .card-value {
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         font-weight: 800;
         color: #78350f;
         line-height: 1.1;
     }
 
     .solar-kpi-card .card-subtext {
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         color: #64748b;
-        margin-top: 2px;
+        margin-top: 4px;
     }
 
     .solar-kpi-card .card-icon-bg {
@@ -121,29 +171,27 @@
         right: 8px;
         bottom: 4px;
         font-size: 1.6rem;
-        opacity: 0.1;
+        opacity: 0.12;
         color: #d97706;
     }
 
-    /* Nav Tabs Responsif Scroll */
+    /* NAV PILLS */
     .nav-pills {
-        background: #fffbf0;
+        background: rgba(255, 251, 240, 0.9);
+        backdrop-filter: blur(8px);
         padding: 4px;
-        border-radius: 10px;
+        border-radius: 8px;
         border: 1px solid #fde68a;
         gap: 4px;
-        box-shadow: 0 2px 4px rgba(217, 119, 6, 0.04);
-        -webkit-overflow-scrolling: touch;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
-
-    .nav-pills::-webkit-scrollbar { display: none; }
 
     .nav-pills .nav-link {
         color: #92400e;
         font-weight: 600;
         border-radius: 6px;
-        padding: 6px 12px;
-        font-size: .78rem;
+        padding: 6px 14px;
+        font-size: .82rem;
         background: transparent;
         border: 1px solid transparent;
         white-space: nowrap;
@@ -156,18 +204,19 @@
         font-weight: 700;
     }
 
+    /* CARDS & TABLES STYLING */
     .card-custom {
         border: 1px solid #fde68a;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.03);
-        background: var(--surface);
-        margin-bottom: 28px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+        background: rgba(255, 255, 255, 0.95);
+        margin-bottom: 14px;
         overflow: hidden;
     }
 
     .card-custom .card-header-amber {
         background: #fef3c7;
-        padding: 8px 12px;
+        padding: 8px 14px;
         border-bottom: 1px solid #fde68a;
         font-size: .85rem;
         font-weight: 700;
@@ -177,143 +226,139 @@
         gap: 8px;
     }
 
-    .card-body-container { padding: 8px; }
-
-    .table-responsive {
-        max-height: 500px;
-        overflow-x: auto;
-        overflow-y: auto;
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        background-color: #ffffff;
-        -webkit-overflow-scrolling: touch;
+    .card-body-container { 
+        padding: 0;
     }
 
-    .table {
-        font-size: .78rem;
-        white-space: nowrap;
-        border-color: #e2e8f0;
-        margin-bottom: 0;
+    .table-responsive {
+        height: auto !important;
+        max-height: none !important;
+        overflow-x: auto;
+        border: none;
         background-color: #ffffff;
+    }
+
+    /* STANDARISASI TABEL */
+    .table {
+        font-size: .8rem;
+        white-space: nowrap;
+        border-color: #fde68a;
+        margin-bottom: 0;
+        width: 100%;
+        table-layout: fixed;
     }
 
     .table thead th {
-        position: sticky;
-        top: 0;
         background-color: #fef3c7 !important;
         color: #78350f !important;
-        z-index: 2;
         font-weight: 700;
         text-align: center;
         vertical-align: middle;
         border-bottom: 1px solid #fde68a !important;
         border-right: 1px solid #fde68a !important;
         padding: 6px 8px;
-        font-size: .75rem;
+        font-size: .8rem;
+        height: 32px;
     }
 
     .table tbody td {
         background-color: #ffffff !important;
         color: #1e293b !important;
         vertical-align: middle;
-        padding: 6px 8px;
-        border-color: #f1f5f9 !important;
+        padding: 5px 8px;
+        border-color: #fef3c7 !important;
         font-weight: 500;
-        height: 32px;
+        height: 30px;
     }
 
     tr.date-separator td {
-        height: 12px;
+        height: 6px;
         background-color: #f8fafc !important;
         border: none !important;
     }
 
-    /* STRUKTUR PRESISI UNTUK SEMUA TABEL REKAP */
-    .table-rekap {
-        table-layout: fixed;
-        width: 100%;
-        min-width: 680px;
-    }
-
-    .table-rekap th, .table-rekap td {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .table-rekap th:nth-child(1), .table-rekap td:nth-child(1) { width: 11%; }
-    .table-rekap th:nth-child(2), .table-rekap td:nth-child(2) { width: 12%; }
-    .table-rekap th:nth-child(3), .table-rekap td:nth-child(3) { width: 14%; }
-    .table-rekap th:nth-child(4), .table-rekap td:nth-child(4),
-    .table-rekap th:nth-child(5), .table-rekap td:nth-child(5),
-    .table-rekap th:nth-child(6), .table-rekap td:nth-child(6),
-    .table-rekap th:nth-child(7), .table-rekap td:nth-child(7),
-    .table-rekap th:nth-child(8), .table-rekap td:nth-child(8),
-    .table-rekap th:nth-child(9), .table-rekap td:nth-child(9),
-    .table-rekap th:nth-child(10), .table-rekap td:nth-child(10) { width: 8%; }
-    .table-rekap th:nth-child(11), .table-rekap td:nth-child(11) { width: 7%; }
-
-    .table-log th:first-child,
-    .table-log td:first-child {
-        width: 35px !important;
-        min-width: 35px !important;
-        text-align: center;
-    }
+    /* LEBAR KOLOM UNIFORM */
+    .table-rekap col.col-armada { width: 14%; }
+    .table-rekap col.col-pelat { width: 14%; }
+    .table-rekap col.col-supir { width: 16%; }
+    .table-rekap col.col-day { width: 7.8%; }
+    .table-rekap col.col-total { width: 9%; }
 
     .table tbody tr.is-total-row td {
-        background-color: #f8fafc !important;
-        color: #0f172a !important;
+        background-color: #fffbf0 !important;
+        color: #78350f !important;
         font-weight: 700;
     }
 
+    /* BADGES STYLES */
     .badge-ritase {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         min-width: 22px;
-        height: 19px;
+        height: 20px;
         background-color: #2563eb !important;
         color: #ffffff !important;
         font-weight: 700;
-        font-size: .72rem;
+        font-size: .75rem;
         border-radius: 4px;
-        padding: 0 4px;
+        padding: 0 6px;
     }
 
     .badge-total {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 24px;
+        min-width: 22px;
         height: 20px;
         background-color: #f59e0b !important;
         color: #ffffff !important;
         font-weight: 800;
         font-size: .75rem;
         border-radius: 4px;
-        padding: 0 5px;
+        padding: 0 6px;
     }
 
-    /* ANIMASI EXCAVATOR LOADING */
+    .badge-grand-total {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 22px;
+        background-color: #ef4444 !important;
+        color: #ffffff !important;
+        font-weight: 800;
+        font-size: .78rem;
+        border-radius: 4px;
+        padding: 0 6px;
+        box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3);
+    }
+
+    /* CONTAINER GRAFIK */
+    .chart-container-box {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+
+    /* LOADING ANIMATION */
     #loading {
-        background: #fffbf0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
         border: 1px solid #fde68a;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.05);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.03);
     }
 
     .excavator-loader {
-        width: 140px;
-        height: 100px;
-        margin: 0 auto 12px auto;
+        width: 90px;
+        height: 60px;
+        margin: 0 auto 8px auto;
         position: relative;
     }
 
-    .excavator-loader svg {
-        width: 100%;
-        height: 100%;
-    }
+    .excavator-loader svg { width: 100%; height: 100%; }
 
     .excavator-arm {
         transform-origin: 35px 65px;
@@ -347,29 +392,11 @@
         80%, 100% { opacity: 0; transform: translate(-25px, 5px) scale(0.5); }
     }
 
-    /* MODE ULTRA-COMPACT SMARTPHONE */
     @media (max-width: 576px) {
-        body { font-size: 11.5px; line-height: 1.3; }
-        .container-fluid { padding-left: 6px !important; padding-right: 6px !important; }
-        .main-header { padding: 6px 0; margin-bottom: 8px; }
-        .main-header h4 { font-size: 0.88rem; }
-        .main-header p { display: none !important; }
-        .main-header .header-icon { width: 26px; height: 26px; font-size: 0.75rem; border-radius: 6px; }
-        .btn-amber-refresh, #current-time { font-size: 0.65rem !important; padding: 3px 6px !important; }
-        .solar-kpi-card { padding: 6px 8px; border-radius: 8px; }
-        .solar-kpi-card .card-label { font-size: 0.6rem; margin-bottom: 1px; }
-        .solar-kpi-card .card-value { font-size: 0.92rem; }
-        .solar-kpi-card .card-subtext { font-size: 0.6rem; margin-top: 1px; line-height: 1; }
-        .solar-kpi-card .card-icon-bg { font-size: 1.1rem; right: 4px; bottom: 2px; opacity: 0.08; }
-        .nav-pills { padding: 3px; gap: 3px; border-radius: 8px; margin-bottom: 8px !important; }
-        .nav-pills .nav-link { padding: 4px 8px; font-size: 0.68rem; border-radius: 5px; }
-        .card-custom { margin-bottom: 18px; border-radius: 8px; }
-        .card-custom .card-header-amber { padding: 6px 10px; font-size: 0.78rem; }
-        .card-body-container { padding: 4px; }
-        .table-responsive { max-height: 340px; border-radius: 4px; }
-        .table thead th { padding: 4px 5px; font-size: 0.68rem; }
-        .table tbody td { padding: 4px 5px; font-size: 0.7rem; height: 28px; }
-        .badge-ritase, .badge-total { min-width: 18px; height: 16px; font-size: 0.65rem; padding: 0 3px; border-radius: 3px; }
+        body { font-size: 11px; }
+        .dashboard-wrapper { padding: 0 6px; }
+        .table tbody td { padding: 4px 6px; height: 26px; }
+        .chart-container-box { height: 250px; }
     }
     </style>
 </head>
@@ -377,14 +404,13 @@
 
     <!-- Header Navbar -->
     <div class="main-header">
-        <div class="container-fluid px-2 d-flex justify-content-between align-items-center flex-wrap gap-1">
+        <div class="dashboard-wrapper d-flex justify-content-between align-items-center">
             <div>
-                <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-1">
+                <h4 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
                     <span class="header-icon"><i class="fa-solid fa-truck-monster"></i></span> Dashboard Rekap
                 </h4>
-                <p class="text-muted small mb-0 mt-1">Sistem Integrasi Operasional Tambang</p>
             </div>
-            <div class="text-end d-flex align-items-center gap-1">
+            <div class="text-end d-flex align-items-center gap-2">
                 <button class="btn btn-amber-refresh d-flex align-items-center gap-1 shadow-sm" id="btn-refresh" onclick="fetchData()">
                     <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Refresh
                 </button>
@@ -395,7 +421,7 @@
         </div>
     </div>
 
-    <div class="container-fluid px-2">
+    <div class="dashboard-wrapper">
         <!-- Loading State -->
         <div id="loading" class="text-center my-3">
             <div class="excavator-loader">
@@ -418,15 +444,45 @@
                     <circle class="dirt-particle" cx="76" cy="64" r="2" fill="#d97706"/>
                 </svg>
             </div>
-            <div class="fw-bold text-dark" style="font-size: 0.9rem;">Hexavator Sedang Mengeruk Data...</div>
-            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Menghubungkan & Memperbarui Spreadsheet</p>
+            <div class="fw-bold text-dark" style="font-size: 0.9rem;">Hexavator Memuat Data...</div>
         </div>
 
         <!-- Content Area -->
         <div id="content" style="display: none;">
             
-            <!-- SECTION CARDS -->
-            <div class="row g-1 g-sm-2 mb-2">
+            <!-- SECTION VISUALISASI GRAFIK (DITARUH PALING ATAS BERDASARKAN PERMINTAAN) -->
+            <div class="row g-2 mb-3">
+                <!-- 1. BAR CHART BERDAMPINGAN (TREN PERIODE) -->
+                <div class="col-12 col-lg-8">
+                    <div class="card card-custom h-100 mb-0">
+                        <div class="card-header-amber">
+                            <i class="fa-solid fa-chart-column"></i> Tren Ritase Per Periode
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="chart-container-box">
+                                <canvas id="barChartPeriode"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. DONUT CHART (TOTAL KESELURUHAN & RITASE DI LEGEND) -->
+                <div class="col-12 col-lg-4">
+                    <div class="card card-custom h-100 mb-0">
+                        <div class="card-header-amber">
+                            <i class="fa-solid fa-chart-pie"></i> Total Ritase Armada
+                        </div>
+                        <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                            <div class="chart-container-box">
+                                <canvas id="donutChartArmada"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION CARDS (CATATAN SOLAR / KPI CARDS DITUKAR KE BAWAH GRAFIK) -->
+            <div class="row g-2 mb-3">
                 <div class="col-6 col-md-3">
                     <div class="solar-kpi-card">
                         <div class="card-label"><i class="fa-solid fa-gas-pump me-1"></i> Total Belanja</div>
@@ -439,7 +495,7 @@
                     <div class="solar-kpi-card">
                         <div class="card-label"><i class="fa-solid fa-truck-fast me-1"></i> Total Ritase</div>
                         <div class="card-value" id="kpi-total-ritase">0 Rit</div>
-                        <div class="card-subtext" id="kpi-pemakaian-liter">Pemakaian: 0 L</div>
+                        <div class="card-subtext" id="kpi-pemakaian-liter">Pakai: 0 L</div>
                         <i class="fa-solid fa-route card-icon-bg"></i>
                     </div>
                 </div>
@@ -462,7 +518,7 @@
             </div>
 
             <!-- Menu Navigasi Tab Sheet -->
-            <ul class="nav nav-pills mb-2 flex-nowrap overflow-auto" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills mb-3 flex-nowrap overflow-auto" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-rekap" type="button" role="tab">
                         <i class="fa-solid fa-chart-pie me-1"></i> Rekap Mingguan
@@ -476,11 +532,6 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-cash" type="button" role="tab">
                         <i class="fa-solid fa-money-bill-wave me-1"></i> Mobil Cash
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-sewa" type="button" role="tab">
-                        <i class="fa-solid fa-truck-ramp-box me-1"></i> Mobil Sewa
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -501,25 +552,19 @@
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Ritase - Mobil YZ</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
+                            <div class="table-responsive"><table class="table table-bordered align-middle table-rekap" id="table-rekap-yz"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Ritase - Mobil Cash</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
+                            <div class="table-responsive"><table class="table table-bordered align-middle table-rekap" id="table-rekap-cash"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-truck-ramp-box"></i> Ritase - Mobil Sewa</div>
+                        <div class="card-header-amber"><i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & CASH</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-sewa"></table></div>
-                        </div>
-                    </div>
-                    <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & SEWA</div>
-                        <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-summary"></table></div>
+                            <div class="table-responsive"><table class="table table-bordered align-middle table-rekap" id="table-rekap-summary"></table></div>
                         </div>
                     </div>
                 </div>
@@ -529,9 +574,6 @@
                 </div>
                 <div class="tab-pane fade" id="tab-cash" role="tabpanel">
                     <div class="card card-custom"><div class="card-body-container"><div class="table-responsive"><table class="table table-bordered align-middle" id="table-cash"></table></div></div></div>
-                </div>
-                <div class="tab-pane fade" id="tab-sewa" role="tabpanel">
-                    <div class="card card-custom"><div class="card-body-container"><div class="table-responsive"><table class="table table-bordered align-middle" id="table-sewa"></table></div></div></div>
                 </div>
                 <div class="tab-pane fade" id="tab-solar" role="tabpanel">
                     <div class="card card-custom">
@@ -552,6 +594,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        // Register DataLabels Plugin untuk Chart.js
+        Chart.register(ChartDataLabels);
+
+        let barChartInstance = null;
+        let donutChartInstance = null;
+
         function updateClock() {
             const now = new Date();
             const options = { weekday: 'short', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -587,14 +635,16 @@
                 processRekapMingguan(data.rekapMingguan);
                 populateTable('table-yz', data.mobilYz);
                 populateTable('table-cash', data.mobilCash);
-                populateTable('table-sewa', data.mobilSewa);
                 populateTable('table-solar', data.solarHexa, false, true);
                 populateTable('table-tagihan', data.tagihan);
+
+                // Render Visualisasi Grafik
+                renderDashboardCharts();
             })
             .catch(err => {
                 console.error("Fetch Error:", err);
                 document.getElementById('loading').innerHTML = `
-                    <div class="alert alert-danger text-center p-3 small mb-0">
+                    <div class="alert alert-danger text-center p-2 small mb-0">
                         <i class="fa-solid fa-triangle-exclamation me-1"></i> 
                         Gagal Memuat Data: ${err.message}<br>
                         <small class="text-muted">Pastikan akses deployment Apps Script disetel ke "Anyone" (Siapa Saja).</small>
@@ -610,6 +660,161 @@
         window.onload = function() {
             fetchData();
         };
+
+        // FUNGSI RENDER GRAFIK TREN PERIODE & DONUT CHART KESELURUHAN
+        function renderDashboardCharts() {
+            const labels = ['Periode 1', 'Periode 2', 'Periode 3', 'Periode 4', 'Periode 5', 'Periode 6', 'Periode 7', 'Periode 8'];
+            const dataYZ = [68, 99, 102, 107, 77, 134, 80, 97];
+            const dataCash = [0, 0, 0, 0, 0, 1, 17, 37];
+
+            // 1. RENDER GROUPED BAR CHART
+            const ctxBar = document.getElementById('barChartPeriode').getContext('2d');
+            if (barChartInstance) barChartInstance.destroy();
+
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Mobil YZ',
+                            data: dataYZ,
+                            backgroundColor: '#2563eb', // Biru
+                            borderRadius: 3,
+                            barPercentage: 0.75,
+                            categoryPercentage: 0.6
+                        },
+                        {
+                            label: 'Mobil Cash',
+                            data: dataCash,
+                            backgroundColor: '#f97316', // Oranye
+                            borderRadius: 3,
+                            barPercentage: 0.75,
+                            categoryPercentage: 0.6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 25 }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, font: { family: 'Inter', size: 12, weight: '600' } }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        // Konfigurasi Angka di Atas Batang
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 2,
+                            font: { family: 'Inter', weight: 'bold', size: 10 },
+                            color: function(context) {
+                                return context.dataset.backgroundColor;
+                            },
+                            formatter: function(value) {
+                                return value > 0 ? value : ''; // Sembunyikan jika angka 0
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter', size: 11, weight: '500' } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 160,
+                            grid: { color: '#f1f5f9' },
+                            title: { display: true, text: 'Jumlah Ritase', font: { family: 'Inter', size: 11, weight: '600' } }
+                        }
+                    }
+                }
+            });
+
+            // 2. RENDER DONUT CHART (TOTAL KESELURUHAN & RITASE DI DALAM BUBBLE & KETERANGAN)
+            const totalYZ = dataYZ.reduce((a, b) => a + b, 0);
+            const totalCash = dataCash.reduce((a, b) => a + b, 0);
+            const grandTotal = totalYZ + totalCash;
+
+            const ctxDonut = document.getElementById('donutChartArmada').getContext('2d');
+            if (donutChartInstance) donutChartInstance.destroy();
+
+            donutChartInstance = new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        `Mobil YZ (${totalYZ} Rit)`, 
+                        `Mobil Cash (${totalCash} Rit)`,
+                        `Total Keseluruhan (${grandTotal} Rit)`
+                    ],
+                    datasets: [{
+                        data: [totalYZ, totalCash],
+                        backgroundColor: ['#2563eb', '#f97316'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { 
+                                usePointStyle: true, 
+                                font: { family: 'Inter', size: 11, weight: '600' },
+                                // Trik custom legend item untuk menambahkan "Total Keseluruhan"
+                                generateLabels: function(chart) {
+                                    return [
+                                        {
+                                            text: `Mobil YZ: ${totalYZ} Rit`,
+                                            fillStyle: '#2563eb',
+                                            strokeStyle: '#2563eb',
+                                            pointStyle: 'circle'
+                                        },
+                                        {
+                                            text: `Mobil Cash: ${totalCash} Rit`,
+                                            fillStyle: '#f97316',
+                                            strokeStyle: '#f97316',
+                                            pointStyle: 'circle'
+                                        },
+                                        {
+                                            text: `Total Keseluruhan: ${grandTotal} Rit`,
+                                            fillStyle: '#475569',
+                                            strokeStyle: '#475569',
+                                            pointStyle: 'rectRounded'
+                                        }
+                                    ];
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label.split(' (')[0]}: ${context.raw} Rit`;
+                                }
+                            }
+                        },
+                        // Konfigurasi Data Label: Menggunakan JUMLAH RITASE bukan %
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { family: 'Inter', weight: 'bold', size: 12 },
+                            formatter: function(value) {
+                                return value > 0 ? `${value} Rit` : '';
+                            }
+                        }
+                    },
+                    cutout: '62%'
+                }
+            });
+        }
 
         function parseNum(val) {
             if (typeof val === 'number') return val;
@@ -668,7 +873,6 @@
             document.getElementById('kpi-sisa-ritase').innerText = `${(sisaRitase || 0).toLocaleString('id-ID', {maximumFractionDigits: 1})} Rit`;
         }
 
-        // FUNGSI FORMAT TANGGAL DD/MM/YY
         function formatDateCell(val) {
             if (!val && val !== 0) return "";
             
@@ -735,15 +939,26 @@
             let cashRows = [globalHeader, subHeader];
             for (let i = 13; i <= 14; i++) { if (rows[i]) cashRows.push(rows[i]); }
 
-            let sewaRows = [globalHeader, subHeader];
-            for (let i = 19; i <= 24; i++) { if (rows[i]) sewaRows.push(rows[i]); }
-
             let summaryRows = [globalHeader, subHeader];
-            for (let i = 31; i <= 35; i++) { if (rows[i]) summaryRows.push(rows[i]); }
+            for (let i = 31; i <= 35; i++) { 
+                if (rows[i]) {
+                    let text = rows[i].join(' ').toLowerCase();
+                    if (!text.includes('sewa')) {
+                        let originalRow = [...rows[i]];
+                        
+                        if (originalRow.length > 0 && originalRow[0] !== "" && (originalRow[1] === "" || originalRow[1] === undefined)) {
+                            let label = originalRow[0];
+                            let formattedSummaryRow = ["", "", label, ...originalRow.slice(1)];
+                            summaryRows.push(formattedSummaryRow);
+                        } else {
+                            summaryRows.push(originalRow);
+                        }
+                    }
+                } 
+            }
 
             populateTable('table-rekap-yz', yzRows, true);
             populateTable('table-rekap-cash', cashRows, true);
-            populateTable('table-rekap-sewa', sewaRows, true);
             populateTable('table-rekap-summary', summaryRows, true);
         }
 
@@ -752,20 +967,23 @@
             if (!table) return;
             table.innerHTML = "";
 
-            if (isMultiHeader) {
-                table.classList.add('table-rekap');
-                table.classList.remove('table-log');
-            } else {
-                table.classList.add('table-log');
-                table.classList.remove('table-rekap');
-            }
-
             if (!rows || rows.length === 0) {
                 table.innerHTML = "<tbody><tr><td class='text-center text-muted py-2 small'>Tidak ada data</td></tr></tbody>";
                 return;
             }
 
             const maxCols = Math.max(...rows.map(r => r ? r.length : 0));
+            
+            let colGroup = "<colgroup>";
+            if (isMultiHeader) {
+                colGroup += `<col class="col-armada"><col class="col-pelat"><col class="col-supir">`;
+                for (let c = 3; c < maxCols - 1; c++) {
+                    colGroup += `<col class="col-day">`;
+                }
+                colGroup += `<col class="col-total">`;
+            }
+            colGroup += "</colgroup>";
+
             let startIndex = 0;
             let thead = "<thead>";
 
@@ -822,43 +1040,23 @@
                 if (!rows[i] || rows[i].every(cell => cell === "" || cell === null)) continue;
                 
                 let rowText = rows[i].join(' ').toLowerCase();
+
+                if (rowText.includes('sewa')) continue;
                 
                 if (rowText.includes('total balanja') || rowText.includes('total belanja') || rowText.includes('total ritase')) {
                     inSummarySection = true;
                 }
 
                 if (isSolarTable && inSummarySection && !hasInsertedSolarSpacing) {
-                    const NUMBER_OF_SPACER_ROWS = 10;
-                    for (let s = 0; s < NUMBER_OF_SPACER_ROWS; s++) {
-                        tbody += `<tr style="height: 24px; background-color: #f8fafc;"><td colspan="${maxCols}" style="border: none !important; background: transparent !important;"></td></tr>`;
-                    }
+                    tbody += `<tr style="height: 18px; background-color: #f8fafc;"><td colspan="${maxCols}" style="border: none !important; background: transparent !important;"></td></tr>`;
                     hasInsertedSolarSpacing = true;
                 }
 
+                let isGrandTotalRow = rowText.includes('total keseluruhan') || rowText.includes('grand total') || (isSummaryTable && i === rows.length - 1);
                 let isTotalRow = rowText.includes('total') || rowText.includes('grand') || rowText.includes('sisa') || inSummarySection;
 
                 if (rows[i][0] !== "" && rows[i][0] !== null && parseNum(rows[i][0]) > 0 && !inSummarySection) {
                     isTotalRow = false;
-                }
-
-                if (isSolarTable && !isTotalRow) {
-                    let hargaIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('harga')) : -1;
-                    let jumlahIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('jumlah')) : -1;
-                    let totalIndex = headerRow ? headerRow.findIndex(h => String(h).toLowerCase().includes('total')) : -1;
-
-                    if (hargaIndex !== -1) {
-                        let currentHarga = parseNum(rows[i][hargaIndex]);
-                        if (currentHarga <= 10) {
-                            rows[i][hargaIndex] = 10000;
-                            currentHarga = 10000;
-                        }
-                        if (jumlahIndex !== -1 && totalIndex !== -1) {
-                            let jml = parseNum(rows[i][jumlahIndex]);
-                            if (jml > 0) {
-                                rows[i][totalIndex] = jml * currentHarga;
-                            }
-                        }
-                    }
                 }
 
                 if (!isSolarTable && !isMultiHeader && dateColIndex !== -1 && !isTotalRow) {
@@ -873,7 +1071,12 @@
                     }
                 }
 
-                tbody += `<tr class="${isTotalRow ? 'is-total-row' : ''}">`;
+                let trClass = "";
+                if (isTotalRow) {
+                    trClass = "is-total-row";
+                }
+
+                tbody += `<tr class="${trClass}">`;
                 
                 rows[i].forEach((cell, colIndex) => {
                     let formattedCell = (cell !== undefined && cell !== null) ? cell : '';
@@ -896,33 +1099,22 @@
 
                     const numVal = parseNum(cell);
                     const isNumeric = numVal > 0 && cell !== "";
-                    const isTotalCol = colIndex === (rows[i].length - 1) || headerName.includes('total');
+                    const isTotalCol = colIndex === (rows[i].length - 1);
 
                     if (!isSolarTable && isNumeric) {
-                        if (isSummaryTable) {
-                            if (rowText.includes('total keseluruhan')) {
-                                formattedCell = `<span class="badge-total">${cell}</span>`;
-                            } else {
-                                if (isTotalCol) {
-                                    formattedCell = `<span class="badge-total">${cell}</span>`;
-                                } else {
-                                    formattedCell = `<span class="badge-ritase">${cell}</span>`;
-                                }
-                            }
-                        } else {
-                            if (isTotalRow) {
-                                formattedCell = `<span class="badge-total">${cell}</span>`;
-                            } else if (colIndex >= 3 && !headerName.includes('no')) {
-                                if (isTotalCol) {
-                                    formattedCell = `<span class="badge-total">${cell}</span>`;
-                                } else {
-                                    formattedCell = `<span class="badge-ritase">${cell}</span>`;
-                                }
-                            }
+                        if (isGrandTotalRow) {
+                            formattedCell = `<span class="badge-grand-total">${cell}</span>`;
+                        } else if (isTotalRow || isTotalCol) {
+                            formattedCell = `<span class="badge-total">${cell}</span>`;
+                        } else if (colIndex >= 3) {
+                            formattedCell = `<span class="badge-ritase">${cell}</span>`;
                         }
                     }
 
-                    let alignmentClass = (isMultiHeader && colIndex === 0) ? 'text-start fw-semibold' : 'text-center';
+                    let alignmentClass = 'text-center';
+                    if (isMultiHeader && colIndex === 2 && isSummaryTable) {
+                        alignmentClass = 'text-center fw-bold';
+                    }
 
                     tbody += `<td class="${alignmentClass}">${formattedCell}</td>`;
                 });
@@ -930,7 +1122,7 @@
             }
             tbody += "</tbody>";
 
-            table.innerHTML = thead + tbody;
+            table.innerHTML = colGroup + thead + tbody;
         }
     </script>
 </body>
