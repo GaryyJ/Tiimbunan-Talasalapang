@@ -241,23 +241,24 @@
         padding: 0;
     }
 
-    /* RESPONSIVE TABLE WRAPPER */
+    /* RESPONSIVE TABLE WRAPPER UNTUK SCROLL HORIZONTAL */
     .table-responsive {
         width: 100%;
-        overflow-x: auto;
+        overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
         border: none;
         background-color: #ffffff;
     }
 
-    /* KUNCI UTAMA PENYELARASAN TABEL */
+    /* PENGATURAN TABEL & LEBAR MINIMUM AGAR BISA DI-SCROLL DI HP */
     .table {
         font-size: .78rem;
         white-space: nowrap;
         border-color: #fde68a;
         margin-bottom: 0;
-        width: 100% !important;
-        table-layout: fixed; /* Kunci ukuran lebar kolom presisi */
+        width: 100%;
+        min-width: 680px !important; /* Memaksa lebar minimum tabel agar data utuh & bisa di-scroll */
+        table-layout: fixed;
     }
 
     .table thead th {
@@ -268,23 +269,19 @@
         vertical-align: middle;
         border-bottom: 1px solid #fde68a !important;
         border-right: 1px solid #fde68a !important;
-        padding: 5px 4px;
+        padding: 6px 4px;
         font-size: .75rem;
-        height: 28px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        height: 30px;
     }
 
     .table tbody td {
         background-color: #ffffff !important;
         color: #1e293b !important;
         vertical-align: middle;
-        padding: 4px 4px;
+        padding: 5px 4px;
         border-color: #fef3c7 !important;
         font-weight: 500;
-        height: 26px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        height: 28px;
     }
 
     tr.date-separator td {
@@ -409,8 +406,6 @@
         .solar-kpi-card { padding: 6px 8px; }
         .solar-kpi-card .card-value { font-size: 1rem; }
         .solar-kpi-card .card-label { font-size: 0.65rem; }
-        .table tbody td { padding: 3px 2px; height: 24px; font-size: 0.7rem; }
-        .table thead th { font-size: 0.68rem; padding: 3px 2px; }
         .chart-container-box { height: 130px; }
         .card-header-amber { font-size: 0.7rem; padding: 5px 8px; }
     }
@@ -950,22 +945,22 @@
 
             const maxCols = Math.max(...rows.map(r => r ? r.length : 0));
             
-            // MENYISIPKAN COLGROUP UNTUK MENGUNCI PERSENTASE LEBAR KOLOM SERAGAM
+            // PENGATURAN LEBAR KOLOM PRESISI MENGGUNAKAN PIXEL (PX) AGAR TIDAK TERPOTONG
             let colgroup = '';
             if (maxCols === 11) {
                 colgroup = `
                 <colgroup>
-                    <col style="width: 14%;">
-                    <col style="width: 13%;">
-                    <col style="width: 15%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 7.5%;">
-                    <col style="width: 10.5%;">
+                    <col style="width: 90px;">   <!-- Armada -->
+                    <col style="width: 95px;">   <!-- Pelat Nomor -->
+                    <col style="width: 100px;">  <!-- Supir -->
+                    <col style="width: 50px;">   <!-- Min -->
+                    <col style="width: 50px;">   <!-- Sen -->
+                    <col style="width: 50px;">   <!-- Sel -->
+                    <col style="width: 50px;">   <!-- Rab -->
+                    <col style="width: 50px;">   <!-- Kam -->
+                    <col style="width: 50px;">   <!-- Jum -->
+                    <col style="width: 50px;">   <!-- Sab -->
+                    <col style="width: 75px;">   <!-- Total Rit -->
                 </colgroup>`;
             }
 
