@@ -238,6 +238,52 @@
         background-color: #ffffff;
     }
 
+    /* =========================================================
+       REKAP MINGGUAN - SATU SCROLL HORIZONTAL UNTUK 3 TABEL
+       Tidak lagi menggunakan sinkronisasi scroll JavaScript.
+       ========================================================= */
+    .rekap-single-scroll {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-gutter: stable;
+        background: #ffffff;
+    }
+
+    .rekap-scroll-track {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    /*
+       Setiap blok memenuhi lebar layar.
+       Pada layar yang lebih kecil dari lebar minimum tabel,
+       blok akan melebar dan scrollbar tetap hanya berada di
+       .rekap-single-scroll.
+    */
+    .rekap-table-block {
+        width: 100%;
+        min-width: 680px;
+        background: #ffffff;
+        margin: 0;
+    }
+
+    .rekap-table-block .table {
+        width: 100% !important;
+        min-width: 680px !important;
+        table-layout: fixed;
+    }
+
+    /* Hanya satu scrollbar: scrollbar pada .rekap-single-scroll */
+    .rekap-table-block .table-responsive {
+        width: 100%;
+        min-width: 680px;
+        overflow: visible !important;
+    }
+
     .table {
         font-size: .78rem;
         border-color: #fde68a;
@@ -316,29 +362,32 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 20px;
-        height: 18px;
+        min-width: 22px;
+        height: 19px;
         background-color: #f59e0b !important;
         color: #ffffff !important;
         font-weight: 800;
-        font-size: .7rem;
+        font-size: .72rem;
         border-radius: 4px;
-        padding: 0 4px;
+        padding: 0 5px;
+        border: 1px solid #d97706;
     }
 
     .badge-grand-total {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 22px;
-        height: 20px;
+        min-width: 26px;
+        height: 22px;
         background-color: #ef4444 !important;
         color: #ffffff !important;
         font-weight: 800;
-        font-size: .75rem;
+        font-size: .78rem;
         border-radius: 4px;
-        padding: 0 5px;
-        box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3);
+        padding: 0 6px;
+        border: 1px solid #b91c1c;
+        box-shadow: 0 1px 4px rgba(239, 68, 68, 0.4);
+        letter-spacing: 0.2px;
     }
 
     .chart-container-box {
@@ -481,8 +530,54 @@
         transition: width 0.3s ease;
     }
 
+    /* =========================================================
+       INDIKATOR SCROLL UNTUK TABEL REKAP
+       Fade di sisi kanan + label kecil supaya user tahu tabel
+       bisa digeser, tanpa perlu coba-coba dulu.
+       ========================================================= */
+    .rekap-scroll-hint {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #b45309;
+        padding: 0 2px 4px;
+    }
+
+    .rekap-single-scroll { position: relative; }
+
+    .rekap-single-scroll::after {
+        content: "";
+        position: sticky;
+        display: block;
+        float: right;
+        top: 0;
+        right: 0;
+        width: 18px;
+        height: 100%;
+        margin-left: -18px;
+        pointer-events: none;
+        background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.85));
+    }
+
+    /* =========================================================
+       BREAKPOINT TABLET (577px - 991px)
+       Sebelumnya cuma ada satu breakpoint mobile, jadi tampilan
+       di tablet "nanggung" antara versi desktop dan HP.
+       ========================================================= */
+    @media (min-width: 577px) and (max-width: 991px) {
+        .dashboard-wrapper { padding: 0 10px; }
+        .chart-container-box { height: 195px; }
+        .solar-kpi-card .card-value { font-size: 1.05rem; }
+        body::after { font-size: 6.5rem; }
+    }
+
     @media (max-width: 576px) {
-        body { font-size: 11px; }
+        /* Sebelumnya turun ke 11px (di bawah rekomendasi 12px minimum
+           untuk keterbacaan di layar kecil) — dinaikkan sedikit dan
+           kompensasi lewat padding, bukan lewat font terlalu kecil. */
+        body { font-size: 12px; }
         .dashboard-wrapper { padding: 0 6px; }
         .main-header h4 { font-size: 0.95rem; }
         .solar-kpi-card { padding: 6px 8px; }
@@ -490,6 +585,23 @@
         .solar-kpi-card .card-label { font-size: 0.65rem; }
         .chart-container-box { height: 180px; }
         .card-header-amber { font-size: 0.7rem; padding: 5px 8px; }
+
+        /* Tabel rekap: kolom dipersempit lewat JS (lihat populateTable)
+           supaya lebih sedikit yang perlu digeser di HP. */
+        .rekap-table-block,
+        .rekap-table-block .table,
+        .rekap-table-block .table-responsive,
+        .table {
+            min-width: 560px !important;
+        }
+        .date-header-text { font-size: 0.7rem !important; }
+
+        /* Watermark dekoratif terlalu dominan di layar kecil —
+           diperkecil supaya tidak mengganggu keterbacaan saat discroll. */
+        body::after { font-size: 4rem; opacity: 0.6; }
+        body::before { width: 380px; height: 380px; opacity: 0.6; }
+
+        .rekap-scroll-hint { display: flex; }
     }
     </style>
 </head>
@@ -616,6 +728,7 @@
                     <div class="card card-custom h-100 mb-0">
                         <div class="card-header-amber text-truncate d-flex justify-content-between align-items-center">
                             <span><i class="fa-solid fa-chart-column me-1"></i> TREN RITASE PER PERIODE</span>
+                            <span id="chart-period-note" class="fw-normal" style="font-size: 0.62rem; opacity: 0.75;"></span>
                         </div>
                         <div class="card-body p-2">
                             <div class="chart-container-box">
@@ -711,22 +824,54 @@
             <!-- Tab Content -->
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="tab-rekap" role="tabpanel">
-                    <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Ritase - Mobil YZ</div>
-                        <div class="card-body-container">
-                            <div class="table-responsive sync-scroll"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
-                        </div>
+                    <!--
+                        SATU SCROLL HORIZONTAL UNTUK:
+                        1. Rekap YZ
+                        2. Rekap Cash
+                        3. Rekap Summary
+
+                        Ketiga tabel berada dalam satu track/container.
+                        Tidak ada lagi sinkronisasi scroll antar elemen.
+                    -->
+                    <div class="rekap-scroll-hint">
+                        <i class="fa-solid fa-arrows-left-right"></i> Geser tabel untuk lihat semua hari
                     </div>
-                    <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Ritase - Mobil Cash</div>
-                        <div class="card-body-container">
-                            <div class="table-responsive sync-scroll"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
-                        </div>
-                    </div>
-                    <div class="card card-custom">
-                        <div class="card-header-amber"><i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & CASH</div>
-                        <div class="card-body-container">
-                            <div class="table-responsive sync-scroll"><table class="table table-bordered align-middle" id="table-rekap-summary"></table></div>
+                    <div class="rekap-single-scroll">
+                        <div class="rekap-scroll-track">
+
+                            <div class="card card-custom rekap-table-block">
+                                <div class="card-header-amber">
+                                    <i class="fa-solid fa-bus"></i> Ritase - Mobil YZ
+                                </div>
+                                <div class="card-body-container">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered align-middle" id="table-rekap-yz"></table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-custom rekap-table-block">
+                                <div class="card-header-amber">
+                                    <i class="fa-solid fa-money-bill-wave"></i> Ritase - Mobil Cash
+                                </div>
+                                <div class="card-body-container">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered align-middle" id="table-rekap-cash"></table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-custom rekap-table-block">
+                                <div class="card-header-amber">
+                                    <i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & CASH
+                                </div>
+                                <div class="card-body-container">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered align-middle" id="table-rekap-summary"></table>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -807,29 +952,10 @@
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyRwzd-ysGE2_VmmZ8lzk1iFr_wLYB3TBPTqe04PUYTolfMGtUrff-22zXIi5zRRpjwmg/exec";
 
-        // MENGHUBUNGKAN SCROLL HORISONTAL PADA TABEL REKAP
-        function initSynchronizedScroll() {
-            const scrollContainers = document.querySelectorAll('.sync-scroll');
-            let isSyncing = false;
+        // Scroll Rekap menggunakan satu container horizontal native.
+        // Tidak diperlukan lagi sinkronisasi scroll JavaScript.
 
-            scrollContainers.forEach(container => {
-                container.addEventListener('scroll', function () {
-                    if (isSyncing) return;
-                    isSyncing = true;
-
-                    const scrollLeft = this.scrollLeft;
-                    scrollContainers.forEach(other => {
-                        if (other !== this) {
-                            other.scrollLeft = scrollLeft;
-                        }
-                    });
-
-                    isSyncing = false;
-                });
-            });
-        }
-
-        function fetchData() {
+function fetchData() {
             const refreshBtn = document.getElementById('btn-refresh');
             const refreshIcon = document.getElementById('refresh-icon');
 
@@ -886,7 +1012,6 @@
                     populateTable('table-tagihan', data.tagihan);
 
                     renderDashboardCharts(data.rekapPeriode || {});
-                    initSynchronizedScroll();
                 }, 300);
             })
             .catch(err => {
@@ -911,11 +1036,24 @@
         };
 
         function renderDashboardCharts(rekapPeriodeData) {
-            const labels = rekapPeriodeData.labels || [];
-            const dataYZ = rekapPeriodeData.dataYZ || [];
-            const dataCash = rekapPeriodeData.dataCash || [];
+            const allLabels = rekapPeriodeData.labels || [];
+            const allDataYZ = rekapPeriodeData.dataYZ || [];
+            const allDataCash = rekapPeriodeData.dataCash || [];
 
             const isMobile = window.innerWidth <= 576;
+
+            // Donut & KPI tetap pakai total dari SEMUA periode.
+            // Bar chart di HP hanya menampilkan periode terbaru supaya
+            // label angka di atas tiap bar tidak numpuk/tumpang tindih
+            // saat jumlah periode terus bertambah.
+            const MAX_PERIODS_MOBILE = 6;
+            const shouldTrim = isMobile && allLabels.length > MAX_PERIODS_MOBILE;
+            const labels = shouldTrim ? allLabels.slice(-MAX_PERIODS_MOBILE) : allLabels;
+            const dataYZ = shouldTrim ? allDataYZ.slice(-MAX_PERIODS_MOBILE) : allDataYZ;
+            const dataCash = shouldTrim ? allDataCash.slice(-MAX_PERIODS_MOBILE) : allDataCash;
+
+            const periodNoteEl = document.getElementById('chart-period-note');
+            if (periodNoteEl) periodNoteEl.textContent = shouldTrim ? `${MAX_PERIODS_MOBILE} periode terakhir` : '';
 
             const colorYZNormal = '#2563eb';
             const colorYZRunning = '#93c5fd';
@@ -1000,9 +1138,10 @@
                 }
             });
 
-            // 2. DONUT CHART
-            const totalYZ = dataYZ.reduce((a, b) => a + parseNum(b), 0);
-            const totalCash = dataCash.reduce((a, b) => a + parseNum(b), 0);
+            // 2. DONUT CHART — selalu dari seluruh periode, bukan versi
+            // terpotong yang dipakai bar chart di layar kecil.
+            const totalYZ = allDataYZ.reduce((a, b) => a + parseNum(b), 0);
+            const totalCash = allDataCash.reduce((a, b) => a + parseNum(b), 0);
             const grandTotal = totalYZ + totalCash;
 
             const ctxDonut = document.getElementById('donutChartArmada').getContext('2d');
@@ -1214,15 +1353,23 @@
             }
 
             const maxCols = Math.max(...rows.map(r => r ? r.length : 0));
-            
+
+            // Kolom dipersempit di layar HP supaya tabel rekap tidak
+            // memaksa lebar sebesar versi desktop (mengurangi jarak scroll).
+            const isNarrowScreen = window.innerWidth <= 576;
+
             let colgroup = '';
             if (isMultiHeader) {
+                const w1 = isNarrowScreen ? 56 : 70;
+                const w2 = isNarrowScreen ? 68 : 85;
+                const w3 = isNarrowScreen ? 76 : 95;
+                const wDay = isNarrowScreen ? 42 : 52;
                 colgroup = `
                 <colgroup>
-                    <col style="width: 70px;">
-                    <col style="width: 85px;">
-                    <col style="width: 95px;">
-                    ${Array(maxCols - 3).fill('<col style="width: 52px;">').join('')}
+                    <col style="width: ${w1}px;">
+                    <col style="width: ${w2}px;">
+                    <col style="width: ${w3}px;">
+                    ${Array(maxCols - 3).fill(`<col style="width: ${wDay}px;">`).join('')}
                 </colgroup>`;
             }
 
