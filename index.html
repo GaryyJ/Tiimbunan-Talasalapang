@@ -41,7 +41,6 @@
         background-color: #f1f5f9;
     }
 
-    /* GRAFIS GELOMBANG DI KIRI */
     body::before {
         content: "";
         position: fixed;
@@ -56,7 +55,6 @@
         pointer-events: none;
     }
 
-    /* TEKS WATERMARK TRANSPARAN */
     body::after {
         content: "REKAP\A REKAP";
         white-space: pre;
@@ -242,7 +240,6 @@
 
     .table {
         font-size: .78rem;
-        white-space: nowrap;
         border-color: #fde68a;
         margin-bottom: 0;
         width: 100%;
@@ -255,12 +252,14 @@
         color: #78350f !important;
         font-weight: 700;
         text-align: center;
-        vertical-align: middle;
+        vertical-align: middle !important;
         border-bottom: 1px solid #fde68a !important;
         border-right: 1px solid #fde68a !important;
         padding: 6px 4px;
-        font-size: .75rem;
-        height: 30px;
+        font-size: .72rem;
+        line-height: 1.15;
+        word-break: break-word;
+        white-space: nowrap;
     }
 
     .table tbody td {
@@ -271,6 +270,8 @@
         border-color: #fef3c7 !important;
         font-weight: 500;
         height: 28px;
+        white-space: normal;
+        word-break: break-word;
     }
 
     tr.date-separator td {
@@ -334,18 +335,17 @@
         width: 100%;
     }
 
-    /* CUSTOM LEGEND STYLING */
     .custom-legend-container {
         display: flex;
         justify-content: center;
-        gap: 20px;
+        gap: 15px;
         margin-top: 6px;
     }
     .legend-item {
         display: flex;
         align-items: center;
         gap: 6px;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 600;
     }
     .legend-color-box {
@@ -624,9 +624,7 @@
                                 <canvas id="donutChartArmada"></canvas>
                             </div>
                             
-                            <!-- Custom Legend Detail bawah Donut Chart -->
                             <div class="custom-legend-container w-100 mt-2 text-center" id="donut-legend-info">
-                                <!-- Terisi secara dinamis -->
                             </div>
                         </div>
                     </div>
@@ -663,7 +661,7 @@
                     <div class="solar-kpi-card">
                         <div class="card-label"><i class="fa-solid fa-calculator me-1"></i> Sisa Kuota</div>
                         <div class="card-value text-primary" id="kpi-sisa-ritase">0 Rit</div>
-                        <div class="card-subtext">Stok ÷ 0,9L</div>
+                        <div class="card-subtext">Stok ÷ 0,9 L</div>
                         <i class="fa-solid fa-chart-line card-icon-bg"></i>
                     </div>
                 </div>
@@ -704,19 +702,19 @@
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-bus"></i> Ritase - Mobil YZ</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
+                            <div class="table-responsive sync-scroll"><table class="table table-bordered align-middle" id="table-rekap-yz"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-money-bill-wave"></i> Ritase - Mobil Cash</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
+                            <div class="table-responsive sync-scroll"><table class="table table-bordered align-middle" id="table-rekap-cash"></table></div>
                         </div>
                     </div>
                     <div class="card card-custom">
                         <div class="card-header-amber"><i class="fa-solid fa-calculator"></i> REKAPAN HARIAN MOBIL YZ & CASH</div>
                         <div class="card-body-container">
-                            <div class="table-responsive"><table class="table table-bordered align-middle" id="table-rekap-summary"></table></div>
+                            <div class="table-responsive sync-scroll"><table class="table table-bordered align-middle" id="table-rekap-summary"></table></div>
                         </div>
                     </div>
                 </div>
@@ -748,28 +746,33 @@
     <script>
         Chart.register(ChartDataLabels);
 
-        // Plugin untuk Menampilkan Teks Total Ritase di Tengah Donut Chart
+        // Helper Capitalization Title Case
+        function toTitleCase(str) {
+            if (!str) return '';
+            return String(str).replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+
+        // Plugin Teks Tengah Donut Chart
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw(chart) {
                 if (chart.config.type !== 'doughnut') return;
-                const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+                const { ctx, chartArea: { top, bottom, left, right } } = chart;
                 ctx.save();
 
                 const total = chart.config.options.plugins.centerText?.total || 0;
-
                 const centerX = (left + right) / 2;
                 const centerY = (top + bottom) / 2;
 
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
 
-                // Nilai Angka Total
                 ctx.font = '800 1.3rem Inter, sans-serif';
                 ctx.fillStyle = '#1e293b';
                 ctx.fillText(total, centerX, centerY - 8);
 
-                // Label Keterangan
                 ctx.font = '600 0.65rem Inter, sans-serif';
                 ctx.fillStyle = '#64748b';
                 ctx.fillText('TOTAL RITASE', centerX, centerY + 10);
@@ -791,6 +794,28 @@
         updateClock();
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyRwzd-ysGE2_VmmZ8lzk1iFr_wLYB3TBPTqe04PUYTolfMGtUrff-22zXIi5zRRpjwmg/exec";
+
+        // MENGHUBUNGKAN SCROLL HORISONTAL PADA TABEL REKAP
+        function initSynchronizedScroll() {
+            const scrollContainers = document.querySelectorAll('.sync-scroll');
+            let isSyncing = false;
+
+            scrollContainers.forEach(container => {
+                container.addEventListener('scroll', function () {
+                    if (isSyncing) return;
+                    isSyncing = true;
+
+                    const scrollLeft = this.scrollLeft;
+                    scrollContainers.forEach(other => {
+                        if (other !== this) {
+                            other.scrollLeft = scrollLeft;
+                        }
+                    });
+
+                    isSyncing = false;
+                });
+            });
+        }
 
         function fetchData() {
             const refreshBtn = document.getElementById('btn-refresh');
@@ -848,8 +873,8 @@
                     populateTable('table-solar', data.solarHexa, false, true);
                     populateTable('table-tagihan', data.tagihan);
 
-                    // Render Grafik dari data spreadsheet REKAP PERIODE
                     renderDashboardCharts(data.rekapPeriode || {});
+                    initSynchronizedScroll();
                 }, 300);
             })
             .catch(err => {
@@ -874,18 +899,25 @@
         };
 
         function renderDashboardCharts(rekapPeriodeData) {
-            // Ambil data dinamis dari Google Spreadsheet tab REKAP PERIODE
             const labels = rekapPeriodeData.labels || [];
             const dataYZ = rekapPeriodeData.dataYZ || [];
             const dataCash = rekapPeriodeData.dataCash || [];
 
             const isMobile = window.innerWidth <= 576;
 
-            // COLOR PALETTE WARM AMBER OPERATIONAL
-            const colorYZ = '#2563eb';   // Biru Operasional YZ
-            const colorCash = '#d97706'; // Warm Amber/Orange Cash
+            const colorYZNormal = '#2563eb';
+            const colorYZRunning = '#93c5fd';
+            const colorCashNormal = '#d97706';
+            const colorCashRunning = '#fde68a';
 
-            // 1. BAR CHART: TREN RITASE PER PERIODE
+            const bgColorsYZ = labels.map(lbl => 
+                String(lbl).toLowerCase().includes('berjalan') ? colorYZRunning : colorYZNormal
+            );
+            const bgColorsCash = labels.map(lbl => 
+                String(lbl).toLowerCase().includes('berjalan') ? colorCashRunning : colorCashNormal
+            );
+
+            // 1. BAR CHART
             const ctxBar = document.getElementById('barChartPeriode').getContext('2d');
             if (barChartInstance) barChartInstance.destroy();
 
@@ -897,7 +929,9 @@
                         {
                             label: 'Mobil YZ',
                             data: dataYZ,
-                            backgroundColor: colorYZ,
+                            backgroundColor: bgColorsYZ,
+                            borderColor: colorYZNormal,
+                            borderWidth: labels.map(lbl => String(lbl).toLowerCase().includes('berjalan') ? 1.5 : 0),
                             borderRadius: 3,
                             barPercentage: 0.8,
                             categoryPercentage: 0.6
@@ -905,7 +939,9 @@
                         {
                             label: 'Mobil Cash',
                             data: dataCash,
-                            backgroundColor: colorCash,
+                            backgroundColor: bgColorsCash,
+                            borderColor: colorCashNormal,
+                            borderWidth: labels.map(lbl => String(lbl).toLowerCase().includes('berjalan') ? 1.5 : 0),
                             borderRadius: 3,
                             barPercentage: 0.8,
                             categoryPercentage: 0.6
@@ -932,7 +968,9 @@
                             align: 'top',
                             offset: -2,
                             font: { family: 'Inter', weight: 'bold', size: isMobile ? 7 : 8.5 },
-                            color: function(context) { return context.dataset.backgroundColor; },
+                            color: function(context) { 
+                                return context.dataset.borderColor || context.dataset.backgroundColor; 
+                            },
                             formatter: function(value) { return value > 0 ? value : ''; }
                         }
                     },
@@ -950,13 +988,10 @@
                 }
             });
 
-            // 2. DONUT CHART: DISTRIBUSI TOTAL RITASE
+            // 2. DONUT CHART
             const totalYZ = dataYZ.reduce((a, b) => a + parseNum(b), 0);
             const totalCash = dataCash.reduce((a, b) => a + parseNum(b), 0);
             const grandTotal = totalYZ + totalCash;
-
-            const pctYZ = grandTotal > 0 ? Math.round((totalYZ / grandTotal) * 100) : 0;
-            const pctCash = grandTotal > 0 ? Math.round((totalCash / grandTotal) * 100) : 0;
 
             const ctxDonut = document.getElementById('donutChartArmada').getContext('2d');
             if (donutChartInstance) donutChartInstance.destroy();
@@ -967,7 +1002,7 @@
                     labels: [`Mobil YZ`, `Mobil Cash`],
                     datasets: [{
                         data: [totalYZ, totalCash],
-                        backgroundColor: [colorYZ, colorCash],
+                        backgroundColor: [colorYZNormal, colorCashNormal],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -982,7 +1017,7 @@
                         datalabels: {
                             color: '#ffffff',
                             font: { family: 'Inter', weight: 'bold', size: isMobile ? 8.5 : 10 },
-                            formatter: function(value, ctx) {
+                            formatter: function(value) {
                                 let pct = grandTotal > 0 ? Math.round((value / grandTotal) * 100) : 0;
                                 return pct > 0 ? `${pct}%` : '';
                             }
@@ -991,20 +1026,19 @@
                 }
             });
 
-            // Update Keterangan Legend di Bawah Donut Chart
             const legendContainer = document.getElementById('donut-legend-info');
             if (legendContainer) {
                 legendContainer.innerHTML = `
                     <div class="d-flex justify-content-around align-items-center w-100">
                         <div>
                             <div class="legend-item text-primary">
-                                <span class="legend-color-box" style="background-color: ${colorYZ};"></span> Mobil YZ
+                                <span class="legend-color-box" style="background-color: ${colorYZNormal};"></span> Mobil YZ
                             </div>
                             <div class="fw-bold fs-6 text-dark mt-1">${totalYZ} <small class="fw-normal text-muted" style="font-size:0.7rem">Ritase</small></div>
                         </div>
                         <div class="border-start ps-3">
-                            <div class="legend-item" style="color: ${colorCash};">
-                                <span class="legend-color-box" style="background-color: ${colorCash};"></span> Mobil Cash
+                            <div class="legend-item" style="color: ${colorCashNormal};">
+                                <span class="legend-color-box" style="background-color: ${colorCashNormal};"></span> Mobil Cash
                             </div>
                             <div class="fw-bold fs-6 text-dark mt-1">${totalCash} <small class="fw-normal text-muted" style="font-size:0.7rem">Ritase</small></div>
                         </div>
@@ -1168,20 +1202,13 @@
             const maxCols = Math.max(...rows.map(r => r ? r.length : 0));
             
             let colgroup = '';
-            if (maxCols === 11) {
+            if (isMultiHeader) {
                 colgroup = `
                 <colgroup>
-                    <col style="width: 90px;">
+                    <col style="width: 70px;">
+                    <col style="width: 85px;">
                     <col style="width: 95px;">
-                    <col style="width: 100px;">
-                    <col style="width: 50px;">
-                    <col style="width: 50px;">
-                    <col style="width: 50px;">
-                    <col style="width: 50px;">
-                    <col style="width: 50px;">
-                    <col style="width: 50px;">
-                    <col style="width: 50px;">
-                    <col style="width: 75px;">
+                    ${Array(maxCols - 3).fill('<col style="width: 52px;">').join('')}
                 </colgroup>`;
             }
 
@@ -1210,13 +1237,24 @@
                 startIndex = 2;
             } else if (isMultiHeader && rows.length >= 2) {
                 thead += `<tr>`;
-                rows[0].forEach((th) => {
-                    thead += `<th class="align-middle text-center">${th || ''}</th>`;
-                });
+                // Menyamakan struktur rowspan="2" untuk kolom Armada, Pelat Nomor, Supir, dan Total Rit
+                if (rows[0]) {
+                    rows[0].forEach((th, idx) => {
+                        if (idx < 3 || idx === maxCols - 1) {
+                            thead += `<th rowspan="2" class="align-middle text-center">${th || ''}</th>`;
+                        } else {
+                            thead += `<th class="align-middle text-center">${th || ''}</th>`;
+                        }
+                    });
+                }
                 thead += `</tr><tr>`;
-                rows[1].forEach((th) => {
-                    thead += `<th class="align-middle text-center">${formatDateCell(th) || ''}</th>`;
-                });
+                if (rows[1]) {
+                    rows[1].forEach((th, idx) => {
+                        if (idx >= 3 && idx < maxCols - 1) {
+                            thead += `<th class="align-middle text-center">${formatDateCell(th) || ''}</th>`;
+                        }
+                    });
+                }
                 thead += `</tr>`;
                 startIndex = 2;
             } else {
@@ -1284,6 +1322,10 @@
                         formattedCell = Number.isInteger(formattedCell) ? formattedCell : formattedCell.toFixed(1);
                     }
 
+                    if (headerName.includes('supir') || colIndex === 2) {
+                        formattedCell = toTitleCase(formattedCell);
+                    }
+
                     if (headerName.includes('tanggal')) {
                         formattedCell = formatDateCell(formattedCell);
                     } else if (headerName.includes('waktu') || headerName.includes('jam')) {
@@ -1308,7 +1350,9 @@
                     }
 
                     let alignmentClass = 'text-center';
-                    if (isMultiHeader && colIndex === 2 && isSummaryTable) {
+                    if (colIndex === 2 && !isTotalRow) {
+                        alignmentClass = 'text-start ps-2';
+                    } else if (isMultiHeader && colIndex === 2 && isSummaryTable) {
                         alignmentClass = 'text-center fw-bold';
                     }
 
