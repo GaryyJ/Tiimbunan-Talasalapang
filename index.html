@@ -262,6 +262,18 @@
         white-space: nowrap;
     }
 
+    /* Styling CSS Header Tanggal agar Tidak Bertabrakan */
+    .date-header-text {
+        font-size: 0.68rem !important;
+        font-weight: 800 !important;
+        color: #78350f !important;
+        display: block;
+        white-space: nowrap;
+        text-align: center;
+        line-height: 1.1;
+        letter-spacing: -0.2px;
+    }
+
     .table tbody td {
         background-color: #ffffff !important;
         color: #1e293b !important;
@@ -1104,34 +1116,36 @@
             document.getElementById('kpi-sisa-ritase').innerText = `${(sisaRitase || 0).toLocaleString('id-ID', {maximumFractionDigits: 1})} Rit`;
         }
 
+        // Fungsi Pembersih Tanggal (Format DD/MM)
         function formatDateCell(val) {
             if (!val && val !== 0) return "";
-            if (typeof val === 'string' && (val.includes('T') || val.includes('-') || val.includes('/'))) {
-                if (val.includes('T')) {
-                    const d = new Date(val);
-                    if (!isNaN(d.getTime())) {
-                        const day = String(d.getDate()).padStart(2, '0');
-                        const month = String(d.getMonth() + 1).padStart(2, '0');
-                        const year = String(d.getFullYear()).slice(-2);
-                        return `${day}/${month}/${year}`;
-                    }
-                }
-                let parts = val.split('T')[0].split(/[-/]/);
-                if (parts.length === 3) {
-                    let day, month, year;
-                    if (parts[0].length === 4) { 
-                        year = parts[0].slice(-2);
-                        month = parts[1].padStart(2, '0');
-                        day = parts[2].padStart(2, '0');
-                    } else { 
-                        day = parts[0].padStart(2, '0');
-                        month = parts[1].padStart(2, '0');
-                        year = parts[2].slice(-2);
-                    }
-                    return `${day}/${month}/${year}`;
+            let strVal = String(val).trim();
+
+            if (strVal.includes('T')) {
+                const d = new Date(strVal);
+                if (!isNaN(d.getTime())) {
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    return `${day}/${month}`;
                 }
             }
-            return val;
+
+            let dateOnly = strVal.split(' ')[0];
+            let parts = dateOnly.split(/[-/]/);
+
+            if (parts.length === 3) {
+                let day, month;
+                if (parts[0].length === 4) { 
+                    month = parts[1].padStart(2, '0');
+                    day = parts[2].padStart(2, '0');
+                } else { 
+                    day = parts[0].padStart(2, '0');
+                    month = parts[1].padStart(2, '0');
+                }
+                return `${day}/${month}`;
+            }
+
+            return strVal;
         }
 
         function formatTimeCell(val) {
@@ -1251,7 +1265,11 @@
                 if (rows[1]) {
                     rows[1].forEach((th, idx) => {
                         if (idx >= 3 && idx < maxCols - 1) {
-                            thead += `<th class="align-middle text-center">${formatDateCell(th) || ''}</th>`;
+                            let formattedDate = formatDateCell(th);
+                            thead += `
+                            <th class="align-middle text-center py-1">
+                                <span class="date-header-text">${formattedDate}</span>
+                            </th>`;
                         }
                     });
                 }
